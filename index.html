@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planes de Gobierno 2026</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
+    
+</head>
+<body>
+
+    <div id="header">
+        <div class="ctn-header">
+            <img src="./img/logo-tu-decides.jpg" alt="Tú Decides" width="100%" class="logo-tu-decides">
+            <h1>¿Qué propone tu candidato?</h1>
+            <h2>Decide con datos y compara los planes de gobierno 2026 - 2031</h2>
+        </div>
+    </div>
+
+    <div class="main">
+        <p class="bajada">
+            Este especial analiza y compara lo que cada candidato ofrece en su plan de gobierno con una metodología híbrida: clasificación y extracción asistidas por IA, validadas por el equipo editorial. Podrás explorar por candidato o partido, contrastar propuestas por tema y revisar indicadores de coherencia, concreción y sustento. Además, incluimos chequeos puntuales y visualizaciones que muestran con claridad: énfasis, vacíos y posibles contradicciones. Información clara y breve para que tú decidas mejor.
+        </p>
+        <span class="update">Actualizado al 28/10/2025</span>
+
+        <ul class="anclas">
+            <li>
+                candidato/partido
+            </li>
+            <li>
+                compara planes
+            </li>
+            <li>
+                panorama general
+            </li>
+        </ul>
+
+        <div class="box-slider-resumen">
+            <div class="slider-resumen">
+                <div>
+                    <div class="box-info-slider-resumen">
+                        <h2 class="slide-title">La mayor densidad temática</h2>
+                        <div class="slide-party">Partido Nacional<br>Manzanas Rojas</div>
+                        <div class="slide-content">
+                            <h3 class="slide-subtitle">El plan más "denso" en propuestas</h3>
+                            <p class="slide-description">Más propuestas por capítulo y mayor detalle por tema.</p>
+                            <p class="slide-metric">Métrica: Densidad promedio<br>1.9 propuestas/página</p>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <div class="box-info-slider-resumen">
+                        <h2 class="slide-title">Mayor alcance territorial</h2>
+                        <div class="slide-party">Coalición Verde</div>
+                        <div class="slide-content">
+                            <h3 class="slide-subtitle">El plan con más cobertura regional</h3>
+                            <p class="slide-description">Propuestas específicas para cada región del país.</p>
+                            <p class="slide-metric">Métrica: Cobertura territorial<br>98% de regiones</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="box-main-candidatos">
+            <div class="container">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('partido')">Por partido</button>
+                    <button class="tab" onclick="switchTab('candidato')">Por candidato</button>
+                </div>
+        
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar" onkeyup="filterItems()">
+                        <span class="search-icon">🔍</span>
+                    </div>
+                </div>
+        
+                <div class="content">
+                    <div class="sidebar" id="itemList">
+                        <!-- Items will be loaded here -->
+                    </div>
+        
+                    <div class="detail-panel" id="detailPanel">
+                        <div class="empty-state">
+                            Selecciona un partido o candidato para ver los detalles
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+
+    </div>
+
+    <!-- scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.js"></script>
+
+    <!-- carrusel resumen -->
+    <script>
+        $(document).ready(function(){
+            $(".slider-resumen").bxSlider({
+                infiniteLoop: false
+            });
+        });
+    </script>
+
+    <!-- buscador candidatos o partidos -->
+    <script>
+        // CONFIGURACIÓN: Reemplaza esta URL con la de tu Google Spreadsheet
+        // Debe estar publicado como CSV
+        // Ejemplo: https://docs.google.com/spreadsheets/d/e/TU_ID/pub?output=csv
+        const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_yZQbmqUse6lOcFRxBhP53YkC3CdIc36YcOE3bk-w_91-TVudDvH9uVuJoSMZwf_4bPPuq--qbHKb/pub?output=csv';
+
+        let currentTab = 'partido';
+        let allData = [];
+        let filteredData = [];
+
+        // Inicializar la aplicación
+        function init() {
+            loadDataFromGoogleSheets();
+        }
+
+        // Función para parsear CSV
+        function parseCSV(csv) {
+            const lines = csv.split('\n');
+            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                
+                const values = parseCSVLine(lines[i]);
+                const row = {};
+                
+                headers.forEach((header, index) => {
+                    row[header] = values[index] ? values[index].trim().replace(/"/g, '') : '';
+                });
+                
+                // Procesar temas y descripciones
+                if (row.temas && row.descripcionesTemas) {
+                    const temasArray = row.temas.split(',').map(t => t.trim());
+                    const descripcionesArray = row.descripcionesTemas.split(',').map(d => d.trim());
+                    
+                    row.temas = temasArray.map((nombre, index) => ({
+                        nombre: nombre,
+                        descripcion: descripcionesArray[index] || ''
+                    }));
+                } else {
+                    row.temas = [];
+                }
+                
+                data.push(row);
+            }
+            
+            return data;
+        }
+
+        // Función auxiliar para parsear una línea CSV (maneja comillas)
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            result.push(current);
+            return result;
+        }
+
+        // Función para cargar datos desde Google Sheets
+        async function loadDataFromGoogleSheets() {
+            const itemList = document.getElementById('itemList');
+            const detailPanel = document.getElementById('detailPanel');
+            
+            // Mostrar mensaje de carga
+            itemList.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">Cargando datos...</div>';
+            detailPanel.innerHTML = '<div class="empty-state">Cargando...</div>';
+
+            try {
+                const response = await fetch(SPREADSHEET_URL);
+                
+                if (!response.ok) {
+                    throw new Error('Error al cargar los datos');
+                }
+                
+                const csvText = await response.text();
+                allData = parseCSV(csvText);
+                filteredData = allData.filter(item => item.tipo === currentTab);
+                
+                console.log('Datos cargados:', allData);
+                
+                if (allData.length === 0) {
+                    itemList.innerHTML = '<div style="padding: 20px; text-align: center; color: #999;">No hay datos disponibles.<br><br>Verifica que tu Google Sheet esté correctamente configurado.</div>';
+                    detailPanel.innerHTML = '<div class="empty-state">No hay datos disponibles</div>';
+                } else {
+                    renderItems();
+                    detailPanel.innerHTML = '<div class="empty-state">Selecciona un partido o candidato para ver los detalles</div>';
+                }
+                
+            } catch (error) {
+                console.error('Error cargando datos:', error);
+                itemList.innerHTML = `
+                    <div style="padding: 20px; text-align: center; color: #e74c3c;">
+                        <p style="font-weight: bold; margin-bottom: 10px;">Error al cargar los datos</p>
+                        <p style="font-size: 13px; line-height: 1.6;">
+                            Verifica que:<br>
+                            1. La URL del Google Sheet sea correcta<br>
+                            2. El archivo esté publicado como CSV<br>
+                            3. Tengas conexión a internet
+                        </p>
+                    </div>
+                `;
+                detailPanel.innerHTML = '<div class="empty-state">Error al cargar los datos</div>';
+            }
+        }
+
+        // Cambiar entre tabs
+        function switchTab(tab) {
+            currentTab = tab;
+            
+            // Actualizar UI de tabs
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // Filtrar datos según el tab
+            filterItems();
+        }
+
+        // Filtrar items por búsqueda
+        function filterItems() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+            
+            filteredData = allData.filter(item => {
+                const matchesTab = item.tipo === currentTab;
+                const matchesSearch = item.nombre.toLowerCase().includes(searchTerm) || 
+                                     item.candidato.toLowerCase().includes(searchTerm);
+                return matchesTab && matchesSearch;
+            });
+            
+            renderItems();
+        }
+
+        // Renderizar lista de items
+        function renderItems() {
+            const itemList = document.getElementById('itemList');
+            
+            if (filteredData.length === 0) {
+                itemList.innerHTML = '<div class="no-results">No se encontraron resultados</div>';
+                return;
+            }
+            
+            itemList.innerHTML = filteredData.map((item, index) => {
+                const logoDisplay = item.logoUrl 
+                    ? `<img src="${item.logoUrl}" alt="${item.nombre}" 
+                           style="width: 100%; height: 100%; object-fit: contain; border-radius: 6px;"
+                           onerror="this.style.display='none'; this.parentElement.innerHTML='🍎';">` 
+                    : '🍎';
+                
+                return `
+                    <div class="party-item" data-id="${item.id}" data-index="${index}">
+                        <div class="party-icon">${logoDisplay}</div>
+                        <div class="party-name">${item.nombre}</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Agregar event listeners después de renderizar
+            document.querySelectorAll('.party-item').forEach(element => {
+                element.addEventListener('click', function() {
+                    const itemId = this.getAttribute('data-id');
+                    selectItem(itemId, this);
+                });
+            });
+        }
+
+        // Seleccionar un item
+        function selectItem(id, element) {
+            const item = allData.find(i => i.id == id);
+            
+            if (!item) {
+                console.error('Item no encontrado:', id);
+                return;
+            }
+            
+            // Actualizar UI de selección
+            document.querySelectorAll('.party-item').forEach(el => el.classList.remove('active'));
+            if (element) {
+                element.classList.add('active');
+            }
+            
+            // Renderizar detalles
+            renderDetails(item);
+        }
+
+        // Renderizar panel de detalles
+        function renderDetails(item) {
+            const detailPanel = document.getElementById('detailPanel');
+            
+            console.log('Renderizando detalles para:', item);
+            
+            // Validar que temas sea un array
+            const temas = Array.isArray(item.temas) ? item.temas : [];
+            
+            const topicsHTML = temas.map(tema => `
+                <div class="topic-tag">
+                    ${tema.nombre}
+                    <div class="info-icon">i</div>
+                    <div class="tooltip">${tema.descripcion}</div>
+                </div>
+            `).join('');
+            
+            // Determinar si mostrar foto o avatar genérico
+            const avatarHTML = item.fotoUrl 
+                ? `<img src="${item.fotoUrl}" alt="${item.candidato}" 
+                       style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;"
+                       onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'avatar-icon\\'></div><div class=\\'avatar-body\\'></div>';">` 
+                : `<div class="avatar-icon"></div><div class="avatar-body"></div>`;
+            
+            // Preparar el botón de descarga
+            const downloadButton = item.planUrl 
+                ? `<a href="${item.planUrl}" target="_blank" class="btn btn-primary" style="text-decoration: none;">Descarga el plan</a>`
+                : `<button class="btn btn-primary" disabled style="opacity: 0.5; cursor: not-allowed;">Plan no disponible</button>`;
+            
+            detailPanel.innerHTML = `
+                <div class="candidate-profile">
+                    <div class="avatar">
+                        ${avatarHTML}
+                    </div>
+                    <div class="candidate-name">${item.candidato || 'Sin información'}</div>
+                    <div class="party-label">Partido</div>
+                    <div class="candidate-info">
+                        ${item.cargo || ''}<br>
+                        ${item.ubicacion || ''} ${item.edad ? '- ' + item.edad : ''} ${item.estadoCivil ? '- ' + item.estadoCivil : ''} ${item.hijos ? '- ' + item.hijos : ''}
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    ${downloadButton}
+                    <button class="btn btn-secondary" onclick="scrollToCompare()">Comparar</button>
+                </div>
+
+                <div class="vision-section">
+                    <p class="vision-text">${item.vision || 'Sin información de visión disponible.'}</p>
+                    
+                    <div class="topics-section">
+                        <h3>Revisión por temas</h3>
+                        <div class="topics">
+                            ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Función para scroll a la sección de comparar (implementar después)
+        function scrollToCompare() {
+            alert('La funcionalidad de comparar se implementará en la siguiente fase');
+            // Aquí irá el código para hacer scroll a la sección de comparación
+        }
+
+        // Iniciar la aplicación cuando se carga la página
+        window.onload = init;
+    </script>
+
+    
+   
+</body>
+</html>
