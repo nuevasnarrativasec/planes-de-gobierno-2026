@@ -74,29 +74,53 @@
                     <button class="tab active" onclick="switchTab('partido')">Por partido</button>
                     <button class="tab" onclick="switchTab('candidato')">Por candidato</button>
                 </div>
-        
+
                 <div class="search-container">
                     <div class="search-box">
                         <input type="text" id="searchInput" placeholder="Buscar" onkeyup="filterItems()">
                         <span class="search-icon">🔍</span>
                     </div>
                 </div>
-        
+
                 <div class="content">
                     <div class="sidebar" id="itemList">
                         <!-- Items will be loaded here -->
                     </div>
-        
+
                     <div class="detail-panel" id="detailPanel">
                         <div class="empty-state">
                             Selecciona un partido o candidato para ver los detalles
                         </div>
                     </div>
                 </div>
+            </div>  
+        </div>
+
+        <!-- Sección de Comparador -->
+        <div class="comparison-section" id="comparisonSection">
+            <div class="comparison-header">
+                <h2>Comparador de Planes</h2>
+                <p>Elige hasta 3 planes y compáralos por tema, tono y coherencia. Resumen asistido por IA y validado por nuestro equipo periodístico. Para más detalle ver metodología.</p>
+                
+                <div class="theme-selector">
+                    <div class="theme-dropdown">
+                        <select id="themeSelector" onchange="updateComparisonTheme()">
+                            <option value="">Temas</option>
+                            <option value="educacion">Educación</option>
+                            <option value="economia">Economía</option>
+                            <option value="salud">Salud</option>
+                            <option value="seguridad">Seguridad</option>
+                            <option value="infraestructura">Infraestructura</option>
+                            <option value="medio-ambiente">Medio Ambiente</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-grid" id="comparisonGrid">
+                <!-- Las tarjetas de comparación se generarán aquí -->
             </div>
         </div>
-        
-
     </div>
 
     <!-- scripts -->
@@ -112,26 +136,325 @@
         });
     </script>
 
-    <!-- buscador candidatos o partidos -->
+    <!-- buscador y comparador de candidatos o partidos -->
     <script>
-        // CONFIGURACIÓN: Reemplaza esta URL con la de tu Google Spreadsheet
-        // Debe estar publicado como CSV
-        // Ejemplo: https://docs.google.com/spreadsheets/d/e/TU_ID/pub?output=csv
+        // ============================================
+        // CONFIGURACIÓN: URLs de Google Spreadsheets
+        // ============================================
+        
+        // Hoja 1: Datos generales de partidos y candidatos
         const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_yZQbmqUse6lOcFRxBhP53YkC3CdIc36YcOE3bk-w_91-TVudDvH9uVuJoSMZwf_4bPPuq--qbHKb/pub?output=csv';
-
+        
+        // Hoja 2: Datos de comparación por temas
+        const COMPARISON_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcgvr6YP_YLsgXS9-mJD34bBug-Qzlv8W_d3ZacfQhYcM-7u85u-U6TCl8S9rsBDVPD8Ck5mMsYNxW/pub?output=csv';
+        
+        // ============================================
+        // Variables globales - Sección Buscador
+        // ============================================
         let currentTab = 'partido';
         let allData = [];
         let filteredData = [];
+        
+        // ============================================
+        // Variables globales - Sección Comparador
+        // ============================================
+        let comparisonDataList = [];
+        let selectedComparisons = [null, null, null]; // Máximo 3 comparaciones
+        let currentComparisonTheme = '';
+
+        // ============================================
+        // Funciones del Comparador
+        // ============================================
+
+        // Cargar datos de comparación desde Google Sheets
+        async function loadComparisonData() {
+            try {
+                const response = await fetch(COMPARISON_SPREADSHEET_URL);
+                if (!response.ok) {
+                    throw new Error('Error al cargar datos de comparación');
+                }
+                const csvText = await response.text();
+                comparisonDataList = parseCSV(csvText);
+                console.log('✅ Datos de comparación cargados:', comparisonDataList);
+                console.log('📊 Total de registros:', comparisonDataList.length);
+                console.log('🔑 Columnas disponibles:', Object.keys(comparisonDataList[0] || {}));
+            } catch (error) {
+                console.error('❌ Error cargando datos de comparación:', error);
+                alert('Error al cargar los datos de comparación. Verifica que la URL del Google Sheet sea correcta y que esté publicado como CSV.');
+            }
+        }
+
+        // Actualizar tema de comparación
+        function updateComparisonTheme() {
+            currentComparisonTheme = document.getElementById('themeSelector').value;
+            renderComparisonCards();
+        }
+
+        // Renderizar tarjetas de comparación
+        function renderComparisonCards() {
+            const grid = document.getElementById('comparisonGrid');
+            
+            grid.innerHTML = selectedComparisons.map((item, index) => {
+                if (!item) {
+                    return `
+                        <div class="comparison-card empty">
+                            <div style="font-size: 48px; color: #ddd;">+</div>
+                            <p>Selecciona un candidato o partido</p>
+                            <div class="card-selector" style="width: 100%; max-width: 250px;">
+                                <select onchange="addToComparison(${index}, this.value)">
+                                    <option value="">Candidato o Partido</option>
+                                    ${allData.map(d => `<option value="${d.id}">${d.nombre}</option>`).join('')}
+                                </select>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                return renderComparisonCard(item, index);
+            }).join('');
+        }
+
+        // Renderizar una tarjeta de comparación con datos
+        function renderComparisonCard(item, index) {
+            const compData = comparisonDataList.find(c => 
+                c.partidoId == item.id && c.tema === currentComparisonTheme
+            );
+            
+            console.log('Buscando datos para:', {
+                partidoId: item.id,
+                tema: currentComparisonTheme,
+                encontrado: compData,
+                todosLosDatos: comparisonDataList
+            });
+            
+            if (!compData && currentComparisonTheme) {
+                return `
+                    <div class="comparison-card">
+                        <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
+                        <div class="card-profile">
+                            <div class="card-avatar">
+                                ${item.fotoUrl ? `<img src="${item.fotoUrl}" alt="${item.candidato}">` : '<div class="card-avatar-icon"></div><div class="card-avatar-body"></div>'}
+                            </div>
+                            <div class="card-name">${item.candidato}</div>
+                            <div class="card-party">${item.nombre}</div>
+                        </div>
+                        <p style="text-align: center; color: #999; padding: 40px 20px;">
+                            No hay información disponible para este tema
+                        </p>
+                    </div>
+                `;
+            }
+            
+            const avatarHTML = item.fotoUrl 
+                ? `<img src="${item.fotoUrl}" alt="${item.candidato}" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'card-avatar-icon\\'></div><div class=\\'card-avatar-body\\'></div>';">` 
+                : '<div class="card-avatar-icon"></div><div class="card-avatar-body"></div>';
+            
+            if (!currentComparisonTheme) {
+                return `
+                    <div class="comparison-card">
+                        <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
+                        <div class="card-selector">
+                            <select onchange="changeComparison(${index}, this.value)">
+                                <option value="${item.id}" selected>${item.nombre}</option>
+                                ${allData.filter(d => d.id != item.id).map(d => 
+                                    `<option value="${d.id}">${d.nombre}</option>`
+                                ).join('')}
+                            </select>
+                        </div>
+                        <div class="card-profile">
+                            <div class="card-avatar">${avatarHTML}</div>
+                            <div class="card-name">${item.candidato || item.nombre}</div>
+                            <div class="card-party">${item.nombre}</div>
+                        </div>
+                        <p style="text-align: center; color: #999; padding: 40px 20px;">
+                            Selecciona un tema arriba para ver las propuestas
+                        </p>
+                    </div>
+                `;
+            }
+            
+            // Renderizar con datos completos
+            const propuestasHTML = compData.propuestas ? 
+                `<ul>${compData.propuestas.split('\n').filter(p => p.trim()).map(p => `<li>${p.replace(/^- /, '')}</li>`).join('')}</ul>` 
+                : '<p>No hay propuestas disponibles</p>';
+            
+            // Parsear los factchecks individuales
+            let factcheckHTML = '';
+            if (compData.factcheckIntro || compData.factcheck1Propuesta) {
+                const factchecks = [];
+                
+                // Recopilar todos los factchecks disponibles
+                for (let i = 1; i <= 5; i++) {
+                    const propuesta = compData[`factcheck${i}Propuesta`];
+                    if (propuesta) {
+                        factchecks.push({
+                            propuesta: propuesta,
+                            descripcion: compData[`factcheck${i}Descripcion`] || '',
+                            veracidad: compData[`factcheck${i}Veracidad`] || 'doubtful',
+                            explicacion: compData[`factcheck${i}Explicacion`] || ''
+                        });
+                    }
+                }
+                
+                if (factchecks.length > 0) {
+                    const veracidadLabels = {
+                        'false': 'FALSO',
+                        'true': 'VERDADERO',
+                        'partially': 'PARCIALMENTE CIERTO',
+                        'doubtful': 'DUDOSO'
+                    };
+                    
+                    factcheckHTML = factchecks.map(fc => `
+                        <div class="factcheck-item">
+                            <div class="factcheck-proposal">${fc.propuesta}</div>
+                            ${fc.descripcion ? `<div class="factcheck-description">${fc.descripcion}</div>` : ''}
+                            <div class="fact-label ${fc.veracidad}">${veracidadLabels[fc.veracidad] || 'DUDOSO'}</div>
+                            ${fc.explicacion ? `<div class="factcheck-explanation"><strong>Explicación:</strong> ${fc.explicacion}</div>` : ''}
+                        </div>
+                    `).join('');
+                }
+            }
+            
+            return `
+                <div class="comparison-card">
+                    <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
+                    <div class="card-selector">
+                        <select onchange="changeComparison(${index}, this.value)">
+                            <option value="${item.id}" selected>${item.nombre}</option>
+                            ${allData.filter(d => d.id != item.id).map(d => 
+                                `<option value="${d.id}">${d.nombre}</option>`
+                            ).join('')}
+                        </select>
+                    </div>
+                    <div class="card-profile">
+                        <div class="card-avatar">${avatarHTML}</div>
+                        <div class="card-name">${item.candidato || item.nombre}</div>
+                        <div class="card-party">${item.nombre}</div>
+                    </div>
+                    <div class="card-content">
+                        <div class="content-section">
+                            <h4>${currentComparisonTheme.toUpperCase()}</h4>
+                            ${propuestasHTML}
+                        </div>
+                        ${compData.tonoDiscursivo || compData.coherencia ? `
+                            <div class="discourse-tone">
+                                <p><strong>Tono discursivo:</strong> ${compData.tonoDiscursivo || 'N/A'}</p>
+                                <p><strong>Coherencia:</strong> ${compData.coherencia || 'N/A'}</p>
+                            </div>
+                        ` : ''}
+                        ${factcheckHTML ? `
+                            <div class="factcheck-section">
+                                <h4>FACTCHECKING</h4>
+                                ${compData.factcheckIntro ? `<div class="factcheck-intro">${compData.factcheckIntro}</div>` : ''}
+                                ${factcheckHTML}
+                            </div>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
+
+        // Agregar partido/candidato a la comparación
+        function addToComparison(index, itemId) {
+            if (!itemId) return;
+            
+            const item = allData.find(d => d.id == itemId);
+            if (item) {
+                selectedComparisons[index] = item;
+                renderComparisonCards();
+            }
+        }
+
+        // Cambiar partido/candidato en la comparación
+        function changeComparison(index, itemId) {
+            if (!itemId) return;
+            
+            const item = allData.find(d => d.id == itemId);
+            if (item) {
+                selectedComparisons[index] = item;
+                renderComparisonCards();
+            }
+        }
+
+        // Remover de la comparación
+        function removeFromComparison(index) {
+            selectedComparisons[index] = null;
+            renderComparisonCards();
+        }
+
+        // Función mejorada de scroll a la sección de comparar
+        function scrollToCompare() {
+            const comparisonSection = document.getElementById('comparisonSection');
+            comparisonSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Agregar al comparador desde el botón "Comparar" del detalle
+        function addToCompare(item) {
+            // Buscar el primer espacio vacío
+            const emptyIndex = selectedComparisons.findIndex(c => c === null);
+            
+            if (emptyIndex !== -1) {
+                selectedComparisons[emptyIndex] = item;
+                renderComparisonCards();
+                scrollToCompare();
+            } else {
+                // Si ya hay 3 partidos, reemplazar el último
+                selectedComparisons[2] = item;
+                renderComparisonCards();
+                scrollToCompare();
+            }
+        }
+
+        // ============================================
+        // Funciones del Buscador Principal
+        // ============================================
 
         // Inicializar la aplicación
         function init() {
             loadDataFromGoogleSheets();
+            loadComparisonData();
+            renderComparisonCards();
         }
 
         // Función para parsear CSV
         function parseCSV(csv) {
-            const lines = csv.split('\n');
-            const headers = lines[0].split(',').map(h => h.trim().replace(/"/g, ''));
+            // Dividir por saltos de línea pero respetando comillas
+            const lines = [];
+            let currentLine = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < csv.length; i++) {
+                const char = csv[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                    currentLine += char;
+                } else if (char === '\n' && !inQuotes) {
+                    if (currentLine.trim()) {
+                        lines.push(currentLine);
+                    }
+                    currentLine = '';
+                } else {
+                    currentLine += char;
+                }
+            }
+            
+            // Agregar la última línea si existe
+            if (currentLine.trim()) {
+                lines.push(currentLine);
+            }
+            
+            console.log('🔍 Parseando CSV...');
+            console.log('📏 Total de líneas encontradas:', lines.length);
+            
+            if (lines.length === 0) {
+                console.error('❌ No se encontraron líneas en el CSV');
+                return [];
+            }
+            
+            const headers = parseCSVLine(lines[0]).map(h => h.trim().replace(/^"|"$/g, ''));
+            console.log('📋 Headers encontrados:', headers);
+            
             const data = [];
 
             for (let i = 1; i < lines.length; i++) {
@@ -141,10 +464,13 @@
                 const row = {};
                 
                 headers.forEach((header, index) => {
-                    row[header] = values[index] ? values[index].trim().replace(/"/g, '') : '';
+                    let value = values[index] || '';
+                    // Limpiar comillas al inicio y final
+                    value = value.trim().replace(/^"|"$/g, '');
+                    row[header] = value;
                 });
                 
-                // Procesar temas y descripciones
+                // Procesar temas y descripciones (solo para la hoja principal)
                 if (row.temas && row.descripcionesTemas) {
                     const temasArray = row.temas.split(',').map(t => t.trim());
                     const descripcionesArray = row.descripcionesTemas.split(',').map(d => d.trim());
@@ -153,13 +479,23 @@
                         nombre: nombre,
                         descripcion: descripcionesArray[index] || ''
                     }));
-                } else {
-                    row.temas = [];
+                }
+                
+                // Debug: mostrar las primeras 3 filas parseadas
+                if (i <= 3) {
+                    console.log(`📄 Fila ${i}:`, {
+                        id: row.id,
+                        partido: row.partido || row.nombre,
+                        tema: row.tema,
+                        tonoDiscursivo: row.tonoDiscursivo,
+                        coherencia: row.coherencia
+                    });
                 }
                 
                 data.push(row);
             }
             
+            console.log(`✅ Total de registros parseados: ${data.length}`);
             return data;
         }
 
@@ -171,9 +507,17 @@
             
             for (let i = 0; i < line.length; i++) {
                 const char = line[i];
+                const nextChar = line[i + 1];
                 
                 if (char === '"') {
-                    inQuotes = !inQuotes;
+                    if (inQuotes && nextChar === '"') {
+                        // Doble comilla dentro de campo entrecomillado = comilla literal
+                        current += '"';
+                        i++; // Saltar la siguiente comilla
+                    } else {
+                        // Toggle estado de comillas (no agregar las comillas al contenido)
+                        inQuotes = !inQuotes;
+                    }
                 } else if (char === ',' && !inQuotes) {
                     result.push(current);
                     current = '';
@@ -355,7 +699,7 @@
 
                 <div class="action-buttons">
                     ${downloadButton}
-                    <button class="btn btn-secondary" onclick="scrollToCompare()">Comparar</button>
+                    <button class="btn btn-secondary" onclick="addToCompare(${JSON.stringify(item).replace(/"/g, '&quot;')})">Comparar</button>
                 </div>
 
                 <div class="vision-section">
@@ -373,14 +717,15 @@
 
         // Función para scroll a la sección de comparar (implementar después)
         function scrollToCompare() {
-            alert('La funcionalidad de comparar se implementará en la siguiente fase');
-            // Aquí irá el código para hacer scroll a la sección de comparación
+            const comparisonSection = document.getElementById('comparisonSection');
+            if (comparisonSection) {
+                comparisonSection.scrollIntoView({ behavior: 'smooth' });
+            }
         }
 
         // Iniciar la aplicación cuando se carga la página
         window.onload = init;
     </script>
-
     
    
 </body>
