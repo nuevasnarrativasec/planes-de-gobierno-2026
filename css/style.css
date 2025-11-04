@@ -108,7 +108,20 @@ html {
         background-color: #fff;
         margin: 0 auto;
         max-width: 900px;
+        padding: 40px 0;
     }
+        #box-main-candidatos h3{
+            font-size: 1.1rem;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        #box-main-candidatos p.bajada-candidatos{
+            font-size: 1rem;
+            line-height: 1.4;
+            margin: 10px auto;
+            max-width: 500px;
+            text-align: left;
+        }
 
     /* buscador candidatos o partidos */
     .container {
@@ -116,7 +129,7 @@ html {
         margin: 0 auto;
         background: white;
         border-radius: 12px;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        
         overflow: hidden;
     }
 
@@ -426,7 +439,8 @@ html {
 
     /* Estilos para la sección de comparación */
     .comparison-section {
-        max-width: 1400px;
+        background-color: #fff;
+        max-width: 860px;
         margin: 60px auto;
         padding: 40px 20px;
     }
@@ -437,19 +451,18 @@ html {
     }
 
         .comparison-header h2 {
-            font-size: 28px;
+            font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 1px;
         }
 
         .comparison-header p {
-            color: #666;
-            font-size: 15px;
-            line-height: 1.6;
-            max-width: 700px;
-            margin: 0 auto 30px;
+            font-size: 1rem;
+            line-height: 1.4;
+            margin: 10px auto;
+            max-width: 500px;
+            text-align: left;
         }
 
     .theme-selector {
@@ -738,7 +751,50 @@ html {
             background: #f39c12;
             color: white;
         }
-            
+       
+    .box-titulo-seccion{
+        text-align: center;
+        margin-top: 60px;
+    }
+        .box-titulo-seccion h3{
+            font: 1.3rem/1.2 "Roboto", sans-serif;
+            font-weight: 900;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .box-titulo-seccion p{
+            font: 1.2rem/1.4 "Roboto", sans-serif;
+            font-weight: 400;
+            margin: 0 auto;
+            max-width: 520px;
+        }
+        .box-titulo-seccion img{
+            margin: 20px auto;
+            max-width: 40px;
+        }
+
+    /** panorama general **/
+    .box-main-panorama{
+        background-color: #fff;
+        margin: 40px auto 0;
+        max-width: 860px;
+        padding: 40px 20px;
+    }
+        .box-main-panorama h2{
+            font-size: 1.1rem;
+            font-weight: 700;
+            max-width: 525px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .box-main-panorama p{
+            font-size: 1rem;
+            line-height: 1.4;
+            margin: 10px auto;
+            max-width: 500px;
+            text-align: left;
+        }
+    
 
 @media (max-width: 768px) {
             
