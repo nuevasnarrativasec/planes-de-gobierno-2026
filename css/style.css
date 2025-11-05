@@ -10,6 +10,9 @@ html {
 
     -webkit-font-smoothing:antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    /* Scroll suave */
+    scroll-behavior: smooth;
 }
 .clear{
     clear: both;
@@ -82,7 +85,18 @@ html {
             padding: 10px 20px;
             text-transform: uppercase;
             vertical-align: top;
+
+            transition: all 0.3s ease;
         }
+            ul.anclas li:hover {
+                background-color: #5a5a5a;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            }
+            ul.anclas li.active {
+                background-color: #5a5a5a;
+                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            }
     .box-slider-resumen{
         border-radius: 30px;
         margin: 40px auto;

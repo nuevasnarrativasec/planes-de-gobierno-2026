@@ -47,6 +47,7 @@
             <img src="./img/icon-desliza.png" alt="" width="100%">
         </div>
 
+        <!-- slider resumen candidatos -->
         <div class="box-slider-resumen">
             <div class="slider-resumen">
                 <div>
@@ -74,6 +75,7 @@
             </div>
         </div>
 
+        <!-- buscador de candidatos y partidos -->
         <div id="box-main-candidatos">
             <h3>explora por candidato o partido</h3>
             <p class="bajada-candidatos">
@@ -136,6 +138,7 @@
             <h3>panorama general</h3>
         </div>
 
+        <!-- panorama general -->
         <div class="box-main-panorama">
             <h2>Diversidad temática</h2>
             <p>
@@ -157,7 +160,7 @@
                 <div class="density-controls">
                     <div class="party-selector">
                         <select id="densityPartyFilter" onchange="updateDensityFilter()">
-                            <option value="">Partido</option>
+                            <option value="">Todos</option>
                         </select>
                     </div>
 
@@ -178,12 +181,23 @@
                     <!-- Lista de partidos con barras se generará aquí -->
                 </div>
             </div>
-        </div>
 
 
+            <h2>Prevalencia temática</h2>
+            <p>
+                Prevalencia temática Ordena los temas por cuántos partidos los incluyen en sus planes. Más alto = más transversal en la agenda. No evalúa detalle, coherencia ni evidencia. Vista global (todos los partidos) Vista específica (un partido).
+            </p>
+
+            <div class="box-flourish">
+                <div class="flourish-embed flourish-hierarchy" data-src="visualisation/25769480"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/25769480/thumbnail" width="100%" alt="hierarchy visualization" /></noscript></div>
+            </div>
+
         </div>
+
 
     </div>
+
+    
 
     <!-- scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -196,6 +210,43 @@
                 infiniteLoop: false
             });
         });
+    </script>
+
+    <!-- anclas botones -->
+    <script>
+        // Smooth scroll para las anclas
+            document.addEventListener('DOMContentLoaded', function() {
+                // Obtener todos los elementos li del menú de anclas
+                const anchorItems = document.querySelectorAll('ul.anclas li');
+                
+                // Mapeo de los li con sus correspondientes divs
+                const sections = [
+                    { element: anchorItems[0], target: '#box-main-candidatos' },
+                    { element: anchorItems[1], target: '#comparisonSection' },
+                    { element: anchorItems[2], target: '.box-main-panorama' }
+                ];
+                
+                // Agregar event listeners a cada li
+                sections.forEach(function(section) {
+                    if (section.element) {
+                        section.element.addEventListener('click', function() {
+                            const targetElement = document.querySelector(section.target);
+                            
+                            if (targetElement) {
+                                // Scroll suave hacia el elemento
+                                targetElement.scrollIntoView({
+                                    behavior: 'smooth',
+                                    block: 'start'
+                                });
+                                
+                                // Opcional: agregar clase active al li clickeado
+                                anchorItems.forEach(item => item.classList.remove('active'));
+                                section.element.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            });
     </script>
 
     <!-- buscador y comparador de candidatos o partidos -->
@@ -479,7 +530,7 @@
                 return `<option value="${partidoId}">${partido.partido}</option>`;
             }).join('');
             
-            select.innerHTML = '<option value="">Partido</option>' + options;
+            select.innerHTML = '<option value="">Todos los partidos</option>' + options;
         }
 
         // ============================================
