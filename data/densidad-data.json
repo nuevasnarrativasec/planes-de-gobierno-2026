@@ -1,0 +1,82 @@
+{
+  "partidos": [
+    {
+      "id": "1",
+      "nombre": "Partido 1",
+      "logoUrl": "https://lh3.googleusercontent.com/d/TU_ID_AQUI",
+      "densidad": {
+        "educacion": 15,
+        "salud": 25,
+        "economia": 20,
+        "seguridad": 18,
+        "infraestructura": 12,
+        "medio-ambiente": 10
+      }
+    },
+    {
+      "id": "2",
+      "nombre": "Partido 2",
+      "logoUrl": "https://lh3.googleusercontent.com/d/TU_ID_AQUI",
+      "densidad": {
+        "educacion": 22,
+        "salud": 28,
+        "economia": 15,
+        "seguridad": 10,
+        "infraestructura": 15,
+        "medio-ambiente": 10
+      }
+    },
+    {
+      "id": "3",
+      "nombre": "Fuerza Popular",
+      "logoUrl": "",
+      "densidad": {
+        "educacion": 18,
+        "salud": 30,
+        "economia": 25,
+        "seguridad": 12,
+        "infraestructura": 8,
+        "medio-ambiente": 7
+      }
+    },
+    {
+      "id": "4",
+      "nombre": "Acción para El Progreso",
+      "logoUrl": "",
+      "densidad": {
+        "educacion": 20,
+        "salud": 22,
+        "economia": 25,
+        "seguridad": 15,
+        "infraestructura": 10,
+        "medio-ambiente": 8
+      }
+    },
+    {
+      "id": "5",
+      "nombre": "Partido Democrático Unidos por el Perú",
+      "logoUrl": "",
+      "densidad": {
+        "educacion": 16,
+        "salud": 35,
+        "economia": 18,
+        "seguridad": 12,
+        "infraestructura": 10,
+        "medio-ambiente": 9
+      }
+    },
+    {
+      "id": "6",
+      "nombre": "Partido de los Trabajadores y Emprendedores",
+      "logoUrl": "",
+      "densidad": {
+        "educacion": 25,
+        "salud": 20,
+        "economia": 22,
+        "seguridad": 15,
+        "infraestructura": 10,
+        "medio-ambiente": 8
+      }
+    }
+  ]
+}

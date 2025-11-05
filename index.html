@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/style.css?v2">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -145,6 +145,42 @@
             <div class="box-flourish">
                 <div class="flourish-embed flourish-chart" data-src="visualisation/25750063"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/25750063/thumbnail" width="100%" alt="chart visualization" /></noscript></div>
             </div>
+
+            <h2>Densidad discursiva</h2>
+            <p>
+                Densidad discursiva ¿En qué temas invierte más páginas un plan? La densidad muestra el porcentaje del discurso que ocupa cada tema dentro de un partido. Un mayor % no implica más concreción ni mejor evidencia.
+            </p>
+
+            <!-- Sección de Densidad Discursiva -->
+            <div class="density-section" id="densitySection">
+
+                <div class="density-controls">
+                    <div class="party-selector">
+                        <select id="densityPartyFilter" onchange="updateDensityFilter()">
+                            <option value="">Partido</option>
+                        </select>
+                    </div>
+
+                    <div class="theme-slider-container">
+                        <div class="theme-slider" id="themeSlider">
+                            <div class="theme-segments" id="themeSegments">
+                                <!-- Segmentos se generarán dinámicamente -->
+                            </div>
+                            <div class="slider-handle" id="sliderHandle"></div>
+                        </div>
+                        <div class="theme-labels" id="themeLabels">
+                            <!-- Labels se generarán dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="party-list" id="partyDensityList">
+                    <!-- Lista de partidos con barras se generará aquí -->
+                </div>
+            </div>
+        </div>
+
+
         </div>
 
     </div>
@@ -182,6 +218,271 @@
         let filteredData = [];
         
         // ============================================
+        // Variables globales - Sección Densidad Discursiva
+        // ============================================
+        
+        // URL del archivo JSON con datos de densidad
+        const DENSITY_DATA_URL = './data/densidad-data.json';
+        
+        const themes = [
+            { id: 'educacion', name: 'EDUCACIÓN', color: '#3B82F6' },
+            { id: 'salud', name: 'SALUD', color: '#EF4444' },
+            { id: 'economia', name: 'ECONOMÍA', color: '#10B981' },
+            { id: 'seguridad', name: 'SEGURIDAD', color: '#F59E0B' },
+            { id: 'infraestructura', name: 'INFRAESTRUCTURA', color: '#8B5CF6' },
+            { id: 'medio-ambiente', name: 'MEDIO AMBIENTE', color: '#06B6D4' }
+        ];
+        
+        let selectedThemeIndex = 1; // Por defecto: SALUD
+        let densityFilteredParty = '';
+        let densityData = {};
+
+        // ============================================
+        // Funciones de Densidad Discursiva
+        // ============================================
+
+        // Cargar datos de densidad desde JSON
+        async function loadDensityData() {
+            try {
+                const response = await fetch(DENSITY_DATA_URL);
+                if (!response.ok) {
+                    throw new Error('Error al cargar datos de densidad');
+                }
+                const data = await response.json();
+                
+                // Convertir array a objeto indexado por ID
+                densityData = {};
+                data.partidos.forEach(partido => {
+                    densityData[partido.id] = {
+                        partido: partido.nombre,
+                        logoUrl: partido.logoUrl || '',
+                        temas: partido.densidad
+                    };
+                });
+                
+                console.log('📊 Datos de densidad cargados:', densityData);
+                return densityData;
+            } catch (error) {
+                console.error('❌ Error cargando datos de densidad:', error);
+                console.log('⚠️ Usando datos de ejemplo...');
+                
+                // Datos de ejemplo si falla la carga
+                densityData = {
+                    "1": {
+                        partido: "Partido 1",
+                        logoUrl: "",
+                        temas: {
+                            educacion: 15,
+                            salud: 25,
+                            economia: 20,
+                            seguridad: 18,
+                            infraestructura: 12,
+                            "medio-ambiente": 10
+                        }
+                    },
+                    "2": {
+                        partido: "Partido 2",
+                        logoUrl: "",
+                        temas: {
+                            educacion: 22,
+                            salud: 28,
+                            economia: 15,
+                            seguridad: 10,
+                            infraestructura: 15,
+                            "medio-ambiente": 10
+                        }
+                    }
+                };
+                return densityData;
+            }
+        }
+
+        // Inicializar slider de temas
+        function initThemeSlider() {
+            const segmentsContainer = document.getElementById('themeSegments');
+            const labelsContainer = document.getElementById('themeLabels');
+            const slider = document.getElementById('themeSlider');
+            
+            // Crear segmentos SIN labels dentro
+            segmentsContainer.innerHTML = themes.map((theme, index) => `
+                <div class="theme-segment theme-${theme.id} ${index === selectedThemeIndex ? 'active' : ''}" 
+                     data-index="${index}"
+                     onclick="selectTheme(${index})">
+                </div>
+            `).join('');
+            
+            // Crear labels fuera de los segmentos
+            labelsContainer.innerHTML = themes.map((theme, index) => `
+                <div class="theme-label-item ${index === selectedThemeIndex ? 'active' : ''}" 
+                     data-index="${index}">
+                    ${theme.name}
+                </div>
+            `).join('');
+            
+            // Posicionar handle en el centro del segmento
+            updateSliderHandle();
+            
+            // Hacer el slider clickeable
+            slider.addEventListener('click', (e) => {
+                if (e.target.classList.contains('theme-segment') || e.target.closest('.theme-segment')) {
+                    return; // Ya manejado por onclick del segmento
+                }
+                handleSliderDrag(e.clientX);
+            });
+        }
+
+        // Manejar arrastre del slider
+        function handleSliderDrag(clientX) {
+            const slider = document.getElementById('themeSlider');
+            const rect = slider.getBoundingClientRect();
+            const x = clientX - rect.left;
+            const percentage = Math.max(0, Math.min(1, x / rect.width));
+            const newIndex = Math.round(percentage * (themes.length - 1));
+            
+            if (newIndex !== selectedThemeIndex) {
+                selectTheme(newIndex);
+            }
+        }
+
+        // Seleccionar tema
+        function selectTheme(index) {
+            selectedThemeIndex = index;
+            
+            // Actualizar segmentos activos y dimmed
+            document.querySelectorAll('.theme-segment').forEach((seg, i) => {
+                seg.classList.toggle('active', i === index);
+                seg.classList.toggle('dimmed', i !== index);
+            });
+            
+            // Actualizar labels activos
+            document.querySelectorAll('.theme-label-item').forEach((label, i) => {
+                label.classList.toggle('active', i === index);
+            });
+            
+            // Actualizar handle
+            updateSliderHandle();
+            
+            // Actualizar visualización
+            renderDensityBars();
+        }
+
+        // Actualizar posición del handle
+        function updateSliderHandle() {
+            const slider = document.getElementById('themeSlider');
+            const handle = document.getElementById('sliderHandle');
+            const segments = document.querySelectorAll('.theme-segment');
+            
+            if (segments.length === 0) return;
+            
+            // Obtener el segmento activo
+            const activeSegment = segments[selectedThemeIndex];
+            const segmentRect = activeSegment.getBoundingClientRect();
+            const sliderRect = slider.getBoundingClientRect();
+            
+            // Posicionar el handle en el centro del segmento
+            const segmentCenter = segmentRect.left - sliderRect.left + (segmentRect.width / 2);
+            handle.style.left = `${segmentCenter}px`;
+        }
+
+        // Renderizar barras de densidad
+        function renderDensityBars() {
+            const container = document.getElementById('partyDensityList');
+            const selectedTheme = themes[selectedThemeIndex].id;
+            
+            // Filtrar partidos si hay selección
+            let partidosToShow = Object.keys(densityData);
+            if (densityFilteredParty) {
+                partidosToShow = partidosToShow.filter(id => id == densityFilteredParty);
+            }
+            
+            // Crear columna de nombres
+            const namesHTML = partidosToShow.map(partidoId => {
+                const partido = densityData[partidoId];
+                const logoHTML = partido.logoUrl 
+                    ? `<img src="${partido.logoUrl}" alt="${partido.partido}" onerror="this.style.display='none';">` 
+                    : '🍎';
+                const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
+                
+                return `
+                    <div class="party-name-item ${highlightClass}">
+                        <div class="party-density-item">
+                            <div class="party-density-icon">${logoHTML}</div>
+                            <div class="party-density-name">${partido.partido}</div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Crear columna de barras
+            const barsHTML = partidosToShow.map(partidoId => {
+                const partido = densityData[partidoId];
+                const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
+                
+                const segmentsHTML = themes.map((theme, themeIndex) => {
+                    const percentage = partido.temas[theme.id] || 0;
+                    const isSelected = theme.id === selectedTheme;
+                    const dimmedClass = selectedTheme ? (isSelected ? 'highlighted' : 'dimmed') : '';
+                    
+                    return `
+                        <div class="density-segment theme-${theme.id} ${dimmedClass}" 
+                             style="width: ${percentage}%"
+                             data-theme="${theme.id}"
+                             data-theme-index="${themeIndex}"
+                             onclick="selectThemeFromBar(${themeIndex})">
+                            <div class="density-tooltip">${theme.name}: ${percentage}%</div>
+                        </div>
+                    `;
+                }).join('');
+                
+                return `
+                    <div class="party-bar-item ${highlightClass}">
+                        <div class="party-density-bar-container">
+                            <div class="party-density-bar">
+                                ${segmentsHTML}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = `
+                <div class="party-names-column">
+                    ${namesHTML}
+                </div>
+                <div class="party-bars-column">
+                    ${barsHTML}
+                </div>
+            `;
+        }
+
+        // Seleccionar tema desde la barra de un partido
+        function selectThemeFromBar(themeIndex) {
+            selectTheme(themeIndex);
+            
+            // Scroll suave al slider
+            const slider = document.getElementById('themeSlider');
+            slider.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Actualizar filtro de partido
+        function updateDensityFilter() {
+            densityFilteredParty = document.getElementById('densityPartyFilter').value;
+            renderDensityBars();
+        }
+
+        // Poblar selector de partidos
+        function populateDensityPartySelector() {
+            const select = document.getElementById('densityPartyFilter');
+            
+            const options = Object.keys(densityData).map(partidoId => {
+                const partido = densityData[partidoId];
+                return `<option value="${partidoId}">${partido.partido}</option>`;
+            }).join('');
+            
+            select.innerHTML = '<option value="">Partido</option>' + options;
+        }
+
+        // ============================================
         // Variables globales - Sección Comparador
         // ============================================
         let comparisonDataList = [];
@@ -204,9 +505,11 @@
                 console.log('✅ Datos de comparación cargados:', comparisonDataList);
                 console.log('📊 Total de registros:', comparisonDataList.length);
                 console.log('🔑 Columnas disponibles:', Object.keys(comparisonDataList[0] || {}));
+                return comparisonDataList;
             } catch (error) {
                 console.error('❌ Error cargando datos de comparación:', error);
                 alert('Error al cargar los datos de comparación. Verifica que la URL del Google Sheet sea correcta y que esté publicado como CSV.');
+                return [];
             }
         }
 
@@ -440,6 +743,18 @@
             loadDataFromGoogleSheets();
             loadComparisonData();
             renderComparisonCards();
+            
+            // Cargar y renderizar densidad discursiva
+            loadDensityData().then(() => {
+                initThemeSlider();
+                populateDensityPartySelector();
+                renderDensityBars();
+                
+                // Reposicionar handle en resize
+                window.addEventListener('resize', () => {
+                    updateSliderHandle();
+                });
+            });
         }
 
         // Función para parsear CSV

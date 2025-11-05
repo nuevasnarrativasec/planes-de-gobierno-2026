@@ -783,9 +783,9 @@ html {
         .box-main-panorama h2{
             font-size: 1.1rem;
             font-weight: 700;
-            max-width: 525px;
-            margin-bottom: 15px;
-            text-align: center;
+            margin: 10px auto;
+            max-width: 500px;
+            text-align: left;
         }
         .box-main-panorama p{
             font-size: 1rem;
@@ -794,10 +794,383 @@ html {
             max-width: 500px;
             text-align: left;
         }
+        .box-flourish{
+            margin-bottom: 40px;
+        }
     
+    /* Estilos para la sección de densidad discursiva */
+        .density-section {
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 40px 20px;
+        }
+
+        .density-header {
+            margin-bottom: 40px;
+        }
+
+        .density-header h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .density-header p {
+            color: #666;
+            font-size: 15px;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+        .density-controls {
+            margin-bottom: 40px;
+        }
+
+        .party-selector {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .party-selector select {
+            width: 100%;
+            max-width: 400px;
+            padding: 14px 40px 14px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 15px;
+            background: white;
+            cursor: pointer;
+            appearance: none;
+            outline: none;
+        }
+
+        .theme-slider-container {
+            margin-bottom: 50px;
+            position: relative;
+        }
+
+        .theme-slider-label {
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            margin-top: 10px;
+            color: #333;
+            text-transform: uppercase;
+        }
+
+        .theme-slider {
+            position: relative;
+            height: 50px;
+            background: transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            overflow: visible;
+            margin-bottom: 10px;
+        }
+
+        .theme-segments {
+            display: flex;
+            height: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .theme-segment {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            opacity: 1;
+        }
+
+        .theme-segment.dimmed {
+            opacity: 0.3;
+        }
+
+        .theme-segment:hover {
+            transform: scaleY(1.1);
+            z-index: 10;
+        }
+
+        .theme-segment.active {
+            transform: scaleY(1.2);
+            z-index: 20;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            opacity: 1 !important;
+        }
+
+        .theme-labels {
+            display: flex;
+            margin-top: 8px;
+        }
+
+        .theme-label-item {
+            flex: 1;
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .theme-label-item.active {
+            color: #333;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .slider-handle {
+            position: absolute;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 30px;
+            height: 30px;
+            background: white;
+            border: 3px solid #333;
+            border-radius: 50%;
+            cursor: grab;
+            z-index: 100;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            transition: left 0.3s ease;
+            pointer-events: none;
+        }
+
+        .slider-handle:active {
+            cursor: grabbing;
+        }
+
+        .party-list {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 0;
+            align-items: start;
+        }
+
+        .party-names-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .party-bars-column {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .party-name-item {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            min-height: 90px;
+            transition: all 0.3s;
+        }
+
+        .party-name-item.highlighted {
+            border-color: #5a5a5a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .party-bar-item {
+            padding: 20px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .party-bar-item.highlighted {
+            border-color: #5a5a5a;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .party-density-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .party-density-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: #d0d0d0;
+            margin-right: 15px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+
+        .party-density-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .party-density-name {
+            font-weight: 600;
+            font-size: 15px;
+            flex: 1;
+        }
+
+        .party-density-bar-container {
+            position: relative;
+            height: 40px;
+            width: 100%;
+        }
+
+        .party-density-bar {
+            display: flex;
+            height: 100%;
+            border-radius: 6px;
+            /*overflow: hidden;*/
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .density-segment {
+            position: relative;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .density-segment.dimmed {
+            opacity: 0.3;
+        }
+
+        .density-segment.highlighted {
+            opacity: 1;
+            transform: scaleY(1.15);
+            z-index: 10;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+
+        .density-tooltip {
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            z-index: 1000;
+        }
+
+        .density-tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: #333;
+        }
+
+        .density-segment:hover .density-tooltip,
+        .density-segment.highlighted .density-tooltip {
+            opacity: 1;
+        }
+
+        /* Colores de temas */
+        .theme-educacion { background-color: #3B82F6; }
+        .theme-salud { background-color: #EF4444; }
+        .theme-economia { background-color: #10B981; }
+        .theme-seguridad { background-color: #F59E0B; }
+        .theme-infraestructura { background-color: #8B5CF6; }
+        .theme-medio-ambiente { background-color: #06B6D4; }
+
 
 @media (max-width: 768px) {
             
+    .party-list {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            /* Crear contenedor para cada partido */
+            .party-names-column,
+            .party-bars-column {
+                display: contents;
+            }
+            
+            /* Agrupar cada partido con su barra */
+            .party-name-item {
+                order: 0;
+                margin-bottom: 10px;
+                width: 85%;
+            }
+            
+            .party-bar-item {
+                order: 0;
+                margin-bottom: 20px;
+                width: 85%;
+            }
+            
+            /* Usar nth-child para emparejar nombres con barras */
+            .party-name-item:nth-child(1) { order: 1; }
+            .party-bar-item:nth-child(1) { order: 2; }
+            
+            .party-name-item:nth-child(2) { order: 3; }
+            .party-bar-item:nth-child(2) { order: 4; }
+            
+            .party-name-item:nth-child(3) { order: 5; }
+            .party-bar-item:nth-child(3) { order: 6; }
+            
+            .party-name-item:nth-child(4) { order: 7; }
+            .party-bar-item:nth-child(4) { order: 8; }
+            
+            .party-name-item:nth-child(5) { order: 9; }
+            .party-bar-item:nth-child(5) { order: 10; }
+            
+            .party-name-item:nth-child(6) { order: 11; }
+            .party-bar-item:nth-child(6) { order: 12; }
+            
+            .party-name-item:nth-child(7) { order: 13; }
+            .party-bar-item:nth-child(7) { order: 14; }
+            
+            .party-name-item:nth-child(8) { order: 15; }
+            .party-bar-item:nth-child(8) { order: 16; }
+            
+            .party-name-item:nth-child(9) { order: 17; }
+            .party-bar-item:nth-child(9) { order: 18; }
+            
+            .party-name-item:nth-child(10) { order: 19; }
+            .party-bar-item:nth-child(10) { order: 20; }
+
+            .theme-label-item {
+                font-size: 9px;
+            }
+            
+            .theme-slider-container {
+                margin-bottom: 40px;
+            }
+            
+            .slider-handle {
+                width: 25px;
+                height: 25px;
+            }
+            
+            .density-tooltip {
+                font-size: 10px;
+                padding: 4px 8px;
+            }
 }
 
 @media (max-width: 1024px) {
