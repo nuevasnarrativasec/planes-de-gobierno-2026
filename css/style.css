@@ -19,7 +19,6 @@ html {
 }
 
 #header{
-    background-color: #939191;
     height: 100vh;
     position: relative;
 }
@@ -51,19 +50,21 @@ html {
             max-width: 500px;
         }
 .main{
-    background-color: #E8E1E1;
     padding: 60px 0;
 }
     p.bajada{
-        font: 1.2rem/1.4 "Roboto", sans-serif;
+        border-bottom: 1px solid #c2c2c2;
+        border-top: 1px solid #c2c2c2;
+        font: 1.1rem/1.5 "Roboto", sans-serif;
         font-weight: 400;
-        margin: 0 auto;
+        margin: 0 auto 80px;
         max-width: 520px;
-        padding: 40px 0;
+        padding: 40px 25px;
     }
     span.update{
+        color: #B4B4B4;
         display: block;
-        font: 1.2rem/1.4 "Roboto", sans-serif;
+        font: 1rem/1.4 "Roboto", sans-serif;
         font-weight: 700;
         margin: 20px auto;
         text-align: center;
@@ -74,24 +75,26 @@ html {
         text-align: center;
     }
         ul.anclas li{
-            background-color: #939191;
+            background-color: #fff;
+            border: 1px solid #C4C4C4;
             border-radius: 30px;
-            color: #fff;
+            color: #000;
             cursor: pointer;
             display: inline-block;
-            font: 1.2rem/1.4 "Roboto", sans-serif;
+            font: 1rem/1.4 "Roboto", sans-serif;
             font-weight: 800;
             margin: 20px;
+            min-width: 200px;
             padding: 10px 20px;
-            text-transform: uppercase;
             vertical-align: top;
 
             transition: all 0.3s ease;
         }
             ul.anclas li:hover {
-                background-color: #5a5a5a;
-                transform: translateY(-2px);
+                background-color: #000;
                 box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+                color: #fff;
+                transform: translateY(-2px);                
             }
             ul.anclas li.active {
                 background-color: #5a5a5a;
@@ -99,9 +102,14 @@ html {
             }
     .box-slider-resumen{
         border-radius: 30px;
-        margin: 40px auto;
+        margin: 60px auto 40px;
         max-width: 450px;
     }
+        img.icon-desliza-gris{
+            display: block;
+            margin: 20px auto;
+            max-width: 150px;
+        }
         .box-slider-resumen .bx-wrapper{
             border-radius: 30px;
         }
@@ -770,22 +778,24 @@ html {
         text-align: center;
         margin-top: 60px;
     }
+        span.linea-titulo-seccion{
+            background-color: #000;
+            display: block;
+            height: 1px;
+            margin: 0 auto 10px;
+            max-width: 60px;
+            width: 100%;
+        }
         .box-titulo-seccion h3{
             font: 1.3rem/1.2 "Roboto", sans-serif;
             font-weight: 900;
             margin-bottom: 10px;
-            text-transform: uppercase;
         }
         .box-titulo-seccion p{
-            font: 1.2rem/1.4 "Roboto", sans-serif;
+            font: 1.1rem/1.5 "Roboto", sans-serif;
             font-weight: 400;
             margin: 0 auto;
-            max-width: 520px;
-        }
-        .box-titulo-seccion img{
-            margin: 20px auto;
-            max-width: 40px;
-        }
+        }       
 
     /** panorama general **/
     .box-main-panorama{
