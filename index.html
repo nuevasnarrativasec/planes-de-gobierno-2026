@@ -49,29 +49,53 @@
         </div>
 
         <!-- slider resumen candidatos -->
-        <div class="box-slider-resumen">
-            <img src="./img/icon-desliza-gris.png" alt="" width="100%" class="icon-desliza-gris">
+        <div class="slider-container">
             <div class="slider-resumen">
-                <div>
-                    <div class="box-info-slider-resumen">
-                        <h2 class="slide-title">La mayor densidad temática</h2>
-                        <div class="slide-party">Partido Nacional<br>Manzanas Rojas</div>
-                        <div class="slide-content">
-                            <h3 class="slide-subtitle">El plan más "denso" en propuestas</h3>
-                            <p class="slide-description">Más propuestas por capítulo y mayor detalle por tema.</p>
-                            <p class="slide-metric">Métrica: Densidad promedio<br>1.9 propuestas/página</p>
-                        </div>
+                <!-- Slide 1 -->
+                <div class="slide-card card-pink">
+                    <div class="card-header">
+                        <h3>La mayor densidad temática</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>El plan más "denso" en propuestas</h4>
+                        <p><strong>ACCIÓN POPULAR</strong> tiene más propuestas por capítulo y mayor detalle por tema.</p>
+                        <p><strong>Métrica:</strong> Densidad promedio 1.9 propuestas/página</p>
                     </div>
                 </div>
-                <div>
-                    <div class="box-info-slider-resumen">
-                        <h2 class="slide-title">Mayor alcance territorial</h2>
-                        <div class="slide-party">Coalición Verde</div>
-                        <div class="slide-content">
-                            <h3 class="slide-subtitle">El plan con más cobertura regional</h3>
-                            <p class="slide-description">Propuestas específicas para cada región del país.</p>
-                            <p class="slide-metric">Métrica: Cobertura territorial<br>98% de regiones</p>
-                        </div>
+
+                <!-- Slide 2 -->
+                <div class="slide-card card-blue">
+                    <div class="card-header">
+                        <h3>La mayor densidad temática</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>El plan más "denso" en propuestas</h4>
+                        <p><strong>ACCIÓN PARA EL PROGRESO</strong> tiene más propuestas por capítulo y mayor detalle por tema.</p>
+                        <p><strong>Métrica:</strong> Densidad promedio 1.9 propuestas/página</p>
+                    </div>
+                </div>
+
+                <!-- Slide 3 -->
+                <div class="slide-card card-yellow">
+                    <div class="card-header">
+                        <h3>La mayor densidad temática</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>El plan más "denso" en propuestas</h4>
+                        <p><strong>ACCIÓN POPULAR</strong> tiene más propuestas por capítulo y mayor detalle por tema.</p>
+                        <p><strong>Métrica:</strong> Densidad promedio 1.9 propuestas/página</p>
+                    </div>
+                </div>
+
+                <!-- Slide 4 -->
+                <div class="slide-card card-pink">
+                    <div class="card-header">
+                        <h3>La mayor densidad temática</h3>
+                    </div>
+                    <div class="card-body">
+                        <h4>El plan más "denso" en propuestas</h4>
+                        <p><strong>OTRO PARTIDO</strong> tiene más propuestas por capítulo y mayor detalle por tema.</p>
+                        <p><strong>Métrica:</strong> Densidad promedio 1.9 propuestas/página</p>
                     </div>
                 </div>
             </div>
@@ -208,8 +232,38 @@
     <!-- carrusel resumen -->
     <script>
         $(document).ready(function(){
-            $(".slider-resumen").bxSlider({
-                infiniteLoop: false
+            var slider;
+            
+            function initSlider() {
+                if (slider) {
+                    slider.destroySlider();
+                }
+                
+                var windowWidth = $(window).width();
+                var isMobile = windowWidth <= 768;
+                var isSmallMobile = windowWidth <= 480;
+                
+                slider = $(".slider-resumen").bxSlider({
+                    slideWidth: isSmallMobile ? windowWidth - 80 : (isMobile ? windowWidth - 100 : 380),
+                    minSlides: 1,
+                    maxSlides: isMobile ? 1 : 3,
+                    moveSlides: 1,
+                    slideMargin: 20,
+                    infiniteLoop: false,
+                    hideControlOnEnd: true,
+                    pager: true,
+                    controls: true
+                });
+            }
+            
+            initSlider();
+            
+            var resizeTimer;
+            $(window).resize(function() {
+                clearTimeout(resizeTimer);
+                resizeTimer = setTimeout(function() {
+                    initSlider();
+                }, 250);
             });
         });
     </script>
