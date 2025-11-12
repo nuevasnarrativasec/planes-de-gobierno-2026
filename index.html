@@ -470,6 +470,24 @@
         const COMPARISON_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcgvr6YP_YLsgXS9-mJD34bBug-Qzlv8W_d3ZacfQhYcM-7u85u-U6TCl8S9rsBDVPD8Ck5mMsYNxW/pub?output=csv';
         
         // ============================================
+        // Funciones de Cache-Busting
+        // ============================================
+        
+        // Agregar timestamp para evitar caché
+        function addCacheBuster(url) {
+            const separator = url.includes('?') ? '&' : '?';
+            return `${url}${separator}_=${new Date().getTime()}`;
+        }
+        
+        // Headers para evitar caché
+        const NO_CACHE_HEADERS = {
+            'Cache-Control': 'no-cache, no-store, must-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0'
+        };
+        
+        
+        // ============================================
         // Variables globales - Sección Buscador
         // ============================================
         let currentTab = 'partido';
@@ -647,6 +665,7 @@
         function renderDensityBars() {
             const container = document.getElementById('partyDensityList');
             const selectedTheme = themes[selectedThemeIndex].id;
+            const isMobile = window.innerWidth <= 768;
             
             // Filtrar partidos si hay selección
             let partidosToShow = Object.keys(densityData);
@@ -654,64 +673,112 @@
                 partidosToShow = partidosToShow.filter(id => id == densityFilteredParty);
             }
             
-            // Crear columna de nombres
-            const namesHTML = partidosToShow.map(partidoId => {
-                const partido = densityData[partidoId];
-                const logoHTML = partido.logoUrl 
-                    ? `<img src="${partido.logoUrl}" alt="${partido.partido}" onerror="this.style.display='none';">` 
-                    : '🍎';
-                const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
-                
-                return `
-                    <div class="party-name-item ${highlightClass}">
-                        <div class="party-density-item">
-                            <div class="party-density-icon">${logoHTML}</div>
-                            <div class="party-density-name">${partido.partido}</div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-            // Crear columna de barras
-            const barsHTML = partidosToShow.map(partidoId => {
-                const partido = densityData[partidoId];
-                const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
-                
-                const segmentsHTML = themes.map((theme, themeIndex) => {
-                    const percentage = partido.temas[theme.id] || 0;
-                    const isSelected = theme.id === selectedTheme;
-                    const dimmedClass = selectedTheme ? (isSelected ? 'highlighted' : 'dimmed') : '';
+            if (isMobile) {
+                // Layout móvil: cada partido con su nombre y barra juntos
+                container.className = 'party-list mobile-view';
+                container.innerHTML = partidosToShow.map(partidoId => {
+                    const partido = densityData[partidoId];
+                    const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
+                    
+                    const logoHTML = partido.logoUrl 
+                        ? `<img src="${partido.logoUrl}" alt="${partido.partido}" onerror="this.style.display='none';">` 
+                        : '🍎';
+                    
+                    const segmentsHTML = themes.map((theme, themeIndex) => {
+                        const percentage = partido.temas[theme.id] || 0;
+                        const isSelected = theme.id === selectedTheme;
+                        const dimmedClass = selectedTheme ? (isSelected ? 'highlighted' : 'dimmed') : '';
+                        
+                        return `
+                            <div class="density-segment theme-${theme.id} ${dimmedClass}" 
+                                 style="width: ${percentage}%"
+                                 data-theme="${theme.id}"
+                                 data-theme-index="${themeIndex}"
+                                 onclick="selectThemeFromBar(${themeIndex})">
+                                <div class="density-tooltip">${theme.name}: ${percentage}%</div>
+                            </div>
+                        `;
+                    }).join('');
                     
                     return `
-                        <div class="density-segment theme-${theme.id} ${dimmedClass}" 
-                             style="width: ${percentage}%"
-                             data-theme="${theme.id}"
-                             data-theme-index="${themeIndex}"
-                             onclick="selectThemeFromBar(${themeIndex})">
-                            <div class="density-tooltip">${theme.name}: ${percentage}%</div>
+                        <div class="party-complete-item ${highlightClass}">
+                            <div class="party-complete-header">
+                                <div class="party-density-icon">${logoHTML}</div>
+                                <div class="party-density-name">${partido.partido}</div>
+                            </div>
+                            <div class="party-complete-bar">
+                                <div class="party-density-bar-container">
+                                    <div class="party-density-bar">
+                                        ${segmentsHTML}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            } else {
+                // Layout desktop: dos columnas
+                container.className = 'party-list';
+                
+                // Crear columna de nombres
+                const namesHTML = partidosToShow.map(partidoId => {
+                    const partido = densityData[partidoId];
+                    const logoHTML = partido.logoUrl 
+                        ? `<img src="${partido.logoUrl}" alt="${partido.partido}" onerror="this.style.display='none';">` 
+                        : '🍎';
+                    const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
+                    
+                    return `
+                        <div class="party-name-item ${highlightClass}">
+                            <div class="party-density-item">
+                                <div class="party-density-icon">${logoHTML}</div>
+                                <div class="party-density-name">${partido.partido}</div>
+                            </div>
                         </div>
                     `;
                 }).join('');
                 
-                return `
-                    <div class="party-bar-item ${highlightClass}">
-                        <div class="party-density-bar-container">
-                            <div class="party-density-bar">
-                                ${segmentsHTML}
+                // Crear columna de barras
+                const barsHTML = partidosToShow.map(partidoId => {
+                    const partido = densityData[partidoId];
+                    const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
+                    
+                    const segmentsHTML = themes.map((theme, themeIndex) => {
+                        const percentage = partido.temas[theme.id] || 0;
+                        const isSelected = theme.id === selectedTheme;
+                        const dimmedClass = selectedTheme ? (isSelected ? 'highlighted' : 'dimmed') : '';
+                        
+                        return `
+                            <div class="density-segment theme-${theme.id} ${dimmedClass}" 
+                                 style="width: ${percentage}%"
+                                 data-theme="${theme.id}"
+                                 data-theme-index="${themeIndex}"
+                                 onclick="selectThemeFromBar(${themeIndex})">
+                                <div class="density-tooltip">${theme.name}: ${percentage}%</div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    return `
+                        <div class="party-bar-item ${highlightClass}">
+                            <div class="party-density-bar-container">
+                                <div class="party-density-bar">
+                                    ${segmentsHTML}
+                                </div>
                             </div>
                         </div>
+                    `;
+                }).join('');
+                
+                container.innerHTML = `
+                    <div class="party-names-column">
+                        ${namesHTML}
+                    </div>
+                    <div class="party-bars-column">
+                        ${barsHTML}
                     </div>
                 `;
-            }).join('');
-            
-            container.innerHTML = `
-                <div class="party-names-column">
-                    ${namesHTML}
-                </div>
-                <div class="party-bars-column">
-                    ${barsHTML}
-                </div>
-            `;
+            }
         }
 
         // Seleccionar tema desde la barra de un partido
@@ -755,7 +822,10 @@
         // Cargar datos de comparación desde Google Sheets
         async function loadComparisonData() {
             try {
-                const response = await fetch(COMPARISON_SPREADSHEET_URL);
+                const response = await fetch(addCacheBuster(COMPARISON_SPREADSHEET_URL), {
+                    headers: NO_CACHE_HEADERS,
+                    cache: 'no-store'
+                });
                 if (!response.ok) {
                     throw new Error('Error al cargar datos de comparación');
                 }
@@ -997,6 +1067,36 @@
         // Funciones del Buscador Principal
         // ============================================
 
+        // Función para refrescar todos los datos (sin UI, para uso programático)
+        async function refreshAllData() {
+            try {
+                console.log('🔄 Refrescando todos los datos...');
+                
+                // Recargar datos del buscador
+                await loadDataFromGoogleSheets();
+                
+                // Recargar datos del comparador
+                await loadComparisonData();
+                
+                // IMPORTANTE: Forzar re-render del comparador después de cargar
+                console.log('🔄 Actualizando tarjetas del comparador...');
+                renderComparisonCards();
+                
+                // Recargar datos de densidad
+                await loadDensityData().then(() => {
+                    populateDensityPartySelector();
+                    renderDensityBars();
+                });
+                
+                console.log('✅ Todos los datos actualizados correctamente');
+                console.log('📊 Comparaciones:', selectedComparisons);
+                console.log('📊 Datos de comparación:', comparisonDataList.length, 'registros');
+                
+            } catch (error) {
+                console.error('❌ Error al refrescar datos:', error);
+            }
+        }
+
         // Inicializar la aplicación
         function init() {
             loadDataFromGoogleSheets();
@@ -1013,6 +1113,15 @@
                 window.addEventListener('resize', () => {
                     updateSliderHandle();
                 });
+            });
+            
+            // Atajo de teclado opcional: Ctrl+Shift+R para refrescar todos los datos
+            document.addEventListener('keydown', (e) => {
+                if (e.ctrlKey && e.shiftKey && e.key === 'R') {
+                    e.preventDefault();
+                    console.log('⌨️ Atajo de teclado: Refrescando datos...');
+                    refreshAllData();
+                }
             });
         }
 
@@ -1140,7 +1249,10 @@
             detailPanel.innerHTML = '<div class="empty-state">Cargando...</div>';
 
             try {
-                const response = await fetch(SPREADSHEET_URL);
+                const response = await fetch(addCacheBuster(SPREADSHEET_URL), {
+                    headers: NO_CACHE_HEADERS,
+                    cache: 'no-store'
+                });
                 
                 if (!response.ok) {
                     throw new Error('Error al cargar los datos');
