@@ -433,7 +433,7 @@ html {
     .party-icon {
         width: 40px;
         height: 40px;
-        background: #d0d0d0;
+        /*background: #d0d0d0;*/
         margin-right: 12px;
         display: flex;
         align-items: center;

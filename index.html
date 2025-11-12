@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v18">
+    <link rel="stylesheet" href="./css/style.css?v19">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -1348,15 +1348,28 @@
             }
             
             itemList.innerHTML = filteredData.map((item, index) => {
-                const logoDisplay = item.logoUrl 
-                    ? `<img src="${item.logoUrl}" alt="${item.nombre}" 
-                           style="width: 100%; height: 100%; object-fit: contain; border-radius: 6px;"
-                           onerror="this.style.display='none'; this.parentElement.innerHTML='🍎';">` 
-                    : '🍎';
+                // Determinar qué imagen mostrar según el tipo
+                let imageDisplay;
+                
+                if (item.tipo === 'candidato') {
+                    // Para candidatos, mostrar la foto del candidato
+                    imageDisplay = item.fotoUrl 
+                        ? `<img src="${item.fotoUrl}" alt="${item.candidato || item.nombre}" 
+                               style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"
+                               onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\\'display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#ccc;\\'><div style=\\'width:20px; height:20px; border-radius:50%; background:#e0e0e0; margin-bottom:4px;\\'></div><div style=\\'width:30px; height:30px; border-radius:6px; background:#e0e0e0;\\'></div></div>\\';">` 
+                        : '<div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; color:#ccc;"><div style="width:20px; height:20px; border-radius:50%; background:#e0e0e0; margin-bottom:4px;"></div><div style="width:30px; height:30px; border-radius:6px; background:#e0e0e0;"></div></div>';
+                } else {
+                    // Para partidos, mostrar el logo del partido
+                    imageDisplay = item.logoUrl 
+                        ? `<img src="${item.logoUrl}" alt="${item.nombre}" 
+                               style="width: 100%; height: 100%; object-fit: contain; border-radius: 6px;"
+                               onerror="this.style.display='none'; this.parentElement.innerHTML='🍎';">` 
+                        : '🍎';
+                }
                 
                 return `
                     <div class="party-item" data-id="${item.id}" data-index="${index}">
-                        <div class="party-icon">${logoDisplay}</div>
+                        <div class="party-icon">${imageDisplay}</div>
                         <div class="party-name">${item.nombre}</div>
                     </div>
                 `;
