@@ -132,8 +132,8 @@ html {
                 transform: translateY(-2px);                
             }
             ul.anclas li.active {
-                background-color: #5a5a5a;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+                background-color: #000;
+                color: #fff;
             }
     .slider-container {
         max-width: 1400px;
@@ -1424,24 +1424,24 @@ html {
                         }
 
 
-        @media (max-width: 480px) {
-            .slider-resumen {
-                margin: 0 10px;
-            }
+@media (max-width: 480px) {
+    .slider-resumen {
+        margin: 0 10px;
+    }
 
-            .bx-wrapper .bx-prev {
-                left: -20px;
-            }
+    .bx-wrapper .bx-prev {
+        left: -20px;
+    }
 
-            .bx-wrapper .bx-next {
-                right: -20px;
-            }
+    .bx-wrapper .bx-next {
+        right: -20px;
+    }
 
-            .bx-wrapper .bx-controls-direction a {
-                width: 35px;
-                height: 35px;
-            }
-        }
+    .bx-wrapper .bx-controls-direction a {
+        height: 35px;
+        width: 35px;        
+    }
+}
 
         
 
@@ -1561,4 +1561,12 @@ html {
     .comparison-grid {
         grid-template-columns: 1fr;
     }
+}
+
+@media (max-height: 732px) {
+
+    #header{
+        background-size: 60%;
+    }
+
 }

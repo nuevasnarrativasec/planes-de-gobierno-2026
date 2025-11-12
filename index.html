@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v12">
+    <link rel="stylesheet" href="./css/style.css?v15">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -186,7 +186,7 @@
             <div class="comparison-header">
                 <span class="linea-titulo-seccion"></span>
                 <h2>¿Aún con dudas? Compara tus principales opciones</h2>
-                <p>Selecciona hasta 3 candidatos o partidos y contrasta sus propuestas por tema, tono y coherencia. Además, incluye un breve fact-checking.</p>
+                <p>Selecciona hasta 3 candidatos y contrasta sus propuestas por tema, tono y coherencia. Además, incluye un breve fact-checking.</p>
                 
                 <div class="theme-selector">
                     <div class="theme-dropdown">
@@ -849,10 +849,10 @@
                     return `
                         <div class="comparison-card empty">
                             <div style="font-size: 48px; color: #ddd;">+</div>
-                            <p>Selecciona un candidato o partido</p>
+                            <p>Selecciona un partido</p>
                             <div class="card-selector" style="width: 100%; max-width: 250px;">
                                 <select onchange="addToComparison(${index}, this.value)">
-                                    <option value="">Candidato o Partido</option>
+                                    <option value="">Partido</option>
                                     ${partyOptions.map(d => `<option value="${d.id}">${d.nombre}</option>`).join('')}
                                 </select>
                             </div>
