@@ -712,8 +712,8 @@ html {
             font: 1.7rem / 1.2 'Guardian Egyp Bold';
             font-weight: 900;
             margin: 0 auto 10px;
+            margin-top: 25px;
             max-width: 450px;
-            text-transform: uppercase;
         }
 
         .comparison-header p {
@@ -1053,21 +1053,21 @@ html {
         background-color: #fff;
         margin: 40px auto 0;
         max-width: 860px;
-        padding: 40px 20px;
+        padding: 0 20px 40px;
     }
         .box-main-panorama h2{
-            font-size: 1.1rem;
-            font-weight: 700;
+            font: 1rem / 1.4 "Roboto", sans-serif;
+            font-weight: 800;
             margin: 10px auto;
             max-width: 500px;
-            text-align: left;
+            text-align: center;
         }
         .box-main-panorama p{
             font-size: 1rem;
             line-height: 1.4;
             margin: 10px auto;
             max-width: 500px;
-            text-align: left;
+            text-align: center;
         }
         .box-flourish{
             margin-bottom: 40px;
@@ -1076,7 +1076,7 @@ html {
     /* Estilos para la sección de densidad discursiva */
         .density-section {
             max-width: 1200px;
-            margin: 60px auto;
+            margin: 0 auto;
             padding: 40px 20px;
         }
 
@@ -1137,7 +1137,7 @@ html {
 
         .theme-slider {
             position: relative;
-            height: 50px;
+            height: 10px;
             background: transparent;
             border-radius: 8px;
             cursor: pointer;
@@ -1204,8 +1204,8 @@ html {
             position: absolute;
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
             background: white;
             border: 3px solid #333;
             border-radius: 50%;
@@ -1244,31 +1244,29 @@ html {
             align-items: center;
             padding: 20px;
             background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            min-height: 90px;
+            border-bottom: 1px solid #e0e0e0;
+            min-height: 50px;
             transition: all 0.3s;
         }
 
         .party-name-item.highlighted {
-            border-color: #5a5a5a;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            /*border-color: #5a5a5a;*/
+            /*box-shadow: 0 4px 12px rgba(0,0,0,0.1);*/
         }
 
         .party-bar-item {
             padding: 20px;
             background: white;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            min-height: 90px;
+            border-bottom: 1px solid #e0e0e0;
+            min-height: 50px;
             display: flex;
             align-items: center;
             transition: all 0.3s;
         }
 
         .party-bar-item.highlighted {
-            border-color: #5a5a5a;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            /*border-color: #5a5a5a;*/
+            /*box-shadow: 0 4px 12px rgba(0,0,0,0.1);*/
         }
 
         .party-density-item {
@@ -1300,7 +1298,7 @@ html {
 
         .party-density-bar-container {
             position: relative;
-            height: 40px;
+            height: 10px;
             width: 100%;
         }
 

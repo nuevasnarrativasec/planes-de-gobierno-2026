@@ -2,8 +2,8 @@
   "partidos": [
     {
       "id": "1",
-      "nombre": "Partido 1",
-      "logoUrl": "https://lh3.googleusercontent.com/d/TU_ID_AQUI",
+      "nombre": "Acción Popular",
+      "logoUrl": "./img/logo-accion-popular.jpg",
       "densidad": {
         "educacion": 15,
         "salud": 25,
@@ -15,8 +15,8 @@
     },
     {
       "id": "2",
-      "nombre": "Partido 2",
-      "logoUrl": "https://lh3.googleusercontent.com/d/TU_ID_AQUI",
+      "nombre": "Ahora Nación",
+      "logoUrl": "./img/logo-ahora-nacion.jpg",
       "densidad": {
         "educacion": 22,
         "salud": 28,
@@ -28,8 +28,8 @@
     },
     {
       "id": "3",
-      "nombre": "Fuerza Popular",
-      "logoUrl": "",
+      "nombre": "Alianza Para el Progreso",
+      "logoUrl": "./img/logo-app.jpg",
       "densidad": {
         "educacion": 18,
         "salud": 30,
@@ -41,8 +41,8 @@
     },
     {
       "id": "4",
-      "nombre": "Acción para El Progreso",
-      "logoUrl": "",
+      "nombre": "Avanza País",
+      "logoUrl": "./img/logo-avanza-pais.jpg",
       "densidad": {
         "educacion": 20,
         "salud": 22,
@@ -54,8 +54,8 @@
     },
     {
       "id": "5",
-      "nombre": "Partido Democrático Unidos por el Perú",
-      "logoUrl": "",
+      "nombre": "Batalla Perú",
+      "logoUrl": "./img/logo-batalla-peru.jpg",
       "densidad": {
         "educacion": 16,
         "salud": 35,
@@ -67,8 +67,8 @@
     },
     {
       "id": "6",
-      "nombre": "Partido de los Trabajadores y Emprendedores",
-      "logoUrl": "",
+      "nombre": "Fe en el Perú",
+      "logoUrl": "./img/logo-fe-en-el-peru.jpg",
       "densidad": {
         "educacion": 25,
         "salud": 20,
