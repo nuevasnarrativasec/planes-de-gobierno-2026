@@ -1368,8 +1368,58 @@ html {
         .theme-infraestructura { background-color: #8B5CF6; }
         .theme-medio-ambiente { background-color: #06B6D4; }
 
+        .box-metodologia{
+            border: 1px solid #707070;
+            box-sizing: border-box;
+            margin: 0 auto;
+            max-width: 600px;
+            padding: 30px 40px;
+        }
+            .box-metodologia h6{
+                font: 1rem/1.5 "Roboto", sans-serif;
+                font-weight: 800;
+                margin: 0 auto;
+                text-transform: uppercase;
+            }
+            .box-metodologia p{
+                font: 1rem/1.5 "Roboto", sans-serif;
+                font-weight: 400;
+            }
 
+        .box-footer{
+            background-color: #000;
+            padding: 50px 0 30px;
+            text-align: center;
+        }
+            img.logo-comercio{
+                border-bottom: 1px solid #fff;
+                border-top: 1px solid #fff;
+                display: block;
+                margin: 0 auto;
+                max-width: 150px;
+                padding: 20px 250px;
+                width: 100%;
+            }
+            .box-footer ul{
+                display: inline-block;
+                list-style-type: none;
+                margin: 30px 60px 0;
+                max-width: 300px;
+                padding: 0;
+                text-align: left;
+                vertical-align: top;
+            }
+                .box-footer ul li{
 
+                }
+                    .box-footer ul li p{
+                        color: #fff;
+                        font: .9rem/1.4 "Roboto", sans-serif;
+                        font-weight: 400;
+                    }
+                        .box-footer ul li p span{
+                            font-weight: 700;
+                        }
 
 
         @media (max-width: 480px) {
