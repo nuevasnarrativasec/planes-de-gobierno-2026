@@ -1,5 +1,6 @@
 body, 
 html {	    
+    font-display: swap;
     box-sizing: border-box;   
     font-style: normal;
     font-weight: normal;    
@@ -17,6 +18,34 @@ html {
 .clear{
     clear: both;
 }
+
+/** fonts **/
+
+@font-face {
+    font-family: 'guardian_egyplight';
+    src: url('../fonts/guardianegyp-light-webfont.woff2') format('woff2'),
+         url('../fonts/guardianegyp-light-webfont.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Guardian Egyp Medium';
+    src: url('../fonts/GuardianEgyp-Medium.woff2') format('woff2'),
+        url('../fonts/GuardianEgyp-Medium.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Guardian Egyp Bold';
+    src: url('../fonts/GuardianEgyp-Bold.woff2') format('woff2'),
+        url('../fonts/GuardianEgyp-Bold.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Guardian Egyp Black';
+    src: url('../fonts/GuardianEgyp-Black.woff2') format('woff2'),
+        url('../fonts/GuardianEgyp-Black.woff') format('woff');
+    font-weight: 900;
+}
+
 
 #header{
     height: 100vh;
@@ -37,14 +66,14 @@ html {
         }
         .ctn-header h1{
             color: #000;
-            font: 5.5rem/1.1 "Roboto", sans-serif;
+            font: 5.5rem/1.1  'Guardian Egyp Bold';
             font-weight: 900;
             margin: 0 auto;
             max-width: 600px;
         }
         .ctn-header h2{
             color: #000;
-            font: 1.5rem/1.3 "Roboto", sans-serif;
+            font: 1.5rem/1.3 'Guardian Egyp Medium';
             font-weight: 500;
             margin: 10px auto;
             max-width: 500px;
@@ -69,8 +98,12 @@ html {
         margin: 20px auto;
         text-align: center;
     }
+    p.elige{
+        text-align: center;
+    }
     ul.anclas{
         list-style: none;
+        margin: 0 auto 10px;
         padding: 0;
         text-align: center;
     }
@@ -101,88 +134,87 @@ html {
                 box-shadow: 0 4px 12px rgba(0,0,0,0.3);
             }
     .slider-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
+        max-width: 1400px;
+        margin: 50px auto;
+        position: relative;
+    }
+        img.icon-desliza-gris{
+            display: block;
+            margin: 10px auto 30px;
+            max-width: 150px;
         }
-
         .slider-resumen {
             margin: 0 60px;
         }
+            .slide-card {
+                background: white;
+                border: 1px solid #7a7a7a;
+                border-radius: 16px;
+                overflow: hidden;
+                height: 400px;
+                display: flex;
+                flex-direction: column;
+            }
+                .card-header {
+                    padding: 30px;
+                    color: white;
+                    text-align: center;
+                }
+                    .card-header h3 {
+                        color: #000;
+                        font: 1.2rem/1.3 'Guardian Egyp Bold';
+                        margin: 0;
+                        font-weight: bold;
+                    }
+                    .card-body {
+                        padding: 40px 30px;
+                        text-align: center;
+                        flex: 1;
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: center;
+                    }
+                    .card-body h4 {
+                        font: 1.1rem/1.3 'Guardian Egyp Bold';
+                        margin: 0 auto 25px;
+                        max-width: 270px;                        
+                    }
+                    .card-body p {
+                        font: 1rem/1.5 'guardian_egyplight';
+                        margin: 0 0 20px 0;
+                    }
+                        .card-body p span{
+                            font-family: "Roboto", sans-serif;
+                            font-weight: 800;
+                        }
+                    .card-body p:last-child {
+                        margin-bottom: 0;
+                    }
 
-        .slide-card {
-            background: white;
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            height: 400px;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .card-header {
-            padding: 30px;
-            color: white;
-            text-align: center;
-        }
-
-        .card-header h3 {
-            margin: 0;
-            font-size: 1.3em;
-            font-weight: bold;
-        }
-
-        .card-body {
-            padding: 40px 30px;
-            text-align: center;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
-
-        .card-body h4 {
-            margin: 0 0 25px 0;
-            font-size: 1.4em;
-            font-weight: bold;
-        }
-
-        .card-body p {
-            margin: 0 0 20px 0;
-            font-size: 1.05em;
-            line-height: 1.6;
-        }
-
-        .card-body p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Colores de las cards */
-        .card-pink .card-header {
-            background-color: #e91e63;
-        }
-
-        .card-blue .card-header {
-            background-color: #5c6bc0;
-        }
-
-        .card-yellow .card-header {
-            background-color: #ffa726;
-        }
+                    /* Colores de las cards */
+                    .card-pink .card-header {
+                        background-color: #e91e63;
+                    }
+                    .card-blue .card-header {
+                        background-color: #5c6bc0;
+                    }
+                    .card-yellow .card-header {
+                        background-color: #ffa726;
+                    }
 
         /* Personalización de controles bxSlider */
         .bx-wrapper {
-            margin: 0 !important;
+            margin: 0 auto !important;
             box-shadow: none !important;
             border: none !important;
         }
 
         .bx-wrapper .bx-controls-direction a {
-            width: 50px;
-            height: 50px;
+            width: 40px !important;
+            height: 40px !important;
             background: white;
-            border: 2px solid #ddd;
-            border-radius: 50%;
+            border: 2px solid #000;
+            border-radius: 12%;
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
@@ -193,10 +225,10 @@ html {
             transition: all 0.3s ease;
         }
 
-        .bx-wrapper .bx-controls-direction a:hover {
-            border-color: #999;
-            background: #f5f5f5;
-        }
+            .bx-wrapper .bx-controls-direction a:hover {
+                border-color: #000;
+                background: #FFF;
+            }
 
         .bx-wrapper .bx-prev {
             left: -70px;
@@ -207,17 +239,23 @@ html {
         }
 
         .bx-wrapper .bx-prev::before {
-            content: '‹';
-            font-size: 30px;
-            color: #333;
-            font-weight: bold;
+            background-image: url('../img/prev.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            content: '';
+            height: 20px;
+            width: 15px;
         }
 
         .bx-wrapper .bx-next::before {
-            content: '›';
-            font-size: 30px;
-            color: #333;
-            font-weight: bold;
+            background-image: url('../img/next.png');
+            background-position: center;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            content: '';
+            height: 20px;
+            width: 15px;
         }
 
         .bx-wrapper .bx-controls-direction a.disabled {
@@ -248,26 +286,27 @@ html {
     #box-main-candidatos{
         background-color: #fff;
         margin: 0 auto;
-        max-width: 900px;
+        /*max-width: 900px;*/
         padding: 40px 0;
     }
         #box-main-candidatos h3{
-            font-size: 1.1rem;
+            font: 1.7rem / 1.2 'Guardian Egyp Bold';
+            font-weight: 900;
+            margin-bottom: 10px;
             text-align: center;
-            text-transform: uppercase;
         }
         #box-main-candidatos p.bajada-candidatos{
-            font-size: 1rem;
-            line-height: 1.4;
-            margin: 10px auto;
-            max-width: 500px;
-            text-align: left;
+            font: 1rem / 1.5 "Roboto", sans-serif;
+            font-weight: 400;
+            margin: 0 auto;
+            max-width: 800px;
+            text-align: center;
         }
 
     /* buscador candidatos o partidos */
     .container {
-        max-width: 1200px;
-        margin: 0 auto;
+        /*max-width: 1200px;*/
+        margin: 30px auto 0;
         background: white;
         border-radius: 12px;
         
@@ -275,59 +314,64 @@ html {
     }
 
     .tabs {
-        display: flex;
-        gap: 10px;
-        padding: 20px 20px 0;
+        background-color: #F5F5F5;
+        display: inline-block;
+        padding: 20px 0 30px;
+        text-align: center;        
+        vertical-align: top;
+        width: 100%;        
     }
-
-    .tab {
-        padding: 12px 24px;
-        border: none;
-        background: #e0e0e0;
-        border-radius: 8px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: all 0.3s;
-        color: #666;
-    }
-
-    .tab.active {
-        background: #5a5a5a;
-        color: white;
-    }
+        .tab {
+            background: transparent;
+            border: none;
+            color: #a2a2a2;
+            cursor: pointer;
+            font: 1rem / 1.5 "Roboto", sans-serif;
+            font-weight: 800;
+            margin: 0 10px;
+            padding: 12px 24px 5px;
+            transition: all 0.3s;
+            border-bottom: 2px solid #a2a2a2;          
+        }
+            .tab.active,
+            .tab:hover {
+                border-bottom: 2px solid #000;     
+                color: #000;
+            }
 
     .search-container {
-        padding: 20px;
+        background-color: #F5F5F5;
+        padding: 0 0 20px;
     }
-
     .search-box {
-        position: relative;
-        width: 300px;
+        box-sizing: border-box;
+        margin: 0 auto;
+        max-width: 350px;
+        position: relative;        
     }
-
-    .search-box input {
-        width: 100%;
-        padding: 12px 40px 12px 16px;
-        border: 2px solid #ddd;
-        border-radius: 25px;
-        font-size: 14px;
-        outline: none;
-    }
-
-    .search-box input:focus {
-        border-color: #5a5a5a;
-    }
-
-    .search-icon {
-        position: absolute;
-        right: 15px;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #999;
-    }
+        .search-box input {
+            width: 88%;
+            padding: 10px 20px;
+            border: 2px solid #ddd;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+        }
+        .search-box input:focus {
+            border-color: #5a5a5a;
+        }
+        .search-icon {
+            max-width: 20px;
+            position: absolute;
+            right: 10px;
+            top: 55%;
+            transform: translateY(-50%);        
+        }
 
     .content {
         display: flex;
+        margin: 50px auto 0;        
+        max-width: 980px;       
         min-height: 500px;
     }
 
@@ -377,7 +421,6 @@ html {
         width: 40px;
         height: 40px;
         background: #d0d0d0;
-        border-radius: 6px;
         margin-right: 12px;
         display: flex;
         align-items: center;
@@ -392,7 +435,12 @@ html {
 
     .detail-panel {
         flex: 1;
-        padding: 40px;
+        padding: 15px;
+        border: 2px solid #c2c2c2;
+        border-radius: 15px;
+        max-width: 400px;
+        margin: 0 auto;
+        box-sizing: border-box;
     }
 
     .empty-state {
@@ -402,19 +450,27 @@ html {
     }
 
     .candidate-profile {
-        text-align: center;
+        /*text-align: center;*/
         margin-bottom: 30px;
     }
+        .box-main-avatar{
+            display: inline-block;            
+            max-width: 250px;
+            min-width: 250px;
+            text-align: left;
+            vertical-align: top;
+        }
+        .box-main-buttons{
+            display: inline-block;            
+            max-width: 110px;
+            text-align: right;
+            vertical-align: top;
+        }
 
     .avatar {
-        width: 150px;
-        height: 150px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        margin: 0 auto 20px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        width: 120px;
+        height: 120px;
+        margin: 0 0 10px;
         position: relative;
         overflow: hidden;
     }
@@ -438,28 +494,77 @@ html {
     }
 
     .candidate-name {
-        font-size: 20px;
-        font-weight: 600;
+        font: 1.05rem/1.2 "Roboto", sans-serif;
+        font-weight: 800;
         margin-bottom: 5px;
     }
 
     .party-label {
-        font-weight: 600;
-        color: #666;
+        color: #AFAFAF;
+        font-weight: 600;        
         margin-bottom: 10px;
     }
 
     .candidate-info {
+        border-bottom: 1px solid #000;
         color: #666;
-        font-size: 14px;
+        font: 1rem/1.1 "Roboto", sans-serif;
         line-height: 1.6;
+        margin-top: 10px;
     }
+        .candidate-info h6,
+        .candidate-experiencia h6,
+        .candidate-profesion h6,
+        .candidate-sentencias h6,
+        .candidate-ingresos h6{
+            color: #000;
+            font: 1rem/1.1 "Roboto", sans-serif;
+            font-weight: 800;
+            margin: 0 0 5px;
+            text-transform: uppercase;
+        }
+        .box-edad{
+            color: #000;
+            display: inline-block;
+            text-align: left;
+            vertical-align: top;
+            width: 49%;            
+        }
+        .box-departamento{
+            border-left: 1px solid #000;
+            color: #000;
+            display: inline-block;
+            padding-left: 10px;
+            text-align: left;
+            vertical-align: top;
+            width: 45%;            
+        }
+        .candidate-experiencia,
+        .candidate-profesion,
+        .candidate-sentencias,
+        .candidate-ingresos{
+            margin-top: 20px;
+        }
+            .candidate-experiencia p,
+            .candidate-profesion p,
+            .candidate-sentencias p{
+                margin: 0 auto;
+            }
+            .candidate-ingresos p{
+                font: 1.7rem/1.1 "Roboto", sans-serif;
+                font-weight: 900;
+                margin: 0 auto;
+            }
+        .candidate-profesion,
+        .candidate-sentencias,
+        .candidate-ingresos{
+            border-top: 1px solid #000;
+            padding-top: 10px;
+        }
 
-    .action-buttons {
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-        margin: 20px 0;
+
+    .action-buttons { 
+        margin: 0;
     }
 
     .btn {
@@ -472,21 +577,33 @@ html {
     }
 
     .btn-primary {
-        background: #888;
-        color: white;
+        background: url('../img/btn-descargar-ficha.png') no-repeat center;
+        background-size: 100%;
+        color: transparent;
+        display: inline-block;
+        height: 66px;
+        padding: 0;
+        vertical-align: top;
+        width: 66px;        
     }
 
     .btn-primary:hover {
-        background: #666;
+        
     }
 
     .btn-secondary {
-        background: #e0e0e0;
-        color: #333;
+        background: url('../img/btn-comparar.png') no-repeat center;
+        background-size: 100%;
+        color: transparent;
+        display: inline-block;
+        height: 66px;
+        padding: 0;
+        vertical-align: top;
+        width: 66px;    
     }
 
     .btn-secondary:hover {
-        background: #d0d0d0;
+        
     }
 
     .vision-section {
@@ -592,8 +709,8 @@ html {
     }
 
         .comparison-header h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
+            font: 1.7rem / 1.2 'Guardian Egyp Bold';
+            font-weight: 900;
             margin-bottom: 15px;
             text-transform: uppercase;
         }
@@ -906,12 +1023,12 @@ html {
             width: 100%;
         }
         .box-titulo-seccion h3{
-            font: 1.3rem/1.2 "Roboto", sans-serif;
+            font: 1.7rem/1.2 'Guardian Egyp Bold';
             font-weight: 900;
             margin-bottom: 10px;
         }
         .box-titulo-seccion p{
-            font: 1.1rem/1.5 "Roboto", sans-serif;
+            font: 1rem/1.5 "Roboto", sans-serif;
             font-weight: 400;
             margin: 0 auto;
         }       
