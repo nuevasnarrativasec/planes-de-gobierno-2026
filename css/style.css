@@ -48,6 +48,8 @@ html {
 
 
 #header{
+    background: url('../img/bg-portada.jpg') no-repeat center bottom;
+    background-size: 100%;
     height: 100vh;
     position: relative;
 }
@@ -55,18 +57,18 @@ html {
         left: 50%;
         position: absolute;
         text-align: center;
-        top: 50%;
+        top: 30%;
 
         transform: translate(-50%,-50%);
     }
         img.logo-tu-decides{
             display: block;
-            margin: 0 auto 60px;
+            margin: 0 auto 20px;
             max-width: 250px;
         }
         .ctn-header h1{
             color: #000;
-            font: 5.5rem/1.1  'Guardian Egyp Bold';
+            font: 5rem/1.1  'Guardian Egyp Bold';
             font-weight: 900;
             margin: 0 auto;
             max-width: 600px;
