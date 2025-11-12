@@ -477,15 +477,7 @@
         function addCacheBuster(url) {
             const separator = url.includes('?') ? '&' : '?';
             return `${url}${separator}_=${new Date().getTime()}`;
-        }
-        
-        // Headers para evitar caché
-        const NO_CACHE_HEADERS = {
-            'Cache-Control': 'no-cache, no-store, must-revalidate',
-            'Pragma': 'no-cache',
-            'Expires': '0'
-        };
-        
+        }        
         
         // ============================================
         // Variables globales - Sección Buscador
@@ -822,10 +814,7 @@
         // Cargar datos de comparación desde Google Sheets
         async function loadComparisonData() {
             try {
-                const response = await fetch(addCacheBuster(COMPARISON_SPREADSHEET_URL), {
-                    headers: NO_CACHE_HEADERS,
-                    cache: 'no-store'
-                });
+                const response = await fetch(addCacheBuster(COMPARISON_SPREADSHEET_URL));
                 if (!response.ok) {
                     throw new Error('Error al cargar datos de comparación');
                 }
@@ -852,6 +841,9 @@
         function renderComparisonCards() {
             const grid = document.getElementById('comparisonGrid');
             
+            // Sólo usar elementos de tipo 'partido' para las opciones del comparador
+            const partyOptions = allData.filter(d => d.tipo === 'partido');
+            
             grid.innerHTML = selectedComparisons.map((item, index) => {
                 if (!item) {
                     return `
@@ -861,7 +853,7 @@
                             <div class="card-selector" style="width: 100%; max-width: 250px;">
                                 <select onchange="addToComparison(${index}, this.value)">
                                     <option value="">Candidato o Partido</option>
-                                    ${allData.map(d => `<option value="${d.id}">${d.nombre}</option>`).join('')}
+                                    ${partyOptions.map(d => `<option value="${d.id}">${d.nombre}</option>`).join('')}
                                 </select>
                             </div>
                         </div>
@@ -908,13 +900,16 @@
                 : '<div class="card-avatar-icon"></div><div class="card-avatar-body"></div>';
             
             if (!currentComparisonTheme) {
+                // Sólo mostrar partidos en el select de cambio
+                const partyOptions = allData.filter(d => d.tipo === 'partido' && d.id != item.id);
+                
                 return `
                     <div class="comparison-card">
                         <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
                         <div class="card-selector">
                             <select onchange="changeComparison(${index}, this.value)">
                                 <option value="${item.id}" selected>${item.nombre}</option>
-                                ${allData.filter(d => d.id != item.id).map(d => 
+                                ${partyOptions.map(d => 
                                     `<option value="${d.id}">${d.nombre}</option>`
                                 ).join('')}
                             </select>
@@ -979,7 +974,7 @@
                     <div class="card-selector">
                         <select onchange="changeComparison(${index}, this.value)">
                             <option value="${item.id}" selected>${item.nombre}</option>
-                            ${allData.filter(d => d.id != item.id).map(d => 
+                            ${allData.filter(d => d.id != item.id && d.tipo === 'partido').map(d => 
                                 `<option value="${d.id}">${d.nombre}</option>`
                             ).join('')}
                         </select>
@@ -1016,10 +1011,13 @@
         function addToComparison(index, itemId) {
             if (!itemId) return;
             
-            const item = allData.find(d => d.id == itemId);
+            // Sólo permitir partidos
+            const item = allData.find(d => d.id == itemId && d.tipo === 'partido');
             if (item) {
                 selectedComparisons[index] = item;
                 renderComparisonCards();
+            } else {
+                alert('Solo se pueden seleccionar partidos para la comparación.');
             }
         }
 
@@ -1027,10 +1025,13 @@
         function changeComparison(index, itemId) {
             if (!itemId) return;
             
-            const item = allData.find(d => d.id == itemId);
+            // Sólo permitir partidos
+            const item = allData.find(d => d.id == itemId && d.tipo === 'partido');
             if (item) {
                 selectedComparisons[index] = item;
                 renderComparisonCards();
+            } else {
+                alert('Solo se pueden seleccionar partidos para la comparación.');
             }
         }
 
@@ -1048,6 +1049,30 @@
 
         // Agregar al comparador desde el botón "Comparar" del detalle
         function addToCompare(item) {
+            // Si nos pasaron un string id, intentar resolver
+            if (typeof item === 'string' || typeof item === 'number') {
+                const resolved = allData.find(d => d.id == item && d.tipo === 'partido');
+                if (!resolved) {
+                    alert('Solo puedes comparar partidos. Selecciona un partido desde la pestaña "Partidos".');
+                    return;
+                }
+                item = resolved;
+            }
+            
+            // Si el objeto no es tipo partido, intentar mapear al partido correspondiente
+            if (item.tipo !== 'partido') {
+                // Buscar partido por nombre de partido en el registro del candidato
+                const partyName = item.nombrePartido || item.partido || item.nombre;
+                const partido = allData.find(d => d.tipo === 'partido' && d.nombre === partyName);
+                
+                if (partido) {
+                    item = partido;
+                } else {
+                    alert('No es posible añadir candidatos al comparador. Sólo se permiten partidos.');
+                    return;
+                }
+            }
+            
             // Buscar el primer espacio vacío
             const emptyIndex = selectedComparisons.findIndex(c => c === null);
             
@@ -1249,10 +1274,7 @@
             detailPanel.innerHTML = '<div class="empty-state">Cargando...</div>';
 
             try {
-                const response = await fetch(addCacheBuster(SPREADSHEET_URL), {
-                    headers: NO_CACHE_HEADERS,
-                    cache: 'no-store'
-                });
+                const response = await fetch(addCacheBuster(SPREADSHEET_URL));
                 
                 if (!response.ok) {
                     throw new Error('Error al cargar los datos');
