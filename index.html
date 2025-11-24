@@ -27,9 +27,92 @@
         <p class="bajada">
             <b>Analizamos los planes,  sintetizamos la información con ayuda de la IA y lo verificamos editorialmente. </b> Ahora podrás elegir un candidato o partido, filtrar por tema, mirar resúmenes y detectar de un vistazo qué proponen, qué omiten y qué no cuadra. Disminuimos el ruido para ofrecerte más claridad para que estés bien informado antes de emitir tu voto.
         </p>
-        <span class="update">Actualizado al 28/10/2025</span>        
+        <span class="update">Actualizado al 28/10/2025</span>    
+        
+        <img src="./img/icon-click.jpg" alt="" width="100%" class="icon-click">
+        <p class="elige">Elige la opción que prefieras para iniciar </p>
+        <ul class="anclas">
+            <li>
+                Candidato o partido
+            </li>
+            <li>
+                Compara planes
+            </li>
+            <li>
+                Panorama general
+            </li>
+        </ul>            
 
-        <div class="box-titulo-seccion">
+        <!-- buscador de candidatos y partidos -->
+        <div id="box-main-candidatos">
+            <span class="linea-titulo-seccion"></span>
+            <h3>Explora por candidato o partido</h3>
+            <p class="bajada-candidatos">
+                Encuentra resúmenes claros de cada plan y accede a una versión concisa de los temas principales que aborda.
+            </p>
+            <div class="container">
+                <div class="tabs">
+                    <button class="tab active" onclick="switchTab('partido')">Partidos</button>
+                    <button class="tab" onclick="switchTab('candidato')">Candidatos</button>
+                </div>
+
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Buscar" 
+                        onkeyup="handleSearchInput(event)" 
+                        onfocus="showAutocomplete()"
+                        autocomplete="off">
+                        <span class="search-icon">
+                            <img src="../img/lupa.png" alt="" width="100%">
+                        </span>
+                        <div class="autocomplete-dropdown" id="autocompleteDropdown">
+                            <!-- Sugerencias se generarán aquí -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content">
+                    <div class="sidebar" id="itemList">
+                        <!-- Items will be loaded here -->
+                    </div>
+
+                    <div class="detail-panel" id="detailPanel">
+                        <div class="empty-state">
+                            Selecciona un partido o candidato para ver los detalles
+                        </div>
+                    </div>
+                </div>
+            </div>  
+        </div>
+
+        <!-- Sección de Comparador -->
+        <div class="comparison-section" id="comparisonSection">
+            <div class="comparison-header">
+                <span class="linea-titulo-seccion"></span>
+                <h2>¿Aún con dudas? Compara tus principales opciones</h2>
+                <p>Selecciona hasta 3 candidatos y contrasta sus propuestas por tema, tono y coherencia. Además, incluye un breve fact-checking.</p>
+                
+                <div class="theme-selector">
+                    <div class="theme-dropdown">
+                        <select id="themeSelector" onchange="updateComparisonTheme()">
+                            <option value="">Temas</option>
+                            <option value="educacion">Educación</option>
+                            <option value="economia">Economía</option>
+                            <option value="salud">Salud</option>
+                            <!--<option value="seguridad">Seguridad</option>
+                            <option value="infraestructura">Infraestructura</option>
+                            <option value="medio-ambiente">Medio Ambiente</option>-->
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="comparison-grid" id="comparisonGrid">
+                <!-- Las tarjetas de comparación se generarán aquí -->
+            </div>
+        </div>
+
+         <div class="box-titulo-seccion">
             <span class="linea-titulo-seccion"></span>
             <h3>¿Sabías que?</h3>
             <p>Descubre en segundos los datos que mejor explican las propuestas</p>            
@@ -69,7 +152,7 @@
                         <h3>Temas menos presentes</h3>
                     </div>
                     <div class="card-body">
-                        <h4>Con menor presencia: Familia, Transporte, Energía y minería, Cultura y turismo y Vivienda.</h4>
+                        <h4>Con menor aparición: Familia, Transporte, Energía y minería, Cultura y turismo y Vivienda.</h4>
                         <p>Baja presencia ≠ irrelevancia</p>
                     </div>
                 </div>
@@ -130,84 +213,7 @@
                 </div>
 
             </div>
-        </div>
-
-        <img src="./img/icon-click.jpg" alt="" width="100%" class="icon-click">
-        <p class="elige">Elige la opción que prefieras para iniciar </p>
-        <ul class="anclas">
-            <li>
-                Candidato o partido
-            </li>
-            <li>
-                Compara planes
-            </li>
-            <li>
-                Panorama general
-            </li>
-        </ul>
-
-        <!-- buscador de candidatos y partidos -->
-        <div id="box-main-candidatos">
-            <span class="linea-titulo-seccion"></span>
-            <h3>Explora por candidato o partido</h3>
-            <p class="bajada-candidatos">
-                Encuentra resúmenes claros de cada plan y accede a una versión concisa de los temas principales que aborda.
-            </p>
-            <div class="container">
-                <div class="tabs">
-                    <button class="tab active" onclick="switchTab('partido')">Partidos</button>
-                    <button class="tab" onclick="switchTab('candidato')">Candidatos</button>
-                </div>
-
-                <div class="search-container">
-                    <div class="search-box">
-                        <input type="text" id="searchInput" placeholder="Buscar" onkeyup="filterItems()">
-                        <span class="search-icon">
-                            <img src="../img/lupa.png" alt="" width="100%">
-                        </span>
-                    </div>
-                </div>
-
-                <div class="content">
-                    <div class="sidebar" id="itemList">
-                        <!-- Items will be loaded here -->
-                    </div>
-
-                    <div class="detail-panel" id="detailPanel">
-                        <div class="empty-state">
-                            Selecciona un partido o candidato para ver los detalles
-                        </div>
-                    </div>
-                </div>
-            </div>  
-        </div>
-
-        <!-- Sección de Comparador -->
-        <div class="comparison-section" id="comparisonSection">
-            <div class="comparison-header">
-                <span class="linea-titulo-seccion"></span>
-                <h2>¿Aún con dudas? Compara tus principales opciones</h2>
-                <p>Selecciona hasta 3 candidatos y contrasta sus propuestas por tema, tono y coherencia. Además, incluye un breve fact-checking.</p>
-                
-                <div class="theme-selector">
-                    <div class="theme-dropdown">
-                        <select id="themeSelector" onchange="updateComparisonTheme()">
-                            <option value="">Temas</option>
-                            <option value="educacion">Educación</option>
-                            <option value="economia">Economía</option>
-                            <option value="salud">Salud</option>
-                            <!--<option value="seguridad">Seguridad</option>
-                            <option value="infraestructura">Infraestructura</option>
-                            <option value="medio-ambiente">Medio Ambiente</option>-->
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <div class="comparison-grid" id="comparisonGrid">
-                <!-- Las tarjetas de comparación se generarán aquí -->
-            </div>
-        </div>
+        </div>   
 
         <div class="box-titulo-seccion">
             <span class="linea-titulo-seccion"></span>
@@ -1320,11 +1326,217 @@
             document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
             
+            // Limpiar búsqueda y autocompletado
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput.value.trim().length > 0) {
+                hideAutocomplete();
+                updateAutocomplete();
+            }
+            
             // Filtrar datos según el tab
             filterItems();
         }
 
         // Filtrar items por búsqueda
+        // ============================================
+        // Funciones de Autocompletado
+        // ============================================
+        
+        let selectedSuggestionIndex = -1;
+        let currentSuggestions = [];
+        
+        // Manejar input de búsqueda con autocompletado
+        function handleSearchInput(event) {
+            const key = event.key;
+            const dropdown = document.getElementById('autocompleteDropdown');
+            
+            // Navegación con teclado
+            if (key === 'ArrowDown') {
+                event.preventDefault();
+                navigateSuggestions(1);
+                return;
+            } else if (key === 'ArrowUp') {
+                event.preventDefault();
+                navigateSuggestions(-1);
+                return;
+            } else if (key === 'Enter') {
+                event.preventDefault();
+                if (selectedSuggestionIndex >= 0 && currentSuggestions[selectedSuggestionIndex]) {
+                    selectSuggestion(currentSuggestions[selectedSuggestionIndex]);
+                }
+                return;
+            } else if (key === 'Escape') {
+                hideAutocomplete();
+                return;
+            }
+            
+            // Actualizar sugerencias mientras escribe
+            updateAutocomplete();
+        }
+        
+        // Actualizar lista de sugerencias
+        function updateAutocomplete() {
+            const searchInput = document.getElementById('searchInput');
+            const searchTerm = searchInput.value.trim().toLowerCase();
+            const dropdown = document.getElementById('autocompleteDropdown');
+            
+            if (searchTerm.length === 0) {
+                hideAutocomplete();
+                filterItems();
+                return;
+            }
+            
+            // Filtrar datos según el tab actual
+            currentSuggestions = allData.filter(item => {
+                const matchesTab = item.tipo === currentTab;
+                const matchesSearch = item.nombre.toLowerCase().includes(searchTerm) || 
+                                     item.candidato.toLowerCase().includes(searchTerm);
+                return matchesTab && matchesSearch;
+            });
+            
+            // Renderizar sugerencias
+            renderSuggestions(searchTerm);
+            
+            // También actualizar la lista lateral
+            filterItems();
+        }
+        
+        // Renderizar sugerencias en el dropdown
+        function renderSuggestions(searchTerm) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            selectedSuggestionIndex = -1;
+            
+            if (currentSuggestions.length === 0) {
+                dropdown.innerHTML = '<div class="autocomplete-no-results">No se encontraron resultados</div>';
+                dropdown.classList.add('show');
+                return;
+            }
+            
+            // Limitar a 8 sugerencias
+            const limitedSuggestions = currentSuggestions.slice(0, 8);
+            
+            dropdown.innerHTML = limitedSuggestions.map((item, index) => {
+                // Determinar qué imagen mostrar
+                let imageContent;
+                if (item.tipo === 'candidato') {
+                    const photoUrl = item.fotoUrl || item.logoUrl;
+                    if (photoUrl && photoUrl.trim() !== '') {
+                        imageContent = `<img src="${photoUrl}" alt="${item.candidato || item.nombre}" onerror="this.parentElement.innerHTML='👤';">`;
+                    } else {
+                        imageContent = '👤';
+                    }
+                } else {
+                    if (item.logoUrl && item.logoUrl.trim() !== '') {
+                        imageContent = `<img src="${item.logoUrl}" alt="${item.nombre}" onerror="this.parentElement.innerHTML='🍎';">`;
+                    } else {
+                        imageContent = '🍎';
+                    }
+                }
+                
+                // Resaltar coincidencias en el texto
+                const highlightText = (text, term) => {
+                    if (!text) return '';
+                    const regex = new RegExp(`(${term})`, 'gi');
+                    return text.replace(regex, '<span class="autocomplete-highlight">$1</span>');
+                };
+                
+                const highlightedName = highlightText(item.nombre, searchTerm);
+                const highlightedCandidate = item.candidato ? highlightText(item.candidato, searchTerm) : '';
+                
+                return `
+                    <div class="autocomplete-item" data-index="${index}" onclick="selectSuggestionByIndex(${index})">
+                        <div class="autocomplete-item-icon">${imageContent}</div>
+                        <div class="autocomplete-item-text">
+                            <div class="autocomplete-item-name">${highlightedName}</div>
+                            ${item.tipo === 'candidato' && item.candidato ? 
+                                `<div class="autocomplete-item-party">${highlightedCandidate}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            dropdown.classList.add('show');
+        }
+        
+        // Navegar entre sugerencias con teclado
+        function navigateSuggestions(direction) {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            const items = dropdown.querySelectorAll('.autocomplete-item');
+            
+            if (items.length === 0) return;
+            
+            // Remover clase active del item anterior
+            if (selectedSuggestionIndex >= 0 && selectedSuggestionIndex < items.length) {
+                items[selectedSuggestionIndex].classList.remove('active');
+            }
+            
+            // Calcular nuevo índice
+            selectedSuggestionIndex += direction;
+            
+            // Manejar límites
+            if (selectedSuggestionIndex < 0) {
+                selectedSuggestionIndex = items.length - 1;
+            } else if (selectedSuggestionIndex >= items.length) {
+                selectedSuggestionIndex = 0;
+            }
+            
+            // Agregar clase active al nuevo item
+            items[selectedSuggestionIndex].classList.add('active');
+            
+            // Scroll automático si es necesario
+            items[selectedSuggestionIndex].scrollIntoView({ block: 'nearest' });
+        }
+        
+        // Seleccionar sugerencia por índice
+        function selectSuggestionByIndex(index) {
+            selectSuggestion(currentSuggestions[index]);
+        }
+        
+        // Seleccionar una sugerencia
+        function selectSuggestion(item) {
+            if (!item) return;
+            
+            // Actualizar input con el nombre seleccionado
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = item.nombre;
+            
+            // Ocultar dropdown
+            hideAutocomplete();
+            
+            // Seleccionar el item en la lista
+            selectItem(item.id);
+            
+            // Actualizar lista filtrada
+            filterItems();
+        }
+        
+        // Mostrar autocompletado
+        function showAutocomplete() {
+            const searchInput = document.getElementById('searchInput');
+            if (searchInput.value.trim().length > 0) {
+                updateAutocomplete();
+            }
+        }
+        
+        // Ocultar autocompletado
+        function hideAutocomplete() {
+            const dropdown = document.getElementById('autocompleteDropdown');
+            dropdown.classList.remove('show');
+            selectedSuggestionIndex = -1;
+        }
+        
+        // Cerrar dropdown al hacer click fuera
+        document.addEventListener('click', function(event) {
+            const searchBox = document.querySelector('.search-box');
+            if (searchBox && !searchBox.contains(event.target)) {
+                hideAutocomplete();
+            }
+        });
+
+        // ============================================
+        // Funciones de Filtrado (actualizadas)
+        // ============================================
+        
         function filterItems() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase();
             
