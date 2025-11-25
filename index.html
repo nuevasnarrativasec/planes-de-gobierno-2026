@@ -98,10 +98,14 @@
                             <option value="">Temas</option>
                             <option value="educacion">Educación</option>
                             <option value="economia">Economía</option>
+                            <option value="gobernanza-digital">Gobernanza digital</option>
+                            <option value="ambiente">Medio Ambiente</option>
                             <option value="salud">Salud</option>
-                            <!--<option value="seguridad">Seguridad</option>
+                            <option value="seguridad">Seguridad</option>
+                            <option value="programas-sociales">Programas sociales</option>
+                            <option value="justicia-dh">Justicia y derechos humanos</option>
+                            <option value="agricultura">Agricultura</option>
                             <option value="infraestructura">Infraestructura</option>
-                            <option value="medio-ambiente">Medio Ambiente</option>-->
                         </select>
                     </div>
                 </div>
@@ -893,15 +897,36 @@
 
         // Renderizar una tarjeta de comparación con datos
         function renderComparisonCard(item, index) {
-            const compData = comparisonDataList.find(c => 
-                c.partidoId == item.id && c.tema === currentComparisonTheme
-            );
+            console.log('🔍 Renderizando tarjeta:', {
+                index: index,
+                itemId: item.id,
+                itemNombre: item.nombre,
+                tema: currentComparisonTheme
+            });
+
+            const compData = comparisonDataList.find(c => {
+                const match = c.partidoId == item.id && c.tema === currentComparisonTheme;
+                if (currentComparisonTheme) {
+                    console.log('🔎 Comparando:', {
+                        'c.partidoId': c.partidoId,
+                        'item.id': item.id,
+                        'coincide ID': c.partidoId == item.id,
+                        'c.tema': c.tema,
+                        'currentTheme': currentComparisonTheme,
+                        'coincide tema': c.tema === currentComparisonTheme,
+                        'match final': match
+                    });
+                }
+                return match;
+            });
             
             console.log('Buscando datos para:', {
                 partidoId: item.id,
                 tema: currentComparisonTheme,
-                encontrado: compData,
-                todosLosDatos: comparisonDataList
+                encontrado: !!compData,
+                datosDisponibles: comparisonDataList.length,
+                partidosEnData: [...new Set(comparisonDataList.map(c => c.partidoId))],
+                temasEnData: [...new Set(comparisonDataList.map(c => c.tema))]
             });
             
             if (!compData && currentComparisonTheme) {
@@ -936,7 +961,7 @@
                         <div class="card-selector">
                             <select onchange="changeComparison(${index}, this.value)">
                                 <option value="${item.id}" selected>${item.nombre}</option>
-                                ${partyOptions.map(d => 
+                                ${allData.filter(d => d.id != item.id && d.tipo === 'partido').map(d => 
                                     `<option value="${d.id}">${d.nombre}</option>`
                                 ).join('')}
                             </select>
@@ -958,43 +983,6 @@
                 `<ul>${compData.propuestas.split('\n').filter(p => p.trim()).map(p => `<li>${p.replace(/^- /, '')}</li>`).join('')}</ul>` 
                 : '<p>No hay propuestas disponibles</p>';
             
-            // Parsear los factchecks individuales
-            let factcheckHTML = '';
-            if (compData.factcheckIntro || compData.factcheck1Propuesta) {
-                const factchecks = [];
-                
-                // Recopilar todos los factchecks disponibles
-                for (let i = 1; i <= 5; i++) {
-                    const propuesta = compData[`factcheck${i}Propuesta`];
-                    if (propuesta) {
-                        factchecks.push({
-                            propuesta: propuesta,
-                            descripcion: compData[`factcheck${i}Descripcion`] || '',
-                            veracidad: compData[`factcheck${i}Veracidad`] || 'doubtful',
-                            explicacion: compData[`factcheck${i}Explicacion`] || ''
-                        });
-                    }
-                }
-                
-                if (factchecks.length > 0) {
-                    const veracidadLabels = {
-                        'false': 'FALSO',
-                        'true': 'VERDADERO',
-                        'partially': 'PARCIALMENTE CIERTO',
-                        'doubtful': 'DUDOSO'
-                    };
-                    
-                    factcheckHTML = factchecks.map(fc => `
-                        <div class="factcheck-item">
-                            <div class="factcheck-proposal">${fc.propuesta}</div>
-                            ${fc.descripcion ? `<div class="factcheck-description">${fc.descripcion}</div>` : ''}
-                            <div class="fact-label ${fc.veracidad}">${veracidadLabels[fc.veracidad] || 'DUDOSO'}</div>
-                            ${fc.explicacion ? `<div class="factcheck-explanation"><strong>Explicación:</strong> ${fc.explicacion}</div>` : ''}
-                        </div>
-                    `).join('');
-                }
-            }
-            
             return `
                 <div class="comparison-card">
                     <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
@@ -1012,21 +1000,17 @@
                         <div class="card-party">${item.nombre}</div>
                     </div>
                     <div class="card-content">
+                        ${compData.tituloPropuesta ? `
+                            <div class="proposal-title-label">titulo-propuesta</div>
+                            <div class="proposal-title">${compData.tituloPropuesta}</div>
+                        ` : ''}
                         <div class="content-section">
-                            <h4>${currentComparisonTheme.toUpperCase()}</h4>
                             ${propuestasHTML}
                         </div>
                         ${compData.tonoDiscursivo || compData.coherencia ? `
                             <div class="discourse-tone">
-                                <p><strong>Tono discursivo:</strong> ${compData.tonoDiscursivo || 'N/A'}</p>
-                                <p><strong>Coherencia:</strong> ${compData.coherencia || 'N/A'}</p>
-                            </div>
-                        ` : ''}
-                        ${factcheckHTML ? `
-                            <div class="factcheck-section">
-                                <h4>FACTCHECKING</h4>
-                                ${compData.factcheckIntro ? `<div class="factcheck-intro">${compData.factcheckIntro}</div>` : ''}
-                                ${factcheckHTML}
+                                <p><strong>TONO DISCURSIVO:</strong> ${compData.tonoDiscursivo || 'N/A'}</p>
+                                <p><strong>COHERENCIA:</strong> ${compData.coherencia || 'N/A'}</p>
                             </div>
                         ` : ''}
                     </div>
