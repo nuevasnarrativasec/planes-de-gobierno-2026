@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v19">
+    <link rel="stylesheet" href="./css/style.css?v20">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -125,7 +125,7 @@
                 <!-- Slide 1 -->
                 <div class="slide-card card-pink">
                     <div class="card-header">
-                        <h3>Cobertura <br> por plan</h3>
+                        <h3>Cobertura por plan</h3>
                     </div>
                     <div class="card-body">
                         <h4>El más amplio trata 17 temas y el más acotado 8; la mayoría se mueve en 14.</h4>
@@ -138,7 +138,7 @@
                 <!-- Slide 2 -->
                 <div class="slide-card card-blue">
                     <div class="card-header">
-                        <h3>Agenda <br> compartida</h3>
+                        <h3>Agenda compartida</h3>
                     </div>
                     <div class="card-body">
                         <h4>Temas que aparecen en casi todos los planes: Economía, Salud, Educación, Programas sociales, Justicia y DD. HH. y Gobernanza digital.</h4>
@@ -182,7 +182,7 @@
                 <!-- Slide 6 -->
                 <div class="slide-card card-yellow">
                     <div class="card-header">
-                        <h3>Tema dominante <br> por plan</h3>
+                        <h3>Tema dominante por plan</h3>
                     </div>
                     <div class="card-body">
                         <h4>En la mayoría de planes el tema n.º 1 es Economía; en varios, Salud o Programas sociales.</h4>
@@ -193,7 +193,7 @@
                 <!-- Slide 7 -->
                 <div class="slide-card card-pink">
                     <div class="card-header">
-                        <h3>Tono <br> predominante</h3>
+                        <h3>Tono predominante</h3>
                     </div>
                     <div class="card-body">
                         <h4>Predominan los tonos social y pragmático; el técnico es minoritario y el ideológico aparece en diversa intensidad. </h4>
@@ -204,7 +204,7 @@
                 <!-- Slide 8 -->
                 <div class="slide-card card-blue">
                     <div class="card-header">
-                        <h3>Coherencia <br> interna</h3>
+                        <h3>Coherencia interna</h3>
                     </div>
                     <div class="card-body">
                         <h4>La evaluación global se concentra en coherencia alta o media; la baja es minoritaria.</h4>
@@ -501,12 +501,23 @@
         const DENSITY_DATA_URL = './data/densidad-data.json';
         
         const themes = [
-            { id: 'educacion', name: 'EDUCACIÓN', color: '#3B82F6' },
-            { id: 'salud', name: 'SALUD', color: '#EF4444' },
-            { id: 'economia', name: 'ECONOMÍA', color: '#10B981' },
-            { id: 'seguridad', name: 'SEGURIDAD', color: '#F59E0B' },
-            { id: 'infraestructura', name: 'INFRAESTRUCTURA', color: '#8B5CF6' },
-            { id: 'medio-ambiente', name: 'MEDIO AMBIENTE', color: '#06B6D4' }
+            { id: 'agricultura', name: 'AGRICULTURA', color: '#3B82F6' },
+            { id: 'medio-ambiente', name: 'AMBIENTE', color: '#EF4444' },
+            { id: 'cambio-climatico', name: 'CAMBIO CLIMÁTICO', color: '#10B981' },
+            { id: 'cultura-turismo', name: 'CULTURA Y TURISMO', color: '#F59E0B' },
+            { id: 'descentralizacion', name: 'DESCENTRALIZACIÓN', color: '#8B5CF6' },
+            { id: 'economia', name: 'ECONOMÍA', color: '#06B6D4' },
+            { id: 'educacion', name: 'EDUCACIÓN', color: '#06B6D4' },
+            { id: 'energia-minera', name: 'ENERGÍA MINERA', color: '#06B6D4' },
+            { id: 'familia', name: 'FAMILIA', color: '#06B6D4' },
+            { id: 'gobernanza-digital', name: 'GOBERNANZA DIGITAL', color: '#06B6D4' },
+            { id: 'infraestructura', name: 'INFRAESTRUCTURA', color: '#06B6D4' },
+            { id: 'justicia-dh', name: 'JUSTICIA', color: '#06B6D4' },
+            { id: 'programas-sociales', name: 'PROGRAMAS SOCIALES', color: '#06B6D4' },
+            { id: 'salud', name: 'SALUD', color: '#06B6D4' },
+            { id: 'seguridad', name: 'SEGURIDAD', color: '#06B6D4' },
+            { id: 'transporte', name: 'TRANSPORTE', color: '#06B6D4' },
+            { id: 'vivienda', name: 'VIVIENDA', color: '#06B6D4' }
         ];
         
         let selectedThemeIndex = 1; // Por defecto: SALUD
@@ -594,6 +605,15 @@
                     ${theme.name}
                 </div>
             `).join('');
+
+            // Posicionar labels dinámicamente basado en el número de temas
+            const totalThemes = themes.length;
+            const labelItems = labelsContainer.querySelectorAll('.theme-label-item');
+            labelItems.forEach((label, index) => {
+                // Calcular la posición central de cada segmento
+                const centerPosition = (100 / totalThemes) * (index + 0.1);
+                label.style.left = `${centerPosition}%`;
+            });
             
             // Posicionar handle en el centro del segmento
             updateSliderHandle();
