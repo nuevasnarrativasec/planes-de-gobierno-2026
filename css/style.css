@@ -177,14 +177,14 @@ html {
                 flex-direction: column;
             }
                 .card-header {
-                    min-height: 63px;
+                    min-height: 40px;
                     padding: 30px;
                     color: white;
                     text-align: center;
                 }
                     .card-header h3 {
                         color: #000;
-                        font: 1.5rem/1.3 'Guardian Egyp Bold';
+                        font: 1.2rem/1.3 'Guardian Egyp Bold';
                         margin: 0;
                         font-weight: bold;
                         text-transform: uppercase;
@@ -198,7 +198,7 @@ html {
                         justify-content: center;
                     }
                     .card-body h4 {
-                        font: 1.1rem/1.3 'Guardian Egyp Bold';
+                        font: 1rem/1.3 'Guardian Egyp Bold';
                         margin: 0 auto 25px;
                         max-width: 270px;                        
                     }
@@ -310,7 +310,7 @@ html {
         background-color: #fff;
         margin: 0 auto;
         /*max-width: 900px;*/
-        padding: 40px 0;
+        padding: 80px 0;
     }
         #box-main-candidatos h3{
             font: 1.7rem / 1.2 'Guardian Egyp Bold';
@@ -1186,7 +1186,7 @@ html {
     .box-main-panorama{
         background-color: #fff;
         margin: 40px auto 0;
-        max-width: 860px;
+        max-width: 1024px;
         padding: 0 20px 40px;
     }
         .box-main-panorama h2{
@@ -1204,7 +1204,8 @@ html {
             text-align: center;
         }
         .box-flourish{
-            margin-bottom: 40px;
+            margin: 0 auto 40px;
+            max-width: 860px;    
         }
     
     /* Estilos para la sección de densidad discursiva */
@@ -1256,7 +1257,7 @@ html {
         }
 
         .theme-slider-container {
-            margin-bottom: 50px;
+            margin-bottom: 70px;
             position: relative;
         }
 
@@ -1271,7 +1272,7 @@ html {
 
         .theme-slider {
             position: relative;
-            height: 10px;
+            height: 15px;
             background: transparent;
             border-radius: 8px;
             cursor: pointer;
@@ -1314,23 +1315,79 @@ html {
         }
 
         .theme-labels {
-            display: flex;
-            margin-top: 8px;
+            margin-top: 25px;
+            position: relative;
+            height: 60px;
+            width: 100%;
         }
 
         .theme-label-item {
-            flex: 1;
-            text-align: center;
-            font-size: 11px;
+            position: absolute;
+            font-size: 10px;
             font-weight: 600;
             color: #666;
             text-transform: uppercase;
             transition: all 0.3s;
+            transform: rotate(-45deg) translateX(-80%);
+            transform-origin: top left;
+            white-space: nowrap;
+            line-height: 1.2;
         }
+            /*.theme-label-item:nth-child(1){
+                margin-left: -45px;
+            }
+            .theme-label-item:nth-child(2){
+                margin-left: -15px;
+            }
+            .theme-label-item:nth-child(3){
+                margin-left: -35px;
+            }
+            .theme-label-item:nth-child(4){
+                margin-left: -60px;
+            }
+            .theme-label-item:nth-child(5){
+                margin-left: -65px;
+            }
+            .theme-label-item:nth-child(6){
+                margin-left: -20px;
+            }
+            .theme-label-item:nth-child(7){
+                margin-left: -15px;
+            }
+            .theme-label-item:nth-child(8){
+                margin-left: -35px;
+            }
+            .theme-label-item:nth-child(9){
+                margin-left: -10px;
+            }
+            .theme-label-item:nth-child(10){
+                margin-left: -60px;
+            }
+            .theme-label-item:nth-child(11){
+                margin-left: -55px;
+            }
+            .theme-label-item:nth-child(12){
+                margin-left: -25px;
+            }
+            .theme-label-item:nth-child(13){
+                margin-left: -40px;
+            }
+            .theme-label-item:nth-child(14){
+                margin-left: -15px;
+            }
+            .theme-label-item:nth-child(15){
+                margin-left: -15px;
+            }
+            .theme-label-item:nth-child(16){
+                margin-left: -25px;
+            }
+            .theme-label-item:nth-child(17){
+                margin-left: -30px;
+            }*/
 
         .theme-label-item.active {
             color: #333;
-            font-size: 12px;
+            font-size: 11px;
             font-weight: 700;
         }
 
@@ -1338,8 +1395,8 @@ html {
             position: absolute;
             top: 50%;
             transform: translate(-50%, -50%);
-            width: 20px;
-            height: 20px;
+            width: 30px;
+            height: 30px;
             background: white;
             border: 3px solid #333;
             border-radius: 50%;
@@ -1495,12 +1552,24 @@ html {
         }
 
         /* Colores de temas */
-        .theme-educacion { background-color: #3B82F6; }
-        .theme-salud { background-color: #EF4444; }
-        .theme-economia { background-color: #10B981; }
-        .theme-seguridad { background-color: #F59E0B; }
-        .theme-infraestructura { background-color: #8B5CF6; }
-        .theme-medio-ambiente { background-color: #06B6D4; }
+        .theme-agricultura { background-color: #66aa94; }
+        .theme-medio-ambiente { background-color: #5d939f; }
+        .theme-cambio-climatico { background-color: #959d53; }
+        .theme-cultura-turismo { background-color: #6ba66d; }
+        .theme-descentralizacion { background-color: #b384d0; }
+        .theme-economia { background-color: #e9c15b; }
+        .theme-educacion { background-color: #63a2e1; }
+        .theme-energia-minera { background-color: #cc816b; }
+        .theme-familia { background-color: #e7804f; }
+        .theme-gobernanza-digital { background-color: #66a87a; }
+        .theme-infraestructura { background-color: #7797ea; }
+        .theme-justicia-dh { background-color: #6ab07c; }
+        .theme-programas-sociales { background-color: #d37a80; }
+        .theme-salud { background-color: #c07fc3; }        
+        .theme-seguridad { background-color: #8d9f55; }
+        .theme-transporte { background-color: #c67cb9; }
+        .theme-vivienda { background-color: #66aab0; }
+        
 
         .box-metodologia{
             border: 1px solid #707070;
@@ -1636,7 +1705,8 @@ html {
             .party-bar-item:nth-child(10) { order: 20; }
 
             .theme-label-item {
-                font-size: 9px;
+                font-size: 8px;
+                left: -8px;
             }
             
             .theme-slider-container {
