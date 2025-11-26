@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v20">
+    <link rel="stylesheet" href="./css/style.css?v21">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -296,7 +296,6 @@
                 Para caracterizar el tono y la coherencia se aplicó un enfoque de análisis del discurso político (referencias: van Dijk, Fairclough, Habermas) y coherencia programática (Klingemann et al.). El tono se etiqueta por fragmento como: Técnico (gestión pública, evidencia, indicadores), Ideológico (valores, principios, identidad), Pragmático (acciones viables, implementación) o Social (inclusión, bienestar, equidad). La coherencia interna se valora en Alta / Media / Baja según el alineamiento entre diagnóstico y medidas, la ausencia de contradicciones y la claridad de metas.
             </p>
         </div>
-
 
     </div>
 
@@ -1670,6 +1669,15 @@
                             <button class="btn btn-secondary" onclick="addToCompare(${JSON.stringify(item).replace(/"/g, '&quot;')})">Comparar</button>
                         </div>
                     </div>  
+                    <div class="vision-section">
+                        <p class="vision-text">${item.vision || 'Sin información de visión disponible.'}</p>    
+                    </div>
+                    <div class="candidate-temas-mencionados">
+                        <h6>Temas más mencionados:</h6>
+                        <div class="topics">
+                            ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
+                        </div>
+                    </div>
                     <div class="candidate-info">
                         <div class="box-edad">  
                             <h6>edad:</h6>                                           
@@ -1696,19 +1704,12 @@
                         <h6>Ingresos declarados:</h6>
                         <p>${item.ingresosDeclarados || ''} </p>
                     </div>
-                    <div class="candidate-temas-mencionados">
-                        <h6>Temas más mencionados:</h6>
-                        <div class="topics">
-                            ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
-                        </div>
-                    </div>
+                    
                 </div>
                           
                 
 
-                <div class="vision-section">
-                    <p class="vision-text">${item.vision || 'Sin información de visión disponible.'}</p>    
-                </div>
+                
             `;
         }
 

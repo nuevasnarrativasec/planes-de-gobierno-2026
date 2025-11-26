@@ -691,6 +691,10 @@ html {
             border-top: 1px solid #000;
             padding-top: 10px;
         }
+        .candidate-temas-mencionados{
+            margin-bottom: 25px;
+            padding-top: 25px;
+        }
 
 
     .action-buttons { 
@@ -737,16 +741,12 @@ html {
     }
 
     .vision-section {
-        margin-top: 30px;
-        padding-top: 30px;
-        border-top: 1px solid #e0e0e0;
+
     }
 
     .vision-text {
-        display: none;
-        line-height: 1.8;
         color: #333;
-        text-align: justify;
+        font: 1rem/1.7 "Roboto", sans-serif;
         margin-bottom: 30px;
     }
 
@@ -764,11 +764,11 @@ html {
 
     .topic-tag {
         background: #ffffff;
-        border: 1px solid #000;
-        border-radius: 5px;
+        border: 1px solid #bfbfbf;
+        border-radius: 20px;
         color: #333;
         font: 1rem/1.1 "Roboto", sans-serif;
-        font-weight: 600;
+        font-weight: 400;
         margin: 10px 0 5px;
         position: relative;
         display: inline-flex;
