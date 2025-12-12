@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v22">
+    <link rel="stylesheet" href="./css/style.css?v26">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -59,9 +59,9 @@
                 <div class="search-container">
                     <div class="search-box">
                         <input type="text" id="searchInput" placeholder="Buscar" 
-                        onkeyup="handleSearchInput(event)" 
-                        onfocus="showAutocomplete()"
-                        autocomplete="off">
+                            onkeyup="handleSearchInput(event)" 
+                            onfocus="showAutocomplete()"
+                            autocomplete="off">
                         <span class="search-icon">
                             <img src="../img/lupa.png" alt="" width="100%">
                         </span>
@@ -72,9 +72,15 @@
                 </div>
 
                 <div class="content">
-                    <div class="sidebar" id="itemList">
-                        <!-- Items will be loaded here -->
+                    <div class="box-indicacion">
+                        <img src="./img/icon-scroll.png" alt="" width="100%">
+                        <span>Has scroll para ver a los partidos y candidatos</span>
                     </div>
+                    <div class="box-ctn-sidebar">
+                        <div class="sidebar" id="itemList">
+                            <!-- Items will be loaded here -->
+                        </div>
+                    </div>                    
 
                     <div class="detail-panel" id="detailPanel">
                         <div class="empty-state">
@@ -122,6 +128,77 @@
                 <!-- Las tarjetas de comparación se generarán aquí -->
             </div>
         </div>
+
+        <!-- Sección de Factchecking -->
+        <section class="factchecking-section" id="factcheckingSection">
+            <div class="factchecking-header">
+                <h2>FactChecking</h2>
+                <p>¿Qué tan ciertas son las propuestas? Nuestro equipo eligió 3 frases clave por plan y las sometió a verificación. Aquí verás qué se dijo, qué dicen los datos y cómo lo comprobamos, con un veredicto al final.</p>
+            </div>
+
+            <!-- Tabs de filtro -->
+            <div class="factchecking-tabs">
+                <button class="factchecking-tab active" data-filter="partido" onclick="switchFactcheckingTab('partido')">
+                    Filtrar por partido
+                </button>
+                <button class="factchecking-tab" data-filter="candidato" onclick="switchFactcheckingTab('candidato')">
+                    Filtrar por candidato
+                </button>
+                <button class="factchecking-tab" data-filter="veredicto" onclick="switchFactcheckingTab('veredicto')">
+                    Filtrar por veredicto
+                </button>
+            </div>
+
+            <!-- Buscador -->
+            <div class="factchecking-search-container">
+                <div class="factchecking-search-box">
+                    <input type="text" 
+                        id="factcheckingSearchInput" 
+                        placeholder="Buscar partido..." 
+                        autocomplete="off"
+                        onkeyup="handleFactcheckingSearch(event)"
+                        onfocus="showFactcheckingAutocomplete()">
+                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                    <div class="factchecking-autocomplete" id="factcheckingAutocomplete">
+                        <!-- Autocomplete items se generarán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div class="factchecking-loading" id="factcheckingLoading">
+                <div class="factchecking-spinner"></div>
+                <p>Cargando datos...</p>
+            </div>
+
+            <!-- Grid de cards -->
+            <div class="factchecking-grid" id="factcheckingGrid" style="display: none;">
+                <!-- Las cards se generarán dinámicamente -->
+            </div>   
+
+            <!-- Botón Ver Más -->
+            <div class="factchecking-load-more" id="factcheckingLoadMore" style="display: none;">
+                <button class="load-more-btn" onclick="loadMoreFactchecking()">
+                    Ver más
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">                    
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <span class="load-more-count" id="loadMoreCount"></span>
+            </div>
+
+            <!-- No results -->
+            <div class="factchecking-no-results" id="factcheckingNoResults" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                <p>No se encontraron resultados</p>
+            </div>
+        </section>
 
          <div class="box-titulo-seccion">
             <span class="linea-titulo-seccion"></span>
@@ -1723,6 +1800,645 @@
 
         // Iniciar la aplicación cuando se carga la página
         window.onload = init;
+    </script>
+
+    <!-- factchecking -->
+    <script>
+        // ============================================
+        // CONFIGURACIÓN
+        // ============================================
+        
+        // URL de tu Google Spreadsheet (Hoja de FactChecking)
+        const FACTCHECKING_SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/1IV5othVVZ0udcHWXN5Tfv5UDsDRPjHcJDz4X6BWGiV8/export?format=csv';
+        
+        // Variables globales
+        let factcheckingData = [];
+        let filteredFactcheckingData = [];
+        let currentFactcheckingFilter = 'partido';
+        let factcheckingSuggestions = [];
+        let selectedFactcheckingSuggestionIndex = -1;
+
+        // Paginación        
+        const ITEMS_PER_PAGE = 9;// 3 filas de 3 cards 
+        let visibleItems = ITEMS_PER_PAGE;
+
+        // ============================================
+        // INICIALIZACIÓN
+        // ============================================
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFactcheckingData();
+        });
+
+        // ============================================
+        // CARGAR DATOS DESDE GOOGLE SHEETS O CSV LOCAL
+        // ============================================
+        
+        async function loadFactcheckingData() {
+            const loading = document.getElementById('factcheckingLoading');
+            const grid = document.getElementById('factcheckingGrid');
+            
+            loading.style.display = 'block';
+            grid.style.display = 'none';
+            
+            try {
+                // Agregar timestamp para evitar caché (solo para URLs de Google)
+                let url = FACTCHECKING_SPREADSHEET_URL;
+                if (url.includes('docs.google.com')) {
+                    const timestamp = new Date().getTime();
+                    url = url + '&_t=' + timestamp;
+                }
+                
+                const response = await fetch(url);
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta: ' + response.status);
+                }
+                
+                const csvText = await response.text();
+                
+                // Parsear CSV
+                factcheckingData = parseFactcheckingCSV(csvText);
+                filteredFactcheckingData = [...factcheckingData];
+                
+                console.log('📊 Datos de factchecking cargados:', factcheckingData.length, 'items');
+                
+                // Mostrar primera fila para debug
+                if (factcheckingData.length > 0) {
+                    console.log('📄 Primera fila:', factcheckingData[0]);
+                }
+                
+                loading.style.display = 'none';
+                grid.style.display = 'grid';
+                
+                renderFactcheckingCards();
+                
+            } catch (error) {
+                console.error('Error cargando datos de factchecking:', error);
+                console.log('⚠️ Cargando datos de ejemplo...');
+                
+                // Cargar datos de ejemplo para demostración
+                loadExampleFactcheckingData();
+            }
+        }
+
+        // Parsear CSV completo (maneja saltos de línea dentro de celdas)
+        function parseFactcheckingCSV(csvText) {
+            const rows = parseCSVComplete(csvText);
+            
+            if (rows.length === 0) return [];
+            
+            const headers = rows[0].map(h => h.trim().toLowerCase());
+            const data = [];
+            
+            console.log('Headers encontrados:', headers);
+            
+            for (let i = 1; i < rows.length; i++) {
+                const values = rows[i];
+                const row = {};
+                
+                headers.forEach((header, index) => {
+                    row[header] = values[index] ? values[index].trim() : '';
+                });
+                
+                // Solo agregar si tiene datos válidos (al menos partido o frase)
+                if (row.partido || row.frase) {
+                    data.push(row);
+                }
+            }
+            
+            console.log('📊 Filas parseadas:', data.length);
+            return data;
+        }
+
+        // Parser CSV completo que maneja saltos de línea dentro de celdas con comillas
+        function parseCSVComplete(csvText) {
+            const rows = [];
+            let currentRow = [];
+            let currentCell = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < csvText.length; i++) {
+                const char = csvText[i];
+                const nextChar = csvText[i + 1];
+                
+                if (char === '"') {
+                    if (inQuotes && nextChar === '"') {
+                        // Comilla escapada ("")
+                        currentCell += '"';
+                        i++; // Saltar la siguiente comilla
+                    } else {
+                        // Toggle estado de comillas
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    // Fin de celda
+                    currentRow.push(currentCell);
+                    currentCell = '';
+                } else if ((char === '\n' || (char === '\r' && nextChar === '\n')) && !inQuotes) {
+                    // Fin de fila (solo si no estamos dentro de comillas)
+                    currentRow.push(currentCell);
+                    if (currentRow.some(cell => cell.trim() !== '')) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                    currentCell = '';
+                    if (char === '\r') i++; // Saltar \n si era \r\n
+                } else if (char === '\r' && !inQuotes) {
+                    // Fin de fila (solo \r)
+                    currentRow.push(currentCell);
+                    if (currentRow.some(cell => cell.trim() !== '')) {
+                        rows.push(currentRow);
+                    }
+                    currentRow = [];
+                    currentCell = '';
+                } else {
+                    currentCell += char;
+                }
+            }
+            
+            // Agregar última celda y fila si existen
+            if (currentCell || currentRow.length > 0) {
+                currentRow.push(currentCell);
+                if (currentRow.some(cell => cell.trim() !== '')) {
+                    rows.push(currentRow);
+                }
+            }
+            
+            return rows;
+        }
+
+        // Datos de ejemplo para demostración
+        function loadExampleFactcheckingData() {
+            factcheckingData = [
+                {
+                    partido: 'Perú Patria Segura',
+                    candidato: 'Rafael Santos',
+                    frase: 'Aumentar el presupuesto en salud en un 20% durante el primer año de gobierno.',
+                    veredicto: 'Indeterminado',
+                    justificacion: 'La afirmación sobre aumentar el presupuesto en salud en un 20% no puede ser verificada ya que no se ha publicado un presupuesto específico para el primer año de gobierno de Perú Patria Segura. Además, los presupuestos anuales son aprobados por el Congreso y pueden variar según las prioridades del gobierno en el momento de su implementación.',
+                    fuentes_consultadas: 'Ministerio de Economía y Finanzas\nhttps://www.mef.gob.pe\nInstituto Nacional de Estadística e Informática\nhttps://www.gob.pe/inei/'
+                },
+                {
+                    partido: 'Perú Patria Segura',
+                    candidato: 'Rafael Santos',
+                    frase: 'Construir 100 nuevas escuelas en zonas rurales en los primeros dos años.',
+                    veredicto: 'Indeterminado',
+                    justificacion: 'La afirmación sobre la construcción de 100 nuevas escuelas en zonas rurales carece de datos verificables específicos que confirmen o desmientan la promesa.',
+                    fuentes_consultadas: 'Ministerio de Educación\nhttps://www.minedu.gob.pe\nInstituto Nacional de Estadística e Informática\nhttps://www.gob.pe/inei/'
+                },
+                {
+                    partido: 'Perú Patria Segura',
+                    candidato: 'Rafael Santos',
+                    frase: 'Reducir la tasa de criminalidad en un 30% en los primeros cuatro años.',
+                    veredicto: 'Indeterminado',
+                    justificacion: 'La afirmación sobre la reducción de la tasa de criminalidad en un 30% en un plazo específico no puede ser verificada en este momento.',
+                    fuentes_consultadas: 'Ministerio del Interior\nhttps://www.gob.pe/mininter\nObservatorio Nacional de Seguridad Ciudadana\nhttps://www.gob.pe/observatorio-seguridad'
+                },
+                {
+                    partido: 'Partido Nacionalista Peruano',
+                    candidato: 'Ollanta Humala',
+                    frase: 'Aumentar el presupuesto en salud en un 20% en los próximos tres años.',
+                    veredicto: 'Indeterminado',
+                    justificacion: 'La afirmación sobre aumentar el presupuesto en salud en un 20% no puede ser verificada actualmente.',
+                    fuentes_consultadas: 'Ministerio de Economía y Finanzas\nhttps://www.gob.pe/mef\nInstituto Nacional de Estadística e Informática\nhttps://www.inei.gob.pe'
+                },
+                {
+                    partido: 'Partido Nacionalista Peruano',
+                    candidato: 'Ollanta Humala',
+                    frase: 'Reducir la pobreza en un 10% durante el primer año de gobierno.',
+                    veredicto: 'Indeterminado',
+                    justificacion: 'La afirmación de reducir la pobreza en un 10% en el primer año de gobierno es ambiciosa y depende de múltiples factores económicos y sociales.',
+                    fuentes_consultadas: 'Instituto Nacional de Estadística e Informática\nhttps://www.gob.pe/inei/\nMinisterio de Economía y Finanzas\nhttps://www.mef.gob.pe'
+                },
+                {
+                    partido: 'Avanza País',
+                    candidato: 'Phillip Butters',
+                    frase: 'Aumentar el presupuesto en educación en un 20% en los próximos dos años.',
+                    veredicto: 'Indeterminado',
+                    justificacion: 'La afirmación de aumentar el presupuesto en educación en un 20% no puede ser verificada actualmente.',
+                    fuentes_consultadas: 'Ministerio de Educación\nhttps://www.minedu.gob.pe\nMinisterio de Economía y Finanzas\nhttps://www.mef.gob.pe'
+                },
+                {
+                    partido: 'Frente Amplio',
+                    candidato: 'Marco Arana Zegarra',
+                    frase: 'Aumentar el salario mínimo a S/ 1,500 en el primer año de gobierno.',
+                    veredicto: 'Indeterminado',
+                    justificacion: 'La afirmación sobre el aumento del salario mínimo a S/ 1,500 es indeterminada porque no se ha establecido oficialmente un plan de implementación.',
+                    fuentes_consultadas: 'Ministerio de Trabajo y Promoción del Empleo\nhttps://www.gob.pe/mtpe\nDiario El Comercio\nhttps://elcomercio.pe/'
+                },
+                {
+                    partido: 'Fuerza Popular',
+                    candidato: 'Keiko Fujimori',
+                    frase: 'Crear 2 millones de empleos formales en el quinquenio.',
+                    veredicto: 'Engañosa',
+                    justificacion: 'La propuesta no especifica los mecanismos concretos para la creación de estos empleos ni cómo se financiaría.',
+                    fuentes_consultadas: 'Ministerio de Trabajo\nhttps://www.gob.pe/mtpe'
+                }
+            ];
+            
+            filteredFactcheckingData = [...factcheckingData];
+            
+            document.getElementById('factcheckingLoading').style.display = 'none';
+            document.getElementById('factcheckingGrid').style.display = 'grid';
+            
+            console.log('📊 Datos de ejemplo cargados:', factcheckingData.length, 'items');
+            
+            renderFactcheckingCards();
+        }
+
+        // ============================================
+        // RENDERIZAR CARDS
+        // ============================================
+        
+        function renderFactcheckingCards() {
+            const grid = document.getElementById('factcheckingGrid');
+            const noResults = document.getElementById('factcheckingNoResults');
+            const loadMoreContainer = document.getElementById('factcheckingLoadMore');
+            const loadMoreCount = document.getElementById('loadMoreCount');
+            
+            if (filteredFactcheckingData.length === 0) {
+                grid.style.display = 'none';
+                noResults.style.display = 'block';
+                loadMoreContainer.style.display = 'none';
+                return;
+            }
+            
+            grid.style.display = 'grid';
+            noResults.style.display = 'none';
+            
+            // Mostrar solo los items visibles
+            const itemsToShow = filteredFactcheckingData.slice(0, visibleItems);
+            grid.innerHTML = itemsToShow.map(item => createFactcheckingCard(item)).join('');
+            
+            // Mostrar/ocultar botón "ver más"
+            const remainingItems = filteredFactcheckingData.length - visibleItems;
+            
+            if (remainingItems > 0) {
+                loadMoreContainer.style.display = 'flex';
+                loadMoreCount.textContent = `Mostrando ${visibleItems} de ${filteredFactcheckingData.length} resultados`;
+            } else {
+                loadMoreContainer.style.display = 'none';
+            }
+        }
+        
+        // Cargar más items
+        function loadMoreFactchecking() {
+            visibleItems += ITEMS_PER_PAGE;
+            renderFactcheckingCards();
+            
+            // Scroll suave hacia los nuevos items
+            const grid = document.getElementById('factcheckingGrid');
+            const cards = grid.querySelectorAll('.factchecking-card');
+            if (cards.length > visibleItems - ITEMS_PER_PAGE) {
+                const targetCard = cards[visibleItems - ITEMS_PER_PAGE];
+                targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
+        }
+        
+        // Resetear paginación (cuando se cambia de tab o se busca)
+        function resetPagination() {
+            visibleItems = ITEMS_PER_PAGE;
+        }
+
+        function createFactcheckingCard(item) {
+            // Normalizar veredicto
+            const veredicto = normalizeVeredicto(item.veredicto);
+            const veredictoClass = getVeredictoClass(veredicto);
+            
+            // Formatear fuentes
+            const fuentes = formatFuentes(item.fuentes_consultadas);
+            
+            return `
+                <div class="factchecking-card">
+                    <div class="factchecking-card-header">
+                        <h3>${item.partido || 'Partido'}</h3>
+                        <p class="factchecking-card-intro">${item.candidato || 'Candidato'}</p>
+                    </div>
+                    <div class="factchecking-card-body">
+                        <div class="factchecking-frase">
+                            "${item.frase || 'Frase no disponible'}"
+                        </div>
+                        
+                        <div class="factchecking-veredicto ${veredictoClass}">
+                            <div class="factchecking-veredicto-label">${veredicto}</div>
+                            <div class="factchecking-veredicto-text">
+                                ${item.justificacion || 'Justificación no disponible'}
+                            </div>
+                        </div>
+                        
+                        <div class="factchecking-fuentes">
+                            <strong>Fuente:</strong> ${fuentes}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function normalizeVeredicto(veredicto) {
+            if (!veredicto) return 'INDETERMINADO';
+            const v = veredicto.toLowerCase().trim();
+            if (v.includes('verdad')) return 'VERDADERA';
+            if (v.includes('fals')) return 'FALSA';
+            if (v.includes('engañ') || v.includes('engan')) return 'ENGAÑOSA';
+            return 'INDETERMINADO';
+        }
+
+        function getVeredictoClass(veredicto) {
+            const v = veredicto.toLowerCase();
+            if (v.includes('verdad')) return 'verdadera';
+            if (v.includes('fals')) return 'falsa';
+            if (v.includes('engañ') || v.includes('engan')) return 'enganosa';
+            return 'indeterminado';
+        }
+
+        function formatFuentes(fuentes) {
+            if (!fuentes) return 'No especificada';
+            
+            // Normalizar saltos de línea (pueden venir como \n literal o como salto real)
+            let normalizedFuentes = fuentes
+                .replace(/\\n/g, '\n')  // Convertir \n literal a salto real
+                .replace(/\r\n/g, '\n') // Normalizar Windows line endings
+                .replace(/\r/g, '\n');  // Normalizar old Mac line endings
+            
+            // Detectar URLs y convertirlas en links
+            const lines = normalizedFuentes.split('\n');
+            const formattedParts = [];
+            let currentSource = '';
+            
+            for (let i = 0; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                
+                if (line.startsWith('http')) {
+                    // Es una URL, crear link con el nombre anterior si existe
+                    const domain = extractDomain(line);
+                    if (currentSource) {
+                        formattedParts.push(`<a href="${line}" target="_blank" rel="noopener">${currentSource}</a>`);
+                        currentSource = '';
+                    } else {
+                        formattedParts.push(`<a href="${line}" target="_blank" rel="noopener">${domain}</a>`);
+                    }
+                } else {
+                    // Es el nombre de una fuente, guardarlo para asociar con la URL siguiente
+                    if (currentSource) {
+                        // Si ya había un nombre sin URL, agregarlo solo
+                        formattedParts.push(currentSource);
+                    }
+                    currentSource = line;
+                }
+            }
+            
+            // Si quedó un nombre sin URL al final
+            if (currentSource) {
+                formattedParts.push(currentSource);
+            }
+            
+            return formattedParts.length > 0 ? formattedParts.join(' | ') : 'No especificada';
+        }
+
+        function extractDomain(url) {
+            try {
+                const domain = new URL(url).hostname;
+                return domain.replace('www.', '');
+            } catch {
+                return url;
+            }
+        }
+
+        // ============================================
+        // TABS DE FILTRO
+        // ============================================
+        
+        function switchFactcheckingTab(filter) {
+            // Actualizar tabs activos
+            document.querySelectorAll('.factchecking-tab').forEach(tab => {
+                tab.classList.remove('active');
+                if (tab.dataset.filter === filter) {
+                    tab.classList.add('active');
+                }
+            });
+            
+            currentFactcheckingFilter = filter;
+            
+            // Limpiar búsqueda y actualizar placeholder
+            const searchInput = document.getElementById('factcheckingSearchInput');
+            searchInput.value = '';
+            searchInput.placeholder = getPlaceholder(filter);
+            
+            // Resetear datos filtrados
+            filteredFactcheckingData = [...factcheckingData];
+            renderFactcheckingCards();
+            hideFactcheckingAutocomplete();
+        }
+
+        function getPlaceholder(filter) {
+            switch(filter) {
+                case 'partido': return 'Buscar partido...';
+                case 'candidato': return 'Buscar candidato...';
+                case 'veredicto': return 'Buscar veredicto...';
+                default: return 'Buscar...';
+            }
+        }
+
+        // ============================================
+        // BÚSQUEDA Y AUTOCOMPLETE
+        // ============================================
+        
+        function handleFactcheckingSearch(event) {
+            const searchTerm = event.target.value.toLowerCase().trim();
+            
+            // Manejar navegación con teclado
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                navigateFactcheckingSuggestions(1);
+                return;
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                navigateFactcheckingSuggestions(-1);
+                return;
+            } else if (event.key === 'Enter') {
+                event.preventDefault();
+                if (selectedFactcheckingSuggestionIndex >= 0) {
+                    selectFactcheckingSuggestion(factcheckingSuggestions[selectedFactcheckingSuggestionIndex]);
+                }
+                return;
+            } else if (event.key === 'Escape') {
+                hideFactcheckingAutocomplete();
+                return;
+            }
+            
+            if (searchTerm.length === 0) {
+                filteredFactcheckingData = [...factcheckingData];
+                renderFactcheckingCards();
+                hideFactcheckingAutocomplete();
+                return;
+            }
+            
+            updateFactcheckingAutocomplete(searchTerm);
+        }
+
+        function updateFactcheckingAutocomplete(searchTerm) {
+            const suggestions = new Set();
+            
+            factcheckingData.forEach(item => {
+                let value = '';
+                
+                switch(currentFactcheckingFilter) {
+                    case 'partido':
+                        value = item.partido || '';
+                        break;
+                    case 'candidato':
+                        value = item.candidato || '';
+                        break;
+                    case 'veredicto':
+                        value = item.veredicto || '';
+                        break;
+                }
+                
+                if (value.toLowerCase().includes(searchTerm)) {
+                    suggestions.add(JSON.stringify({
+                        value: value,
+                        type: currentFactcheckingFilter,
+                        partido: item.partido,
+                        candidato: item.candidato
+                    }));
+                }
+            });
+            
+            // Convertir a array y parsear JSON
+            factcheckingSuggestions = Array.from(suggestions).map(s => JSON.parse(s));
+            selectedFactcheckingSuggestionIndex = -1;
+            
+            renderFactcheckingSuggestions(searchTerm);
+        }
+
+        function renderFactcheckingSuggestions(searchTerm) {
+            const autocomplete = document.getElementById('factcheckingAutocomplete');
+            
+            if (factcheckingSuggestions.length === 0) {
+                autocomplete.innerHTML = '<div class="factchecking-autocomplete-item" style="cursor: default;">No se encontraron resultados</div>';
+                autocomplete.classList.add('show');
+                return;
+            }
+            
+            autocomplete.innerHTML = factcheckingSuggestions.slice(0, 8).map((item, index) => {
+                // Resaltar coincidencias
+                const highlightedValue = highlightMatch(item.value, searchTerm);
+                
+                // Determinar icono/badge según tipo
+                let iconContent = '';
+                if (item.type === 'veredicto') {
+                    const veredictoClass = getVeredictoClass(item.value);
+                    iconContent = `<span class="veredicto-badge ${veredictoClass}">${normalizeVeredicto(item.value)}</span>`;
+                } else {
+                    iconContent = item.type === 'candidato' ? '👤' : '🏛️';
+                }
+                
+                // Subtexto
+                let subText = '';
+                if (item.type === 'candidato') {
+                    subText = item.partido || '';
+                } else if (item.type === 'partido') {
+                    subText = item.candidato || '';
+                }
+                
+                return `
+                    <div class="factchecking-autocomplete-item" 
+                         data-index="${index}" 
+                         onclick="selectFactcheckingSuggestionByIndex(${index})">
+                        <div class="item-icon">${iconContent}</div>
+                        <div class="item-text">
+                            <div class="item-name">${highlightedValue}</div>
+                            ${subText ? `<div class="item-sub">${subText}</div>` : ''}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            autocomplete.classList.add('show');
+        }
+
+        function highlightMatch(text, term) {
+            if (!text) return '';
+            const regex = new RegExp(`(${escapeRegex(term)})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+        }
+
+        function escapeRegex(string) {
+            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        }
+
+        function navigateFactcheckingSuggestions(direction) {
+            const items = document.querySelectorAll('.factchecking-autocomplete-item[data-index]');
+            if (items.length === 0) return;
+            
+            // Remover active del anterior
+            if (selectedFactcheckingSuggestionIndex >= 0 && selectedFactcheckingSuggestionIndex < items.length) {
+                items[selectedFactcheckingSuggestionIndex].classList.remove('active');
+            }
+            
+            // Calcular nuevo índice
+            selectedFactcheckingSuggestionIndex += direction;
+            
+            if (selectedFactcheckingSuggestionIndex < 0) {
+                selectedFactcheckingSuggestionIndex = items.length - 1;
+            } else if (selectedFactcheckingSuggestionIndex >= items.length) {
+                selectedFactcheckingSuggestionIndex = 0;
+            }
+            
+            // Agregar active al nuevo
+            items[selectedFactcheckingSuggestionIndex].classList.add('active');
+            items[selectedFactcheckingSuggestionIndex].scrollIntoView({ block: 'nearest' });
+        }
+
+        function selectFactcheckingSuggestionByIndex(index) {
+            selectFactcheckingSuggestion(factcheckingSuggestions[index]);
+        }
+
+        function selectFactcheckingSuggestion(suggestion) {
+            if (!suggestion) return;
+            
+            const searchInput = document.getElementById('factcheckingSearchInput');
+            searchInput.value = suggestion.value;
+            
+            // Filtrar datos
+            filteredFactcheckingData = factcheckingData.filter(item => {
+                switch(currentFactcheckingFilter) {
+                    case 'partido':
+                        return (item.partido || '').toLowerCase() === suggestion.value.toLowerCase();
+                    case 'candidato':
+                        return (item.candidato || '').toLowerCase() === suggestion.value.toLowerCase();
+                    case 'veredicto':
+                        return normalizeVeredicto(item.veredicto) === normalizeVeredicto(suggestion.value);
+                    default:
+                        return true;
+                }
+            });
+            
+            renderFactcheckingCards();
+            hideFactcheckingAutocomplete();
+        }
+
+        function showFactcheckingAutocomplete() {
+            const searchInput = document.getElementById('factcheckingSearchInput');
+            if (searchInput.value.trim().length > 0) {
+                updateFactcheckingAutocomplete(searchInput.value.toLowerCase().trim());
+            }
+        }
+
+        function hideFactcheckingAutocomplete() {
+            document.getElementById('factcheckingAutocomplete').classList.remove('show');
+            selectedFactcheckingSuggestionIndex = -1;
+        }
+
+        // Cerrar autocomplete al hacer click fuera
+        document.addEventListener('click', function(event) {
+            const searchBox = document.querySelector('.factchecking-search-box');
+            if (searchBox && !searchBox.contains(event.target)) {
+                hideFactcheckingAutocomplete();
+            }
+        });
     </script>
     
    
