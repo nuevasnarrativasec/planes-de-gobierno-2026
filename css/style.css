@@ -1631,9 +1631,499 @@ html {
                         .box-footer ul li p span{
                             font-weight: 700;
                         }
+    /* ============================================
+           SECCIÓN FACTCHECKING
+           ============================================ */
+        
+        .factchecking-section {
+            max-width: 1000px;
+            margin: 60px auto;
+            padding: 40px 20px;
+        }
+
+        .factchecking-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .factchecking-header h2 {
+            font: 1.7rem / 1.2 'Guardian Egyp Bold';
+            margin-bottom: 15px;
+        }
+
+        .factchecking-header p {
+            font: 1rem / 1.5 "Roboto", sans-serif;
+            font-weight: 400;
+            margin: 0 auto 25px;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        /* Tabs de filtro */
+        .factchecking-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+
+        .factchecking-tab {
+            padding: 10px 20px;
+            border: none;
+            background: transparent;
+            color: #666;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-bottom: 2px solid transparent;
+            font-weight: 500;
+        }
+
+        .factchecking-tab:hover {
+            color: #333;
+        }
+
+        .factchecking-tab.active {
+            color: #333;
+            border-bottom-color: #333;
+            font-weight: 600;
+        }
+
+        /* Buscador */
+        .factchecking-search-container {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .factchecking-search-box {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .factchecking-search-box input {
+            width: 100%;
+            padding: 14px 50px 14px 20px;
+            border: 2px solid #ddd;
+            border-radius: 30px;
+            font-size: 15px;
+            outline: none;
+            /*background: #4CAF50;*/
+            color: #c2c2c2;
+            transition: all 0.3s;
+        }
+
+        .factchecking-search-box input::placeholder {
+            color: rgba(71, 71, 71, 0.8);
+        }
+
+        .factchecking-search-box input:focus {
+            background: white;
+            color: #333;
+            border: 2px solid #ddd;
+        }
+
+        .factchecking-search-box input:focus::placeholder {
+            color: #999;
+        }
+
+        .factchecking-search-box .search-icon {
+            position: absolute;
+            right: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            pointer-events: none;
+            transition: color 0.3s;
+        }
+
+        .factchecking-search-box input:focus + .search-icon {
+            color: #666;
+        }
+
+        /* Dropdown autocomplete */
+        .factchecking-autocomplete {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            margin-top: 8px;
+            max-height: 300px;
+            overflow-y: auto;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            z-index: 100;
+            display: none;
+        }
+
+        .factchecking-autocomplete.show {
+            display: block;
+        }
+
+        .factchecking-autocomplete-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: background 0.2s;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .factchecking-autocomplete-item:last-child {
+            border-bottom: none;
+        }
+
+        .factchecking-autocomplete-item:hover,
+        .factchecking-autocomplete-item.active {
+            background: #f5f5f5;
+        }
+
+        .factchecking-autocomplete-item .item-icon {
+            
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #eee;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            overflow: hidden;
+            font-size: 18px;
+        }
+
+        .factchecking-autocomplete-item .item-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .factchecking-autocomplete-item .item-text {
+            flex: 1;
+        }
+
+        .factchecking-autocomplete-item .item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .factchecking-autocomplete-item .item-sub {
+            font-size: 12px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .factchecking-autocomplete-item .highlight {
+            background: #fff3cd;
+            padding: 2px 0;
+            border-radius: 2px;
+        }
+
+        /* Veredicto badges en autocomplete */
+        .veredicto-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .veredicto-badge.verdadera {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .veredicto-badge.falsa {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .veredicto-badge.enganosa {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .veredicto-badge.indeterminado {
+            background: #e2e3e5;
+            color: #383d41;
+        }
+
+        /* Grid de cards */
+        .factchecking-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(255px, 1fr));
+            gap: 25px;
+        }
+
+        /* Card de factchecking */
+        .factchecking-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border: 1px solid #e0e0e0;
+        }
+
+        .factchecking-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+        }
+
+        .factchecking-card-header {
+            padding: 20px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .factchecking-card-header h3 {
+            color: #333;
+            margin-bottom: 5px;
+            font: 1rem / 1.2 'Guardian Egyp Bold';
+        }
+
+        .factchecking-card-intro {
+            font-size: 13px;
+            color: #666;
+            margin: 0 auto;
+        }
+
+        .factchecking-card-body {
+            /*padding: 20px;*/
+        }
+
+        .factchecking-frase {
+            font: .9rem/1.3 "Roboto", sans-serif;
+            color: #333;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 20px 20px 0;
+        }
+
+        /* Veredicto */
+        .factchecking-veredicto {
+            padding: 0;
+            border-radius: 0;
+            margin-bottom: 15px;
+        }
+
+        .factchecking-veredicto.verdadera {            
+            
+        }
+
+        .factchecking-veredicto.falsa {            
+            
+        }
+
+        .factchecking-veredicto.enganosa {            
+           
+        }
+
+        .factchecking-veredicto.indeterminado {
+            background: #fff;
+        }
+
+        .factchecking-veredicto-label {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            padding: 10px 20px;
+        }
+
+        .factchecking-veredicto.verdadera .factchecking-veredicto-label {
+            color: #fff;
+            background: #155725;
+        }
+
+        .factchecking-veredicto.falsa .factchecking-veredicto-label {
+            color: #fff;
+            background: #c2303e;
+        }
+
+        .factchecking-veredicto.enganosa .factchecking-veredicto-label {
+            color: #fff;
+            background: #b4983c;
+        }
+
+        .factchecking-veredicto.indeterminado .factchecking-veredicto-label {
+            color: #383d41;
+            background: #e2e3e5;
+        }
+
+        .factchecking-veredicto-text {
+            font-size: .9rem;
+            line-height: 1.5;
+        }
+
+        .factchecking-veredicto.verdadera .factchecking-veredicto-text {
+            color: #383d41;
+            padding: 0 20px;
+        }
+
+        .factchecking-veredicto.falsa .factchecking-veredicto-text {
+            color: #383d41;
+            padding: 0 20px;
+        }
+
+        .factchecking-veredicto.enganosa .factchecking-veredicto-text {
+            color: #383d41;
+            padding: 0 20px;
+        }
+
+        .factchecking-veredicto.indeterminado .factchecking-veredicto-text {
+            color: #383d41;
+            padding: 0 20px;
+        }
+
+        /* Fuentes */
+        .factchecking-fuentes {
+            font-size: 12px;
+            color: #666;
+            padding: 20px;
+        }
+
+        .factchecking-fuentes strong {
+            color: #333;
+        }
+
+        .factchecking-fuentes a {
+            color: #000;
+            text-decoration: none;
+            line-height: 1.3;
+            font-weight: bold;
+        }
+
+        .factchecking-fuentes a:hover {
+            text-decoration: underline;
+        }
+
+        /* No results */
+        .factchecking-no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .factchecking-no-results svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* Botón Ver Más */
+        .factchecking-load-more {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .load-more-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 32px;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .load-more-btn:hover {
+            background: #333;
+            color: white;
+        }
+
+        .load-more-btn svg {
+            transition: transform 0.3s ease;
+        }
+
+        .load-more-btn:hover svg {
+            transform: translateY(3px);
+        }
+
+        .load-more-count {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Loading */
+        .factchecking-loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+
+        .factchecking-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f0f0f0;
+            border-top-color: #4CAF50;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .factchecking-section {
+                padding: 30px 15px;
+            }
+
+            .factchecking-header h2 {
+                font-size: 22px;
+            }
+
+            .factchecking-tabs {
+                gap: 10px;
+            }
+
+            .factchecking-tab {
+                padding: 8px 15px;
+                font-size: 13px;
+            }
+
+            .factchecking-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+.box-indicacion{
+    display: none;
+}
 
 
-@media (max-width: 480px) {
+
+@media (max-width: 640px) {
+
+    .ctn-header{        
+        width: 90%;
+    }
+        .ctn-header h1{
+            font: 2.5rem / 1.1 'Guardian Egyp Bold';
+        }
+        .ctn-header h2{
+            max-width: 300px;
+        }
+
     .slider-resumen {
         margin: 0 10px;
     }
@@ -1650,121 +2140,206 @@ html {
         height: 35px;
         width: 35px;        
     }
-}
 
-        
+    .content{
+        display: block;
+        margin: 0 auto 0;
+    }
+        .box-ctn-sidebar{
+            display: inline-block;
+            overflow-y: scroll;
+            vertical-align: top;
+            width: 100%;
+        }
+            .sidebar{
+                width: 742%;
+            }
+                .party-item{
+                    box-sizing: border-box;
+                    display: inline-block;
+                    max-width: 185px;
+                    min-height: 116px;
+                    text-align: center;
+                    vertical-align: top;
+                }
+                    .party-item.active{
+                        border-bottom: 4px solid #5a5a5a;
+                        border-left: none;
+                    }
+                    .party-icon{
+                        align-items: inherit;
+                        display: block;
+                        margin: 0 auto 5px;
+                        text-align: center;
+                    }
+            .detail-panel{
+                margin: 20px 10px;
+            }
+                .box-main-avatar{
+                    min-width: 190px;
+                    max-width: 190px;
+                }
+
+    .party-complete-item {
+        width: 93%;
+    }
+
+    .box-indicacion{
+        display: block;
+        margin: 15px auto;
+        max-width: 180px;
+        text-align: center;
+    }
+        .box-indicacion img{
+            max-width: 30px;
+        }
+        .box-indicacion span{
+            color: #a2a2a2;
+            display: block;
+            font: .9rem/1.2 'arial';
+        }
+
+}       
 
 @media (max-width: 768px) {
             
     .party-list {
-                display: flex;
-                flex-direction: column;
-                gap: 20px;
-            }
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
             
-            /* Crear contenedor para cada partido */
-            .party-names-column,
-            .party-bars-column {
-                display: contents;
-            }
+    /* Crear contenedor para cada partido */
+    .party-names-column,
+    .party-bars-column {
+        display: contents;
+    }            
+    /* Agrupar cada partido con su barra */
+    .party-name-item {
+        order: 0;
+        margin-bottom: 10px;
+        width: 85%;
+    }            
+    .party-bar-item {
+        order: 0;
+        margin-bottom: 20px;
+        width: 85%;
+    }
             
-            /* Agrupar cada partido con su barra */
-            .party-name-item {
-                order: 0;
-                margin-bottom: 10px;
-                width: 85%;
-            }
+    /* Usar nth-child para emparejar nombres con barras */
+    .party-name-item:nth-child(1) { order: 1; }
+    .party-bar-item:nth-child(1) { order: 2; }
             
-            .party-bar-item {
-                order: 0;
-                margin-bottom: 20px;
-                width: 85%;
-            }
+    .party-name-item:nth-child(2) { order: 3; }
+    .party-bar-item:nth-child(2) { order: 4; }
             
-            /* Usar nth-child para emparejar nombres con barras */
-            .party-name-item:nth-child(1) { order: 1; }
-            .party-bar-item:nth-child(1) { order: 2; }
+    .party-name-item:nth-child(3) { order: 5; }
+    .party-bar-item:nth-child(3) { order: 6; }
             
-            .party-name-item:nth-child(2) { order: 3; }
-            .party-bar-item:nth-child(2) { order: 4; }
+    .party-name-item:nth-child(4) { order: 7; }
+    .party-bar-item:nth-child(4) { order: 8; }
             
-            .party-name-item:nth-child(3) { order: 5; }
-            .party-bar-item:nth-child(3) { order: 6; }
+    .party-name-item:nth-child(5) { order: 9; }
+    .party-bar-item:nth-child(5) { order: 10; }
             
-            .party-name-item:nth-child(4) { order: 7; }
-            .party-bar-item:nth-child(4) { order: 8; }
+    .party-name-item:nth-child(6) { order: 11; }
+    .party-bar-item:nth-child(6) { order: 12; }
             
-            .party-name-item:nth-child(5) { order: 9; }
-            .party-bar-item:nth-child(5) { order: 10; }
+    .party-name-item:nth-child(7) { order: 13; }
+    .party-bar-item:nth-child(7) { order: 14; }
             
-            .party-name-item:nth-child(6) { order: 11; }
-            .party-bar-item:nth-child(6) { order: 12; }
+    .party-name-item:nth-child(8) { order: 15; }
+    .party-bar-item:nth-child(8) { order: 16; }
             
-            .party-name-item:nth-child(7) { order: 13; }
-            .party-bar-item:nth-child(7) { order: 14; }
+    .party-name-item:nth-child(9) { order: 17; }
+    .party-bar-item:nth-child(9) { order: 18; }
             
-            .party-name-item:nth-child(8) { order: 15; }
-            .party-bar-item:nth-child(8) { order: 16; }
-            
-            .party-name-item:nth-child(9) { order: 17; }
-            .party-bar-item:nth-child(9) { order: 18; }
-            
-            .party-name-item:nth-child(10) { order: 19; }
-            .party-bar-item:nth-child(10) { order: 20; }
+    .party-name-item:nth-child(10) { order: 19; }
+    .party-bar-item:nth-child(10) { order: 20; }
 
-            .theme-label-item {
-                font-size: 8px;
-                left: -8px;
-            }
+    .theme-label-item {
+        font-size: 8px;
+        left: -8px;
+    }
             
-            .theme-slider-container {
-                margin-bottom: 40px;
-            }
+    .theme-slider-container {
+        margin-bottom: 40px;
+    }
             
-            .slider-handle {
-                width: 25px;
-                height: 25px;
-            }
+    .slider-handle {
+        width: 25px;
+        height: 25px;
+    }
             
-            .density-tooltip {
-                font-size: 10px;
-                padding: 4px 8px;
-            }
+    .density-tooltip {
+        font-size: 10px;
+        padding: 4px 8px;
+    }
 
+    .slider-resumen {
+        margin: 0 20px;
+    }
 
-        .slider-resumen {
-                margin: 0 20px;
-            }
+    .bx-wrapper .bx-prev {
+        left: -30px;
+    }
 
-            .bx-wrapper .bx-prev {
-                left: -30px;
-            }
+    .bx-wrapper .bx-next {
+        right: -30px;
+    }
 
-            .bx-wrapper .bx-next {
-                right: -30px;
-            }
+    .bx-wrapper .bx-controls-direction a {
+        width: 40px;
+        height: 40px;
+    }
 
-            .bx-wrapper .bx-controls-direction a {
-                width: 40px;
-                height: 40px;
-            }
+    .slide-card {
+        height: auto;
+        min-height: 350px;
+    }
 
-            .slide-card {
-                height: auto;
-                min-height: 350px;
-            }
+    .card-header h3 {
+        font-size: 1.1em;
+    }
 
-            .card-header h3 {
-                font-size: 1.1em;
-            }
+    .card-body h4 {
+        font-size: 1em;
+    }
 
-            .card-body h4 {
-                font-size: 1.2em;
-            }
+    .card-body p {
+        font-size: 1em;
+    }
 
-            .card-body p {
-                font-size: 1em;
-            }
+    .factchecking-section {
+        padding: 30px 15px;
+    }
+
+    .factchecking-header h2 {
+        font-size: 22px;
+    }
+
+    .factchecking-tabs {
+        gap: 10px;
+    }
+
+    .factchecking-tab {
+        padding: 8px 15px;
+        font-size: 13px;
+    }
+
+    .factchecking-grid {
+        grid-template-columns: 1fr;
+    }
+
+    img.logo-comercio{
+        padding: 20px 25px;
+    }
+    .box-footer ul{
+        display: block;
+    }
+    .factchecking-search-box input{
+        width: 75%;
+    }
 }
 
 @media (max-width: 1024px) {
