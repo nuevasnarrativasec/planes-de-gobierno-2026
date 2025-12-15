@@ -28,9 +28,28 @@ html {
 }
 
 @font-face {
+    font-family: 'Guardian Egyp Regular';
+    src: url('../fonts/GuardianEgyp-Regular.woff2') format('woff2'),
+        url('../fonts/GuardianEgyp-Regular.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+@font-face {
     font-family: 'Guardian Egyp Medium';
     src: url('../fonts/GuardianEgyp-Medium.woff2') format('woff2'),
         url('../fonts/GuardianEgyp-Medium.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'Guardian Egyp Semibold';
+    src: url('../fonts/GuardianEgyp-Semibold.woff2') format('woff2'),
+        url('../fonts/GuardianEgyp-Semibold.woff') format('woff');
+    font-weight: 600;
+    font-style: normal;
+    font-display: swap;
 }
 
 @font-face {
@@ -225,85 +244,96 @@ html {
                         background-color: #ffa726;
                     }
 
-        /* Personalización de controles bxSlider */
-        .bx-wrapper {
-            margin: 0 auto !important;
-            box-shadow: none !important;
-            border: none !important;
+        /* Contenedor principal tipo Grid */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr); /* 3 columnas */
+            gap: 30px;
+            margin: 60px auto;
+            max-width: 1024px;
+            width: 100%;
         }
 
-        .bx-wrapper .bx-controls-direction a {
-            width: 40px !important;
-            height: 40px !important;
-            background: white;
-            border: 2px solid #000;
-            border-radius: 12%;
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            z-index: 100;
+        /* Estilo base de las tarjetas */
+        .card {
+            background-color: #f8f9fa; /* Color de fondo gris claro */
+            border-radius: 15px;
+            padding: 40px 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+            position: relative;
+            margin-bottom: 50px;
+        }
+            .card h3 {
+                font: 1.1rem/1.2 'Guardian Egyp Semibold';
+                font-weight: 900;
+                margin-bottom: 15px;
+            }
+            .card p{
+                font: 1rem/1.5 'Guardian Egyp Regular';
+                font-weight: 400;
+                color: #555;
+            }
+
+        /* Estilos de los íconos */
+        .icon-box {
+            clip-path: border-box;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s ease;
+            color: white;
+            font-size: 28px;
+            margin-bottom: 20px;
+            position: absolute;
+            top: -30px;
         }
 
-            .bx-wrapper .bx-controls-direction a:hover {
-                border-color: #000;
-                background: #FFF;
-            }
-
-        .bx-wrapper .bx-prev {
-            left: -70px;
+        /* Línea de color debajo del título */
+        .color-line {
+            width: 100%;
+            height: 3px;
+            margin-bottom: 25px;
+            border-radius: 2px;
         }
 
-        .bx-wrapper .bx-next {
-            right: -70px;
+        /* Separador punteado (para la fila superior) */
+        .separator-dotted {
+            width: 100%;
+            border-top: 1px dotted #aaa;
+            margin: 20px 0;
         }
 
-        .bx-wrapper .bx-prev::before {
-            background-image: url('../img/prev.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 100%;
-            content: '';
-            height: 20px;
-            width: 15px;
-        }
+        /* --- COLORES ESPECÍFICOS POR TARJETA --- */
+        
+        /* 1. Rosa */
+        .theme-pink .icon-box, .theme-pink .color-line { background-color: #ec407a; }
+        .theme-pink p span{ color: #ec407a; }
 
-        .bx-wrapper .bx-next::before {
-            background-image: url('../img/next.png');
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: 100%;
-            content: '';
-            height: 20px;
-            width: 15px;
-        }
+        /* 2. Azul Oscuro */
+        .theme-blue .icon-box, .theme-blue .color-line { background-color: #536dfe; }
+        .theme-blue p span{ color: #536dfe; }
 
-        .bx-wrapper .bx-controls-direction a.disabled {
-            opacity: 0.3;
-            pointer-events: none;
-        }
+        /* 3. Amarillo */
+        .theme-yellow .icon-box, .theme-yellow .color-line { background-color: #fdd835; }
+        .theme-yellow p span{ color: #fcd31f; }
+        
+        /* 4. Naranja */
+        .theme-orange .icon-box, .theme-orange .color-line { background-color: #ff7043; }
+        .theme-orange p span{ color: #ff7043; }
 
-        /* Ocultar el texto de las flechas por defecto */
-        .bx-wrapper .bx-prev span,
-        .bx-wrapper .bx-next span {
-            display: none;
-        }
-
-        /* Pager */
-        .bx-wrapper .bx-pager {
-            padding-top: 30px;
-        }
-
-        .bx-wrapper .bx-pager-item a {
-            background: #ddd;
-        }
-
-        .bx-wrapper .bx-pager-item a.active {
-            background: #333;
-        }
+        /* 5. Azul Claro (Cyan) */
+        .theme-cyan .icon-box, .theme-cyan .color-line { background-color: #03a9f4; }
+        .theme-cyan p span{ color: #03a9f4; }
+        
+        /* 6. Turquesa/Verde Agua */
+        .theme-teal .icon-box, .theme-teal .color-line { background-color: #4dd0e1; }
+        .theme-teal p span{ color: #4dd0e1; }
 
         
     #box-main-candidatos{
@@ -2198,6 +2228,10 @@ html {
             display: block;
             font: .9rem/1.2 'arial';
         }
+
+    .grid-container {
+        grid-template-columns: 1fr; /* 1 columna en pantallas pequeñas */
+    }
 
 }       
 
