@@ -569,7 +569,7 @@ html {
         display: flex;
         margin: 50px auto 0;        
         max-width: 980px;       
-        min-height: 500px;
+        /*min-height: 500px;*/
     }
 
     .sidebar {
@@ -903,7 +903,7 @@ html {
     .comparison-section {
         background-color: #fff;
         max-width: 860px;
-        margin: 60px auto;
+        margin: 30px auto;
         padding: 40px 20px;
     }
 
@@ -1284,8 +1284,7 @@ html {
             text-align: center;
         }
         .box-main-panorama p{
-            font-size: 1rem;
-            line-height: 1.4;
+            font: 1rem / 1.5 "Roboto", sans-serif;
             margin: 10px auto;
             max-width: 500px;
             text-align: center;
@@ -1722,7 +1721,7 @@ html {
 
         .factchecking-header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 10px;
         }
 
         .factchecking-header h2 {
@@ -1735,6 +1734,14 @@ html {
             font-weight: 400;
             margin: 0 auto 25px;
             max-width: 600px;
+            text-align: center;
+        }
+
+        span.filtrar{
+            color: #5f5f5f;
+            display: block;
+            font: 1rem / 1.5 "Roboto", sans-serif;
+            margin: 0 auto 10px;
             text-align: center;
         }
 
@@ -1810,7 +1817,7 @@ html {
 
         .factchecking-search-box .search-icon {
             position: absolute;
-            right: 18px;
+            right: 30px;
             top: 50%;
             transform: translateY(-50%);
             color: white;
@@ -2193,6 +2200,10 @@ html {
 
 @media (max-width: 640px) {
 
+    body #header {
+        background-size: 90%;
+    }
+
     .ctn-header{        
         width: 90%;
     }
@@ -2202,6 +2213,19 @@ html {
         .ctn-header h2{
             max-width: 300px;
         }
+
+    p.bajada{
+        max-width: 85%;
+        padding: 20px 15px;
+    }
+    #box-main-candidatos h3{
+        margin: 10px auto;
+        max-width: 70%;
+    }
+    #box-main-candidatos p.bajada-candidatos,
+    .box-titulo-seccion p{
+        padding: 0 10px;
+    }
 
     .slider-resumen {
         margin: 0 10px;
@@ -2231,7 +2255,7 @@ html {
             width: 100%;
         }
             .sidebar{
-                width: 742%;
+                width: 2675px;
             }
                 .party-item{
                     box-sizing: border-box;
@@ -2284,6 +2308,22 @@ html {
 
     .scroll-container{
         width: 93%;
+    }
+
+    .factchecking-section{
+        margin: 0 auto;
+    }
+    #box-main-candidatos{
+        padding: 80px 0 0;
+    }
+    .comparison-section{
+        padding: 40px 20px 0;
+    }
+    .card{
+        width: 85%;
+    }
+    .box-metodologia{
+        max-width: 90%;
     }
 
 }       
@@ -2410,6 +2450,7 @@ html {
     }
 
     .factchecking-tab {
+        border-bottom-color: #e3e0e0;
         padding: 8px 15px;
         font-size: 13px;
     }
