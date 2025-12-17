@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v32">
+    <link rel="stylesheet" href="./css/style.css?v35">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -84,7 +84,7 @@
 
                     <div class="detail-panel" id="detailPanel">
                         <div class="empty-state">
-                            Selecciona un partido o candidato para ver los detalles
+                            Información del partido o candidato elegido
                         </div>
                     </div>
                 </div>
@@ -199,6 +199,10 @@
                     <path d="M21 21l-4.35-4.35"></path>
                 </svg>
                 <p>No se encontraron resultados</p>
+            </div>
+
+            <!-- Estado inicial: invitar a buscar -->
+            <div class="factchecking-initial" id="factcheckingInitial">
             </div>
         </section>
 
@@ -449,8 +453,7 @@
             </li>
         </ul>
     </div>
-
-    
+   
 
     <!-- scripts -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -1796,6 +1799,9 @@
         const ITEMS_MOBILE = 3;  // 3 cards en móvil
         const MOBILE_BREAKPOINT = 768;
         
+        // Estado inicial: no mostrar cards hasta que se busque
+        let hasSearched = false;
+        
         function getItemsPerPage() {
             return window.innerWidth <= MOBILE_BREAKPOINT ? ITEMS_MOBILE : ITEMS_DESKTOP;
         }
@@ -1809,7 +1815,9 @@
             if ((visibleItems <= ITEMS_MOBILE && newItemsPerPage > ITEMS_MOBILE) ||
                 (visibleItems > ITEMS_MOBILE && newItemsPerPage <= ITEMS_MOBILE)) {
                 visibleItems = newItemsPerPage;
-                renderFactcheckingCards();
+                if (hasSearched) {
+                    renderFactcheckingCards();
+                }
             }
         });
 
@@ -2048,6 +2056,19 @@
             const noResults = document.getElementById('factcheckingNoResults');
             const loadMoreContainer = document.getElementById('factcheckingLoadMore');
             const loadMoreCount = document.getElementById('loadMoreCount');
+            const initialState = document.getElementById('factcheckingInitial');
+            
+            // Si no se ha buscado, mostrar estado inicial
+            if (!hasSearched) {
+                grid.style.display = 'none';
+                noResults.style.display = 'none';
+                loadMoreContainer.style.display = 'none';
+                initialState.style.display = 'block';
+                return;
+            }
+            
+            // Ocultar estado inicial
+            initialState.style.display = 'none';
             
             if (filteredFactcheckingData.length === 0) {
                 grid.style.display = 'none';
@@ -2219,6 +2240,9 @@
             searchInput.value = '';
             searchInput.placeholder = getPlaceholder(filter);
             
+            // Resetear estado de búsqueda
+            hasSearched = false;
+            
             // Resetear datos filtrados y paginación
             filteredFactcheckingData = [...factcheckingData];
             resetPagination();
@@ -2263,6 +2287,8 @@
             }
             
             if (searchTerm.length === 0) {
+                // Resetear estado de búsqueda
+                hasSearched = false;
                 filteredFactcheckingData = [...factcheckingData];
                 resetPagination();
                 renderFactcheckingCards();
@@ -2397,6 +2423,9 @@
             const searchInput = document.getElementById('factcheckingSearchInput');
             searchInput.value = suggestion.value;
             
+            // Marcar que se ha realizado búsqueda
+            hasSearched = true;
+            
             // Filtrar datos
             filteredFactcheckingData = factcheckingData.filter(item => {
                 switch(currentFactcheckingFilter) {
@@ -2436,9 +2465,7 @@
             }
         });
     </script>
-
-
-    
+   
    
 </body>
 </html>
