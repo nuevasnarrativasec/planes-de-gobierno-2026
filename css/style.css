@@ -631,6 +631,7 @@ html {
     }
 
     .detail-panel {
+        background: #f9f9f9;
         flex: 1;
         padding: 15px;
         border: 2px solid #c2c2c2;
@@ -2201,7 +2202,12 @@ html {
 @media (max-width: 640px) {
 
     body #header {
-        background-size: 90%;
+        background: url(../img/bg-portada-movil.jpg) no-repeat center bottom;
+        background-size: cover;
+        
+    }
+    img.logo-tu-decides{
+        max-width: 165px;
     }
 
     .ctn-header{        
@@ -2324,6 +2330,10 @@ html {
     }
     .box-metodologia{
         max-width: 90%;
+    }
+    ul.anclas li{
+        margin: 10px;
+        min-width: 140px;
     }
 
 }       
