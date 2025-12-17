@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v29">
+    <link rel="stylesheet" href="./css/style.css?v32">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -136,16 +136,18 @@
                 <p>¿Qué tan ciertas son las propuestas? Nuestro equipo eligió 3 frases clave por plan y las sometió a verificación. Aquí verás qué se dijo, qué dicen los datos y cómo lo comprobamos, con un veredicto al final.</p>
             </div>
 
+            <span class="filtrar">Filtrar por:</span>
+
             <!-- Tabs de filtro -->
             <div class="factchecking-tabs">
                 <button class="factchecking-tab active" data-filter="partido" onclick="switchFactcheckingTab('partido')">
-                    Filtrar por partido
+                    Partido
                 </button>
                 <button class="factchecking-tab" data-filter="candidato" onclick="switchFactcheckingTab('candidato')">
-                    Filtrar por candidato
+                    Candidato
                 </button>
                 <button class="factchecking-tab" data-filter="veredicto" onclick="switchFactcheckingTab('veredicto')">
-                    Filtrar por veredicto
+                    Veredicto
                 </button>
             </div>
 
@@ -280,9 +282,7 @@
                     <p>Muestra prioridad, mas no la profundidad.</p>
                 </div>
             </div>
-        </div>
-        
-
+        </div>  
 
         <div class="box-titulo-seccion">
             <span class="linea-titulo-seccion"></span>
@@ -456,7 +456,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.js"></script>
 
-    <!-- carrusel resumen -->
+    <!-- cards resumen -->
     <script>
         const slider = document.querySelector('.scroll-container');
         let isDown = false;
@@ -1758,10 +1758,7 @@
                         <p>${item.ingresosDeclarados || ''} </p>
                     </div>
                     
-                </div>
-                          
-                
-
+                </div>  
                 
             `;
         }
@@ -1793,10 +1790,28 @@
         let currentFactcheckingFilter = 'partido';
         let factcheckingSuggestions = [];
         let selectedFactcheckingSuggestionIndex = -1;
-
-        // Paginación        
-        const ITEMS_PER_PAGE = 9;// 3 filas de 3 cards 
-        let visibleItems = ITEMS_PER_PAGE;
+        
+        // Paginación responsive
+        const ITEMS_DESKTOP = 8; // 2 filas de 4 cards en desktop
+        const ITEMS_MOBILE = 3;  // 3 cards en móvil
+        const MOBILE_BREAKPOINT = 768;
+        
+        function getItemsPerPage() {
+            return window.innerWidth <= MOBILE_BREAKPOINT ? ITEMS_MOBILE : ITEMS_DESKTOP;
+        }
+        
+        let visibleItems = getItemsPerPage();
+        
+        // Actualizar al cambiar tamaño de ventana
+        window.addEventListener('resize', function() {
+            const newItemsPerPage = getItemsPerPage();
+            // Solo resetear si cambiamos entre móvil y desktop
+            if ((visibleItems <= ITEMS_MOBILE && newItemsPerPage > ITEMS_MOBILE) ||
+                (visibleItems > ITEMS_MOBILE && newItemsPerPage <= ITEMS_MOBILE)) {
+                visibleItems = newItemsPerPage;
+                renderFactcheckingCards();
+            }
+        });
 
         // ============================================
         // INICIALIZACIÓN
@@ -2020,6 +2035,7 @@
             
             console.log('📊 Datos de ejemplo cargados:', factcheckingData.length, 'items');
             
+            resetPagination();
             renderFactcheckingCards();
         }
 
@@ -2060,21 +2076,22 @@
         
         // Cargar más items
         function loadMoreFactchecking() {
-            visibleItems += ITEMS_PER_PAGE;
+            visibleItems += getItemsPerPage();
             renderFactcheckingCards();
             
             // Scroll suave hacia los nuevos items
             const grid = document.getElementById('factcheckingGrid');
             const cards = grid.querySelectorAll('.factchecking-card');
-            if (cards.length > visibleItems - ITEMS_PER_PAGE) {
-                const targetCard = cards[visibleItems - ITEMS_PER_PAGE];
+            const itemsPerPage = getItemsPerPage();
+            if (cards.length > visibleItems - itemsPerPage) {
+                const targetCard = cards[visibleItems - itemsPerPage];
                 targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
             }
         }
         
         // Resetear paginación (cuando se cambia de tab o se busca)
         function resetPagination() {
-            visibleItems = ITEMS_PER_PAGE;
+            visibleItems = getItemsPerPage();
         }
 
         function createFactcheckingCard(item) {
@@ -2202,8 +2219,9 @@
             searchInput.value = '';
             searchInput.placeholder = getPlaceholder(filter);
             
-            // Resetear datos filtrados
+            // Resetear datos filtrados y paginación
             filteredFactcheckingData = [...factcheckingData];
+            resetPagination();
             renderFactcheckingCards();
             hideFactcheckingAutocomplete();
         }
@@ -2246,6 +2264,7 @@
             
             if (searchTerm.length === 0) {
                 filteredFactcheckingData = [...factcheckingData];
+                resetPagination();
                 renderFactcheckingCards();
                 hideFactcheckingAutocomplete();
                 return;
@@ -2392,6 +2411,7 @@
                 }
             });
             
+            resetPagination();
             renderFactcheckingCards();
             hideFactcheckingAutocomplete();
         }
