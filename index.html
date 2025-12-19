@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v35">
+    <link rel="stylesheet" href="./css/style.css?v36">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -144,15 +144,15 @@
                     Partido
                 </button>
                 <button class="factchecking-tab" data-filter="candidato" onclick="switchFactcheckingTab('candidato')">
-                    Candidato
+                   Candidato
                 </button>
                 <button class="factchecking-tab" data-filter="veredicto" onclick="switchFactcheckingTab('veredicto')">
                     Veredicto
                 </button>
             </div>
 
-            <!-- Buscador -->
-            <div class="factchecking-search-container">
+            <!-- Buscador de texto (para partido y candidato) -->
+            <div class="factchecking-search-container" id="factcheckingSearchContainer">
                 <div class="factchecking-search-box">
                     <input type="text" 
                         id="factcheckingSearchInput" 
@@ -168,6 +168,16 @@
                         <!-- Autocomplete items se generarán aquí -->
                     </div>
                 </div>
+            </div>
+
+            <!-- Dropdown para veredicto (oculto por defecto) -->
+            <div class="factchecking-dropdown-container" id="factcheckingDropdownContainer" style="display: none;">
+                <select class="factchecking-dropdown" id="factcheckingVeredictoDropdown" onchange="handleVeredictoChange()">
+                    <option value="">Seleccionar veredicto...</option>
+                    <option value="verdadera">Verdadero</option>
+                    <option value="falsa">Falso</option>
+                    <option value="enganosa">Engañoso</option>
+                </select>
             </div>
 
             <!-- Loading -->
@@ -395,6 +405,17 @@
                     Marcelo Hidalgo
                 </p>
             </li>
+
+            <li>
+                <p>
+                    <span>Ilustraciones y animación:</span>
+                </p>
+            </li>
+            <li>
+                <p>
+                    Kiomy Kanashiro
+                </p>
+            </li>
         </ul>
 
         <ul>
@@ -443,10 +464,6 @@
         </ul>
     </div>
    
-
-    <!-- scripts -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.js"></script>
 
     <!-- cards resumen -->
     <script>
@@ -1816,6 +1833,13 @@
         
         document.addEventListener('DOMContentLoaded', function() {
             loadFactcheckingData();
+            
+            // Cerrar autocomplete al hacer click fuera
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.factchecking-search-box')) {
+                    hideFactcheckingAutocomplete();
+                }
+            });
         });
 
         // ============================================
@@ -2224,17 +2248,27 @@
             
             currentFactcheckingFilter = filter;
             
-            // Limpiar búsqueda y actualizar placeholder
+            // Mostrar/ocultar el input de búsqueda o el dropdown según el filtro
+            const searchContainer = document.getElementById('factcheckingSearchContainer');
+            const dropdownContainer = document.getElementById('factcheckingDropdownContainer');
             const searchInput = document.getElementById('factcheckingSearchInput');
-            searchInput.value = '';
-            searchInput.placeholder = getPlaceholder(filter);
+            const dropdown = document.getElementById('factcheckingVeredictoDropdown');
             
-            // Resetear estado de búsqueda
-            hasSearched = false;
+            if (filter === 'veredicto') {
+                // Mostrar dropdown, ocultar input de búsqueda
+                searchContainer.style.display = 'none';
+                dropdownContainer.style.display = 'block';
+                dropdown.value = ''; // Resetear selección
+            } else {
+                // Mostrar input de búsqueda, ocultar dropdown
+                searchContainer.style.display = 'block';
+                dropdownContainer.style.display = 'none';
+                searchInput.value = '';
+                searchInput.placeholder = getPlaceholder(filter);
+            }
             
-            // Resetear datos filtrados y paginación
+            // Resetear datos filtrados
             filteredFactcheckingData = [...factcheckingData];
-            resetPagination();
             renderFactcheckingCards();
             hideFactcheckingAutocomplete();
         }
@@ -2243,13 +2277,38 @@
             switch(filter) {
                 case 'partido': return 'Buscar partido...';
                 case 'candidato': return 'Buscar candidato...';
-                case 'veredicto': return 'Buscar veredicto...';
                 default: return 'Buscar...';
             }
         }
 
         // ============================================
-        // BÚSQUEDA Y AUTOCOMPLETE
+        // MANEJO DEL DROPDOWN DE VEREDICTO
+        // ============================================
+        
+        function handleVeredictoChange() {
+            const dropdown = document.getElementById('factcheckingVeredictoDropdown');
+            const selectedValue = dropdown.value;
+            
+            // Marcar que se ha realizado búsqueda para mostrar las cards
+            hasSearched = true;
+            
+            if (!selectedValue) {
+                // Si no hay selección, mostrar todos
+                filteredFactcheckingData = [...factcheckingData];
+            } else {
+                // Filtrar por el veredicto seleccionado
+                filteredFactcheckingData = factcheckingData.filter(item => {
+                    const veredictoClass = getVeredictoClass(item.veredicto);
+                    return veredictoClass === selectedValue;
+                });
+            }
+            
+            resetPagination();
+            renderFactcheckingCards();
+        }
+
+        // ============================================
+        // BÚSQUEDA Y AUTOCOMPLETE (para partido y candidato)
         // ============================================
         
         function handleFactcheckingSearch(event) {
@@ -2266,26 +2325,30 @@
                 return;
             } else if (event.key === 'Enter') {
                 event.preventDefault();
-                if (selectedFactcheckingSuggestionIndex >= 0) {
-                    selectFactcheckingSuggestion(factcheckingSuggestions[selectedFactcheckingSuggestionIndex]);
-                }
+                selectFactcheckingHighlightedItem();
                 return;
             } else if (event.key === 'Escape') {
                 hideFactcheckingAutocomplete();
                 return;
             }
             
-            if (searchTerm.length === 0) {
-                // Resetear estado de búsqueda
-                hasSearched = false;
+            // Si está vacío, mostrar todos
+            if (!searchTerm) {
                 filteredFactcheckingData = [...factcheckingData];
-                resetPagination();
                 renderFactcheckingCards();
                 hideFactcheckingAutocomplete();
                 return;
             }
             
+            // Generar sugerencias
             updateFactcheckingAutocomplete(searchTerm);
+        }
+        
+        // Seleccionar el item resaltado con Enter
+        function selectFactcheckingHighlightedItem() {
+            if (selectedFactcheckingSuggestionIndex >= 0 && selectedFactcheckingSuggestionIndex < factcheckingSuggestions.length) {
+                selectFactcheckingSuggestion(factcheckingSuggestions[selectedFactcheckingSuggestionIndex]);
+            }
         }
 
         function updateFactcheckingAutocomplete(searchTerm) {
