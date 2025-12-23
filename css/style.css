@@ -67,7 +67,7 @@ html {
 
 
 #header{
-    background: url('../img/bg-portada.jpg') no-repeat center bottom;
+    /*background: url('../img/bg-portada.jpg') no-repeat center bottom;*/
     background-size: 100%;
     height: 100vh;
     position: relative;
@@ -76,7 +76,8 @@ html {
         left: 50%;
         position: absolute;
         text-align: center;
-        top: 30%;
+        top: 25%;
+        z-index: 5;
 
         transform: translate(-50%,-50%);
     }
@@ -98,6 +99,18 @@ html {
             font-weight: 500;
             margin: 10px auto;
             max-width: 500px;
+        }
+    #header video{
+        bottom: 0;
+        left: 0;
+        position: absolute;
+        width: 100%;
+    }
+        .video-desktop{
+            display: block;
+        }
+        .video-movil{
+            display: none;
         }
 .main{
     padding: 60px 0;
@@ -2241,12 +2254,18 @@ html {
 @media (max-width: 640px) {
 
     body #header {
-        background: url(../img/bg-portada-movil.jpg) no-repeat center bottom;
         background-size: cover;
         
     }
     img.logo-tu-decides{
         max-width: 165px;
+    }
+
+    .video-desktop{
+        display: none;
+    }
+    .video-movil{
+        display: block;
     }
 
     .ctn-header{        
@@ -2520,6 +2539,16 @@ html {
 }
 
 @media (max-width: 1024px) {
+    .ctn-header{
+        top: 30%;
+        width: 100%;
+    }
+        .ctn-header h1{
+            font-size: 3.8rem;
+        }
+        img.logo-tu-decides{
+            max-width: 210px;
+        }
     .comparison-grid {
         grid-template-columns: 1fr;
     }
