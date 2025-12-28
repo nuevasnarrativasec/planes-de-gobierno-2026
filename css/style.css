@@ -73,18 +73,21 @@ html {
     position: relative;
 }
     .ctn-header{
-        left: 50%;
+        /*left: 50%;*/
         position: absolute;
         text-align: center;
-        top: 25%;
+        top: 5%;
         z-index: 5;
-
-        transform: translate(-50%,-50%);
+        width: 100%;
+        /*transform: translate(-50%,-50%);*/
     }
         img.logo-tu-decides{
             display: block;
+            left: 20px;
             margin: 0 auto 20px;
-            max-width: 250px;
+            max-width: 165px;
+            position: absolute;
+            top: 10px;
         }
         .ctn-header h1{
             color: #000;
@@ -112,6 +115,59 @@ html {
         .video-movil{
             display: none;
         }
+    #social{
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        z-index: 600;
+        margin: 0;
+    }
+        #social ul{
+            display: inline-block;
+            margin: 0 auto;
+            padding: 0;
+            vertical-align: middle;
+        }
+            #social ul li{
+                cursor: pointer;
+                display: inline-block;
+                margin: 0 3px;
+                vertical-align: middle;
+            }
+                #social ul li a{
+                    height: 36px;
+                    width: 36px;
+                }
+                    #fb{
+                        background: url(https://d1ts5g4ys243sh.cloudfront.net/proyectos_especiales_prod/especiales-multimedia/abuso-infantil/img/fb-icon-negro.png?v2) no-repeat 0 0;
+                        background-size: 100% !important;
+                        border: none;
+                        display: inline-block;
+                        height: 36px;
+                        text-indent: -9999px;
+                        width: 36px;
+                    }
+                    #wst{                
+                        background: url(https://d1ts5g4ys243sh.cloudfront.net/proyectos_especiales_prod/especiales-multimedia/abuso-infantil/img/wsp-icon-negro.png?v2) no-repeat 0 0 !important;
+                        background-size: 100% !important;
+                        border: none;
+                        display: none;
+                        height: 36px;
+                        text-indent: -9999px;
+                        width: 36px;
+                    }
+                    #tw{            
+                        background: url(https://d1ts5g4ys243sh.cloudfront.net/proyectos_especiales_prod/especiales-multimedia/abuso-infantil/img/tw-icon-negro.png?v2) no-repeat 0 0 !important;
+                        background-size: 100% !important;
+                        border: none;
+                        display: inline-block;
+                        height: 36px;
+                        text-indent: -9999px;
+                        width: 36px;
+                    } 
+
+
+    
 .main{
     padding: 60px 0;
 }
@@ -346,7 +402,7 @@ html {
         .color-line {
             width: 100%;
             height: 3px;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
             border-radius: 2px;
         }
 
@@ -359,7 +415,7 @@ html {
         .separator-dotted {
             width: 100%;
             border-top: 1px dotted #aaa;
-            margin: 20px 0;
+            margin: 10px 0;
         }
 
         /* --- COLORES ESPECÍFICOS POR TARJETA --- */
@@ -795,7 +851,7 @@ html {
     }
 
     .btn-primary {
-        background: url('../img/btn-descargar-ficha.png') no-repeat center;
+        background: url('../img/btn-descargar-ficha-2.png') no-repeat center;
         background-size: 100%;
         color: transparent;
         display: inline-block;
@@ -2257,8 +2313,15 @@ html {
         background-size: cover;
         
     }
-    img.logo-tu-decides{
+    #header img.logo-tu-decides{
+        left: 0;
+        margin: 0 auto;
         max-width: 165px;
+        position: relative;
+        top: 0;  
+    }
+    #wst{
+        display: inline-block;
     }
 
     .video-desktop{
@@ -2268,15 +2331,20 @@ html {
         display: block;
     }
 
-    .ctn-header{        
-        width: 90%;
+    #header .ctn-header{    
+        top: 8%;    
+        width: 100%;
     }
-        .ctn-header h1{
+        #header .ctn-header h1{
             font: 2.5rem / 1.1 'Guardian Egyp Bold';
         }
         .ctn-header h2{
             max-width: 300px;
         }
+
+    #social{
+        top: -50px;
+    }
 
     p.bajada{
         max-width: 85%;
