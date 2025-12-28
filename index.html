@@ -20,6 +20,15 @@
             <img src="./img/logo-tu-decides-color.png" alt="Tú Decides" width="100%" class="logo-tu-decides">
             <h1>¿Qué propone tu candidato?</h1>
             <h2>Una guía rápida para comparar planes de gobierno 2026–2031.</h2>
+
+            <div id="social">
+                <button id="fb" class="sharer button" data-sharer="facebook" data-hashtag="" data-url="https://elcomercio.pe/deporte-total/goles-cristiano-ronaldo-video-anotaciones-camino-los-1000-CR7-especdis-noticia/">Facebook</button>
+
+                <button id="wst" class="sharer button" data-sharer="whatsapp" data-title="El Comercio" data-url="https://elcomercio.pe/deporte-total/goles-cristiano-ronaldo-video-anotaciones-camino-los-1000-CR7-especdis-noticia/">Whatsapp</button>
+
+                <button id="tw" class="sharer button" data-sharer="twitter" data-title="El Comercio" data-hashtags="" data-via='elcomercio_peru' data-url="https://elcomercio.pe/deporte-total/goles-cristiano-ronaldo-video-anotaciones-camino-los-1000-CR7-especdis-noticia/">Twitter</button>
+            </div>
+
         </div>
         <video class="video-desktop" src="./video/portada-desktop.mp4" width="100%" loop autoplay muted playsinline></video>
         <video class="video-movil" src="./video/portada-movil.mp4" width="100%" loop autoplay muted playsinline></video>
@@ -238,7 +247,7 @@
                     </div>
                     <h3>Cobertura por plan</h3>
                     <div class="color-line"></div>
-                    <p>El más amplio trata <span>17 temas y el más acotado 8;</span> la mayoría se mueve en 14.</p>
+                    <p>Mientras el plan más completo abarca <span>17 ejes y el más escueto se limita a solo 3.</span> El promedio general se sitúa en 14 temas por partido.</p>
                     <div class="separator-dotted"></div>
                     <p>Muchos temas indican amplitud, no necesariamente mejor sustento.</p>
                 </div>
@@ -249,7 +258,7 @@
                     </div>
                     <h3>Agenda compartida</h3>
                     <div class="color-line"></div>
-                    <p>Temas que aparecen en casi todos los planes: <span>Economía, Salud, Educación, Programas sociales, Justicia y DD. HH. y Gobernanza digital.</span></p>
+                    <p>Cuatro temas figuran en la agenda de casi todos los partidos: <span>Economía, Educación, Infraestructura y Salud. Son el eje base de sus propuestas.</span></p>
                     <div class="separator-dotted"></div>
                     <p>Alta presencia = tema transversal en la agenda.</p>
                 </div>
@@ -258,9 +267,9 @@
                     <div class="icon-box">
                         <img src="./img/icon-card-3.jpg" alt="" width="100%">
                     </div>
-                    <h3>Temas menos presentes</h3>
+                    <h3>Los temas menos presentes</h3>
                     <div class="color-line"></div>
-                    <p>Con menor aparición: <span>Familia, Transporte, Energía y minería, Cultura y turismo y Vivienda.</span></p>
+                    <p>Temas como <span> Familia, Cultura y Transporte</span> aparecen de forma escueta o son ignorados por las agrupaciones.</p>
                     <div class="separator-dotted"></div>
                     <p>Baja presencia ≠ irrelevancia</p>
                 </div>
@@ -271,7 +280,7 @@
                     </div>
                     <h3>Más espacio en los planes</h3>
                     <div class="color-line"></div>
-                    <p style="margin-top: auto; margin-bottom: auto;">Los planes dedican más espacio a <span>Economía (18%) y Salud (14%).</span></p>
+                    <p style="margin-top: auto; margin-bottom: auto;"><span>La Economía (14.2%) y los Programas Sociales (13.8%)</span> dominan la narrativa, consumiendo casi un tercio del texto total de los planes. Les siguen Salud y Justicia.</p>
                     <div class="separator-dotted"></div>
                     <p>Más porcentaje = más espacio, no mejor propuesta.</p>
                 </div>
@@ -282,7 +291,7 @@
                     </div>
                     <h3>Menos espacio en los planes</h3>
                     <div class="color-line"></div>
-                    <p style="margin-top: auto; margin-bottom: auto;"><span>Familia (1,5%) y Transporte (1,6%)</span> reciben menos menciones.</p>
+                    <p style="margin-top: auto; margin-bottom: auto;">Pese a su importancia ciudadana, temas como  <span>Transporte (1.2%) y Cultura (1.4%)</span> ocupan un espacio insignificante en la redacción de los documentos.</p>
                     <div class="separator-dotted"></div>
                     <p>Poco espacio no representa calidad.</p>
                 </div>
@@ -293,7 +302,7 @@
                     </div>
                     <h3>Tema dominante por plan</h3>
                     <div class="color-line"></div>
-                    <p style="margin-top: auto; margin-bottom: auto;">En la mayoría de planes el tema n.º 1 es <span>Economía; en varios, Salud o Programas sociales.</span></p>
+                    <p style="margin-top: auto; margin-bottom: auto;">La Economía no solo es transversal, <span>sino que es el tema que acapara el mayor volumen de palabras (14.2%) </span>en el promedio nacional.</p>
                     <div class="separator-dotted"></div>
                     <p>Muestra prioridad, mas no la profundidad.</p>
                 </div>
@@ -465,7 +474,42 @@
             </li>
         </ul>
     </div>
-   
+
+    <!-- compartir -->
+    <script>
+        function shareUrl(event) {
+            const button = event.target;
+            const url = button.getAttribute('data-url');
+            
+            const sharer = button.getAttribute('data-sharer');
+            let shareUrl = '';
+
+            switch (sharer) {
+            case 'facebook':
+                const fbHashtag = button.getAttribute('data-hashtag') || '';
+                shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&hashtag=${encodeURIComponent(fbHashtag)}`;
+                break;
+                
+            case 'whatsapp':
+                const whatsappTitle = button.getAttribute('data-title');
+                shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(whatsappTitle + ' ' + url)}`;
+                break;
+                
+            case 'twitter':
+                const twitterTitle = button.getAttribute('data-title');
+                const twitterHashtags = button.getAttribute('data-hashtags');
+                const twitterVia = button.getAttribute('data-via');
+                shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(twitterTitle)}&url=${encodeURIComponent(url)}&hashtags=${twitterHashtags}&via=${twitterVia}`;
+                break;
+            }
+
+            window.open(shareUrl, '_blank');
+        }
+
+        document.querySelectorAll('.sharer').forEach(button => {
+            button.addEventListener('click', shareUrl);
+        });
+    </script>   
 
     <!-- cards resumen -->
     <script>
