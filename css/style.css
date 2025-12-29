@@ -2631,6 +2631,13 @@ html {
     #header{
         background-size: 60%;
     }
+    .ctn-header h1{
+        font: 2rem / 1.1 'Guardian Egyp Bold';
+    }
+    .ctn-header h2{
+        font: 1.3rem / 1.3 'Guardian Egyp Medium';
+        max-width: 350px;
+    }
 
 }
 
@@ -2748,3 +2755,27 @@ span.separador-logo {
         max-width: 30px;
         vertical-align: bottom;
     }
+
+    #sliderHandle {
+    cursor: grab;
+    touch-action: none;
+    transition: transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+#sliderHandle:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+#sliderHandle.dragging {
+    cursor: grabbing;
+    transform: translate(-50%, -50%) scale(1.15);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+    transition: none;
+}
+
+#themeSlider {
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
