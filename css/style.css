@@ -1708,18 +1708,18 @@ html {
 
         /* Colores de temas */
         .theme-agricultura { background-color: #66aa94; }
-        .theme-medio-ambiente { background-color: #5d939f; }
-        .theme-cambio-climatico { background-color: #959d53; }
-        .theme-cultura-turismo { background-color: #6ba66d; }
+        .theme-medio_ambiente { background-color: #5d939f; }
+        .theme-cambio_climatico { background-color: #959d53; }
+        .theme-cultura_turismo { background-color: #6ba66d; }
         .theme-descentralizacion { background-color: #b384d0; }
         .theme-economia { background-color: #e9c15b; }
         .theme-educacion { background-color: #63a2e1; }
-        .theme-energia-minera { background-color: #cc816b; }
+        .theme-energia_minera { background-color: #cc816b; }
         .theme-familia { background-color: #e7804f; }
-        .theme-gobernanza-digital { background-color: #66a87a; }
+        .theme-gobernanza_digital { background-color: #66a87a; }
         .theme-infraestructura { background-color: #7797ea; }
-        .theme-justicia-dh { background-color: #6ab07c; }
-        .theme-programas-sociales { background-color: #d37a80; }
+        .theme-justicia_dh { background-color: #6ab07c; }
+        .theme-programas_sociales { background-color: #d37a80; }
         .theme-salud { background-color: #c07fc3; }        
         .theme-seguridad { background-color: #8d9f55; }
         .theme-transporte { background-color: #c67cb9; }
@@ -2796,3 +2796,35 @@ span.separador-logo {
 .selected-theme-badge{
     display: none;
 }
+
+.btn-ver-hojas{
+    background-color: #000;
+    border-radius: 50px;
+    bottom: 10px;
+    color: #fff;
+    cursor: pointer;
+    display: block;
+    font: 0.8rem/1.1 'roboto';
+    float: right;   
+    max-width: 62px; 
+    min-height: 62px;
+    padding: 10px;
+    position: fixed;
+    right: 5px;
+    text-align: center;
+    text-decoration: none;    
+    z-index: 10;
+
+    transition: opacity 0.3s ease; 
+       /* Empieza oculto hasta que hagas scroll */
+}
+    .btn-ver-hojas a{
+        color: #fff;
+        text-decoration: none;
+        display: inline-block;
+        vertical-align: bottom;
+        margin-top: 10px;
+    }
+        .btn-ver-hojas a:hover{
+            text-decoration: underline;
+        }
