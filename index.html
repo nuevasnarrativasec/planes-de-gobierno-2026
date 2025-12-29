@@ -9,13 +9,13 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v40">
+    <link rel="stylesheet" href="./css/style.css?v41">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
 <body>
 
-    <div id="header">
+    <div id="header" class="header">
         <div class="ctn-header">
             <img src="./img/logo-tu-decides-color.png" alt="Tú Decides" width="100%" class="logo-tu-decides">
             <h1>¿Qué propone tu candidato?</h1>
@@ -35,6 +35,12 @@
     </div>
 
     <div class="main">
+
+        <div class="btn-ver-hojas">
+            <a href="https://elcomercio.pe/politica/elecciones-peru-2026-candidatos-presidenciales-hojas-de-vida-especdis-noticia/" target="_blank">ver hojas de vida de candidatos</a>
+        </div>   
+        
+
         <p class="bajada">
             <b>Analizamos los planes, sintetizamos la información con ayuda de la IA y lo verificamos editorialmente. </b> Ahora podrás elegir un candidato o partido, filtrar por tema, mirar resúmenes y detectar de un vistazo qué proponen y qué omiten. Disminuimos el ruido para ofrecerte más claridad para que estés bien informado antes de emitir tu voto.
         </p>
@@ -595,8 +601,8 @@
     <!-- buscador y comparador de candidatos o partidos -->
     <script>
         // ============================================
-// CONFIGURACIÓN: URLs de Google Spreadsheets
-// ============================================
+        // CONFIGURACIÓN: URLs de Google Spreadsheets
+        // ============================================
 
 // Hoja 1: Datos generales de partidos y candidatos
 const SPREADSHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_yZQbmqUse6lOcFRxBhP53YkC3CdIc36YcOE3bk-w_91-TVudDvH9uVuJoSMZwf_4bPPuq--qbHKb/pub?output=csv';
@@ -2851,6 +2857,47 @@ window.onload = init;
                     botonLeerMas.innerText = "Conoce el detalle del método de análisis aquí"; // Restauramos el texto
                 }
             });
+        });
+    </script>
+
+    <!-- botón flotante-->
+    <script>
+        document.addEventListener("scroll", function() {
+            // 1. Seleccionamos los elementos
+            const boton = document.querySelector('.btn-ver-hojas');
+            const header = document.querySelector('.header'); // O usa la clase de tu header, ej: '.main-header'
+            const footer = document.querySelector('.footer-section');
+
+            // Validamos que existan para evitar errores
+            if (!boton || !header || !footer) return;
+
+            // 2. Obtenemos las posiciones actuales
+            const scrollY = window.scrollY; // Cuánto ha bajado el usuario
+            const ventanaAlto = window.innerHeight; // Alto de la pantalla del usuario
+            
+            const alturaHeader = header.offsetHeight; // Alto del header
+            const inicioFooter = footer.offsetTop; // En qué pixel empieza el footer
+
+            // 3. Definimos un "margen de seguridad" (offset)
+            // Para que se oculte un poquito antes de tocar el footer (ej. 50px antes)
+            const offset = 50; 
+
+            // 4. Lógica de visibilidad
+            // ¿Estamos muy arriba? (Menos que la altura del header)
+            const muyArriba = scrollY < alturaHeader;
+
+            // ¿Estamos muy abajo? (El scroll + pantalla supera el inicio del footer)
+            const muyAbajo = (scrollY + ventanaAlto) > (inicioFooter - offset);
+
+            if (muyArriba || muyAbajo) {
+                // OCULTAR
+                boton.style.opacity = '0';
+                boton.style.pointerEvents = 'none'; // Evita clics accidentales cuando está invisible
+            } else {
+                // MOSTRAR
+                boton.style.opacity = '1';
+                boton.style.pointerEvents = 'all';
+            }
         });
     </script>
    
