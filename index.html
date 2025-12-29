@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v38">
+    <link rel="stylesheet" href="./css/style.css?v39">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -38,7 +38,8 @@
         <p class="bajada">
             <b>Analizamos los planes,  sintetizamos la información con ayuda de la IA y lo verificamos editorialmente. </b> Ahora podrás elegir un candidato o partido, filtrar por tema, mirar resúmenes y detectar de un vistazo qué proponen, qué omiten y qué no cuadra. Disminuimos el ruido para ofrecerte más claridad para que estés bien informado antes de emitir tu voto.
         </p>
-        <span class="update">Actualizado al 28/10/2025</span>    
+        <span class="update">Actualizado al 29/12/2025</span>    
+        <span class="aviso" style="color: #9e9d9d; display: block; font: .9rem/1.5 'roboto'; margin: 5px auto; max-width: 630px; padding: 0 10px; text-align: center;">El Plan de Gobierno del candidato Armando Massé de Perú Federal aún no se encuentra disponible. El plan de Marisol Pérez Tello de Primero la Gente se obtuvo de su cuenta oficial en X.</span>
         
         <img src="./img/icon-click.jpg" alt="" width="100%" class="icon-click">
         <p class="elige">Elige la opción que prefieras para iniciar </p>
@@ -320,6 +321,13 @@
             <p>
                 Aquí verás la variedad de áreas tratadas en el plan. Un plan con muchos temas ofrece una mayor cobertura, aunque no siempre puede entrar en detalle ni mostrar sustento en cada área.
             </p>
+            <div class="box-indicador">
+                <img src="./img/icon-click.jpg" alt="" width="100%">
+                <p>
+                    Presiona una barra para más información
+                </p>
+            </div>
+            
 
             <div class="box-flourish">
                 <div class="flourish-embed flourish-chart" data-src="visualisation/25750063"><script src="https://public.flourish.studio/resources/embed.js"></script><noscript><img src="https://public.flourish.studio/visualisation/25750063/thumbnail" width="100%" alt="chart visualization" /></noscript></div>
@@ -373,107 +381,99 @@
         <div class="box-metodologia">
             <h6>metodología</h6>
             <p>
-                Este especial se basa en información pública de los planes de gobierno que cada partido suministra al JNE. Los documentos se procesaron con el programa de automatización n8n para su lectura, limpieza, estandarización y unificación. El contenido se clasificó por temas con asistencia de IA y se calcularon indicadores como diversidad temática, densidad discursiva y prevalencia. Para los resúmenes finales se emplearon modelos de OpenAI y Gemini, con edición y validación editorial antes de la publicación. El resultado es una síntesis comparable y clara, pensada para consulta rápida sin perder rigor.
+                Este especial analiza los planes de gobierno presentados ante el JNE, procesados y comparados mediante herramientas de automatización, código y agentes de inteligencia artificial.
             </p>
             <p>
-                Para caracterizar el tono y la coherencia se aplicó un enfoque de análisis del discurso político (referencias: van Dijk, Fairclough, Habermas) y coherencia programática (Klingemann et al.). El tono se etiqueta por fragmento como: Técnico (gestión pública, evidencia, indicadores), Ideológico (valores, principios, identidad), Pragmático (acciones viables, implementación) o Social (inclusión, bienestar, equidad). La coherencia interna se valora en Alta / Media / Baja según el alineamiento entre diagnóstico y medidas, la ausencia de contradicciones y la claridad de metas.
+                Los documentos fueron limpiados, estandarizados y clasificados por temas para identificar qué asuntos aborda cada partido, cuánto espacio les dedica y qué tan compartidos son en la agenda política.  El análisis se desarrolló con apoyo del fondo AI Catalyst de WAN-IFRA, en alianza con OpenAI.
             </p>
+            <p>
+                Todos los resultados pasaron por revisión y validación editorial antes de su publicación, con el objetivo de ofrecer una síntesis clara, comparable y de consulta rápida, sin perder rigor.
+            </p>
+            <p class="mas-metodologia" style="cursor: pointer; text-decoration: underline;">
+                Conoce el detalle del método de análisis aquí
+            </p>
+
+            <div id="detalle-oculto" style="display: none;">
+                <h6>¿Cómo se realizó el análisis?</h6>
+                <p>
+                    El análisis se basa en los planes de gobierno presentados ante el JNE, procesados mediante flujos de automatización con n8n para su lectura, limpieza y estandarización.
+                </p>
+                <p>
+                    Cada plan fue segmentado en unidades de análisis comparables (fragmentos), lo que permitió evaluar de forma consistente los temas, el tono y la coherencia del discurso.
+                </p>
+                <p>
+                    Con apoyo de modelos de inteligencia artificial, los fragmentos se clasificaron por temas y se calcularon indicadores de diversidad temática, densidad discursiva y prevalencia.
+                </p>
+                <p>
+                    Los resultados y resúmenes fueron editados y validados editorialmente antes de su publicación.
+                </p>
+
+                <h6>Tono y coherencia</h6>
+                <p>
+                    El análisis del tono y la coherencia se basa en enfoques clásicos de análisis del discurso político y coherencia programática (referencias: van Dijk, Fairclough, Habermas; Klingemann et al.).
+                </p>
+                <p>
+                    Tono del discurso: Cada fragmento fue clasificado según su enfoque predominante: Técnico: gestión pública, evidencia, indicadores; ideológico: valores, principios, identidad, pragmático: acciones viables, implementación y social: inclusión, bienestar, equidad.
+                </p>
+                <p>
+                    Coherencia interna: Se evalúa como Alta, Media o Baja, considerando el alineamiento entre diagnóstico y propuestas, la ausencia de contradicciones y la claridad de metas.
+                </p>
+            </div>
         </div>
 
     </div>
 
-    <div class="box-footer">
-        <img src="./img/logo-comercio.png" alt="El Comercio" width="100%" class="logo-comercio">
-        <ul>
-            <li>
-                <p>
-                    <span>Investigación y textos:</span>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Gisella Salmón
-                </p>
-            </li>
-            <li>
-                <p>
-                    Mayté Ciriaco
-                </p>
-            </li>
-            <li>
-                <p>
-                    Lorena Obregón
-                </p>
-            </li>
+   <div class="footer-section">
+            <div class="footer-content">
+                <img src="https://nuevasnarrativasec.github.io/conclave/img/logo-comercio.png" alt="El Comercio" width="100%" class="logo-comercio">
+                
 
-            <li>
-                <p>
-                    <span>Diseño:</span>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Marcelo Hidalgo
-                </p>
-            </li>
+                <ul>
+                    <li>
+                        <h4>Investigación y verificación:</h4>
+                        <p>Gisella Salmón</p>
+                        <p>Mayte Ciriaco</p>
+                        <p>Lorena Obregón</p>
+                    </li>
+                    <li>
+                        <h4>Edición:</h4>
+                        <p>Héctor Villalobos</p>
+                    </li>
+                    <li>
+                        <h4>Arquitectura de automatización (n8n + IA)</h4>
+                        <p>Gisella Salmón</p>
+                        <p>Armando Scargglioni C.</p>
+                    </li>
+                    <li>
+                        <h4>Programación:</h4>
+                        <p>Armando Scargglioni C.</p>
+                    </li>                        
+                </ul>
 
-            <li>
-                <p>
-                    <span>Ilustraciones y animación:</span>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Kiomy Kanashiro
-                </p>
-            </li>
-        </ul>
-
-        <ul>
-            <li>
-                <p>
-                    <span>Programación:</span>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Armando Scargglioni C.
-                </p>
-            </li>
-            <li>
-                <p>
-                    Edición visual:
-                </p>
-            </li>
-            <li>
-                <p>
-                    Angela Peña
-                </p>
-            </li>
-
-            <li>
-                <p>
-                    <span>Producción general:</span>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Gisella Salmón
-                </p>
-            </li>
-
-            <li>
-                <p>
-                    <span>Director periodístico:</span>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Juan Aurelio Arévalo
-                </p>
-            </li>
-        </ul>
-    </div>
+                <ul>
+                    <li>
+                        <h4>Edición visual:</h4>
+                        <p>Ángela Peña</p>
+                    </li>
+                    <li>
+                        <h4>Diseño:</h4>
+                        <p>Marcelo Hidalgo</p>
+                    </li>
+                    <li>
+                        <h4>Ilustraciones:</h4>
+                        <p>Kiomy Kanashiro</p>
+                    </li>
+                    <li>
+                        <h4>Producción general:</h4>
+                        <p>Gisella Salmón</p>
+                    </li>
+                    <li>
+                        <h4>Director periodístico:</h4>
+                        <p>Juan Aurelio Arévalo</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
 
     <!-- compartir -->
     <script>
@@ -1769,22 +1769,18 @@
                             ${avatarHTML}
                         </div>
                         <div class="candidate-name">${item.candidato || 'Sin información'}</div>
-                        <div class="party-label">${item.nombrePartido || 'Sin información'}</div>
+                        <div class="party-label">${item.nombrePartido || 'Sin información'}</div>                        
                     </div>   
+                    
                     <div class="box-main-buttons">
                         <div class="action-buttons">
                             ${downloadButton}
                             <button class="btn btn-secondary" onclick="addToCompare(${JSON.stringify(item).replace(/"/g, '&quot;')})">Comparar</button>
                         </div>
-                    </div>  
-                    <div class="vision-section">
-                        <p class="vision-text">${item.vision || 'Sin información de visión disponible.'}</p>    
-                    </div>
-                    <div class="candidate-temas-mencionados">
-                        <h6>Temas más mencionados:</h6>
-                        <div class="topics">
-                            ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
-                        </div>
+                    </div> 
+                    <div class="candidate-vices">
+                        <h6>Vicepresidentes:</h6>
+                        ${item.vicepresidentes || 'Sin información'}
                     </div>
                     <div class="candidate-info">
                         <div class="box-edad">  
@@ -1795,7 +1791,18 @@
                             <h6>departamento:</h6>         
                             ${item.ubicacion || ''}
                         </div> 
+                    </div> 
+                    <div class="vision-section">
+                        <p class="vision-text">${item.vision || 'Sin información de visión disponible.'}</p>    
                     </div>
+                    <div class="candidate-temas-mencionados">                        
+                        <h6>Temas más mencionados:</h6>
+                        <img src="./img/icon-click-2.png" alt="" width="100%" class="icon-click-temas">
+                        <div class="topics">
+                            ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
+                        </div>
+                    </div>
+                    
                     <div class="candidate-experiencia">
                         <h6>Experiencia laboral:</h6>
                         <p>${item.experienciaLaboral || 'Sin información de experiencia disponible.'}</p>
@@ -2561,6 +2568,28 @@
             if (searchBox && !searchBox.contains(event.target)) {
                 hideFactcheckingAutocomplete();
             }
+        });
+    </script>
+
+    <!-- metodología -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Seleccionamos el botón y el contenido
+            const botonLeerMas = document.querySelector('.mas-metodologia');
+            const contenidoOculto = document.getElementById('detalle-oculto');
+
+            botonLeerMas.addEventListener('click', function() {
+                // Verificamos si está oculto o visible
+                if (contenidoOculto.style.display === "none") {
+                    // Si está oculto, lo mostramos
+                    contenidoOculto.style.display = "block";
+                    botonLeerMas.innerText = "Ocultar detalle del método"; // Cambiamos el texto
+                } else {
+                    // Si está visible, lo ocultamos
+                    contenidoOculto.style.display = "none";
+                    botonLeerMas.innerText = "Conoce el detalle del método de análisis aquí"; // Restauramos el texto
+                }
+            });
         });
     </script>
    
