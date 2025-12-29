@@ -2736,3 +2736,15 @@ span.separador-logo {
     font-weight: 800;
     margin: 0 auto 5px;
 }
+
+.indicador-2{
+
+}   
+    .indicador-2 p{
+        margin: 0 auto;
+        max-width: 125px;
+    }
+    .indicador-2 img{
+        max-width: 30px;
+        vertical-align: bottom;
+    }
