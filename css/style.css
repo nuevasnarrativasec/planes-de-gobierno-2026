@@ -1560,7 +1560,6 @@ html {
             z-index: 100;
             box-shadow: 0 2px 8px rgba(0,0,0,0.3);
             transition: left 0.3s ease;
-            pointer-events: none;
         }
 
         .slider-handle:active {
@@ -2790,5 +2789,10 @@ span.separador-logo {
 
 #sliderHandle.dragging {
     cursor: grabbing;
+    transform: translateY(-50%) scale(1.1);
     transform: translateX(-50%) scale(1.1);
+}
+
+.selected-theme-badge{
+    display: none;
 }
