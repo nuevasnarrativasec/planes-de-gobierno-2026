@@ -2641,6 +2641,13 @@ html {
 
 }
 
+@media (min-height: 768px){
+
+    .ctn-header h1 {
+        font-size: 3.8rem;
+    }
+}
+
 
 .box-indicador{
     margin: 5px auto;
