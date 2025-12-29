@@ -2336,7 +2336,8 @@ html {
         width: 100%;
     }
         #header .ctn-header h1{
-            font: 2.5rem / 1.1 'Guardian Egyp Bold';
+            font: 2.2rem / 1.1 'Guardian Egyp Bold';
+            margin-top: 10px;
         }
         .ctn-header h2{
             max-width: 300px;
@@ -2756,7 +2757,7 @@ span.separador-logo {
         vertical-align: bottom;
     }
 
-    #sliderHandle {
+#sliderHandle {
     cursor: grab;
     touch-action: none;
     transition: transform 0.15s ease, box-shadow 0.2s ease;
@@ -2778,4 +2779,16 @@ span.separador-logo {
     touch-action: none;
     user-select: none;
     -webkit-user-select: none;
+}
+
+#sliderHandle {
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    transition: left 0.2s ease-out;
+}
+
+#sliderHandle.dragging {
+    cursor: grabbing;
+    transform: translateX(-50%) scale(1.1);
 }
