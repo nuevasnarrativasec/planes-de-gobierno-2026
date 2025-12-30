@@ -2462,7 +2462,7 @@ html {
         min-width: 140px;
     }
 
-    .footer-content ul{
+    .footer-section .footer-content ul{
         display: block;
     }
 
