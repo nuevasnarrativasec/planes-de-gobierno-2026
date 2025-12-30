@@ -1356,7 +1356,7 @@ html {
         .box-main-panorama p{
             font: 1rem / 1.5 "Roboto", sans-serif;
             margin: 10px auto;
-            max-width: 500px;
+            max-width: 550px;
             text-align: center;
         }
         .box-flourish{
@@ -2159,7 +2159,7 @@ html {
         .factchecking-veredicto.verdadera .factchecking-veredicto-text,
         .factchecking-veredicto.enganosa .factchecking-veredicto-text,
         .factchecking-veredicto.inexacta .factchecking-veredicto-text,
-        .factchecking-veredicto.no_es_su_competencia .factchecking-veredicto-text,
+        .factchecking-veredicto.requiere_accion .factchecking-veredicto-text,
         .factchecking-veredicto.inviable .factchecking-veredicto-text,
         .factchecking-veredicto.viable .factchecking-veredicto-text  {
             color: #383d41;
@@ -2186,7 +2186,7 @@ html {
             background: #c2303e;
         }
 
-        .factchecking-veredicto.no_es_su_competencia .factchecking-veredicto-label {
+        .factchecking-veredicto.requiere_accion .factchecking-veredicto-label {
             color: #fff;
             background: #5a6478;
         }
