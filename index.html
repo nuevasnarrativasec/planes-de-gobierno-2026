@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v51">
+    <link rel="stylesheet" href="./css/style.css?v52">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
     <style>
@@ -251,7 +251,7 @@
                     <option value="">Seleccionar veredicto...</option>
                     <option value="viable">Viable</option>
                     <option value="inviable">Inviable</option>
-                    <option value="no_en_sus_manos">No está en sus manos</option>
+                    <option value="no_es_su_competencia">No es de su competencia</option>
                     <option value="enganosa">Engañosa</option>
                     <option value="inexacta">Inexacta</option>
                 </select>
@@ -2526,10 +2526,24 @@ window.onload = init;
             visibleItems = getItemsPerPage();
         }
 
+        // Función para obtener la descripción de cada veredicto
+        function getVeredictoDescripcion(veredictoClass) {
+            const descripciones = {
+                'viable': 'Propuesta que puede ejecutarse de manera factible durante una gestión.',
+                'inviable': 'Propuesta que no puede ejecutarse dentro de una gestión o que contraviene la normativa vigente.',
+                'no_es_su_competencia': 'Propuesta cuyo desarrollo o cumplimiento no depende del ejecutivo. ',
+                'inexacta': 'Compromiso que no presenta información concreta ni criterios medibles para su desarrollo o evaluación.',
+                'enganosa': 'Propuesta que incluye metas o cifras concretas, pero que sobredimensiona las capacidades reales del Ejecutivo, usa plazos o alcances irrealistas o presenta resultados que no son exigibles ni creíbles dadas las restricciones técnicas, presupuestales o institucionales.',
+                'indeterminado': 'No se cuenta con información suficiente para determinar la viabilidad de esta propuesta.'
+            };
+            return descripciones[veredictoClass] || '';
+        }
+
         function createFactcheckingCard(item) {
             // Normalizar veredicto
             const veredicto = normalizeVeredicto(item.veredicto);
             const veredictoClass = getVeredictoClass(veredicto);
+            const veredictoDescripcion = getVeredictoDescripcion(veredictoClass);
             
             // Formatear fuentes
             const fuentes = formatFuentes(item.fuentes_consultadas);
@@ -2546,7 +2560,9 @@ window.onload = init;
                         </div>
                         
                         <div class="factchecking-veredicto ${veredictoClass}">
-                            <div class="factchecking-veredicto-label">${veredicto}</div>
+                            <div class="factchecking-veredicto-label">${veredicto}
+                                <span class="veredicto-descripcion">(${veredictoDescripcion})</span>
+                            </div>
                             <div class="factchecking-veredicto-text">
                                 ${item.justificacion || 'Justificación no disponible'}
                             </div>
@@ -2568,7 +2584,7 @@ window.onload = init;
             // Inviable
             if (v === 'inviable') return 'INVIABLE';
             // No esta en sus manos (con o sin tilde)
-            if (v.includes('no est') && v.includes('en sus manos')) return 'NO ESTA EN SUS MANOS';
+            if (v.includes('no es') && v.includes('su competencia')) return 'NO ES DE SU COMPETENCIA';
             // Enganosa (con o sin ene)
             if (v.includes('enga')) return 'ENGAÑOSA';
             // Inexacta
@@ -2584,7 +2600,7 @@ window.onload = init;
             // Inviable
             if (v === 'inviable') return 'inviable';
             // No esta en sus manos (con o sin tilde)
-            if (v.includes('no est') && v.includes('en sus manos')) return 'no_en_sus_manos';
+            if (v.includes('no es') && v.includes('de su competencia')) return 'no_es_su_competencia';
             // Enganosa (con o sin ene)
             if (v.includes('enga')) return 'enganosa';
             // Inexacta
