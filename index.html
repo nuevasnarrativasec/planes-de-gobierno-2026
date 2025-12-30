@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v52">
+    <link rel="stylesheet" href="./css/style.css?v54">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
     <style>
@@ -226,32 +226,29 @@
                 </button>
             </div>
 
-            <!-- Buscador de texto (para partido y candidato) -->
-            <div class="factchecking-search-container" id="factcheckingSearchContainer">
-                <div class="factchecking-search-box">
-                    <input type="text" 
-                        id="factcheckingSearchInput" 
-                        placeholder="Buscar partido..." 
-                        autocomplete="off"
-                        onkeyup="handleFactcheckingSearch(event)"
-                        onfocus="showFactcheckingAutocomplete()">
-                    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <path d="M21 21l-4.35-4.35"></path>
-                    </svg>
-                    <div class="factchecking-autocomplete" id="factcheckingAutocomplete">
-                        <!-- Autocomplete items se generarán aquí -->
-                    </div>
-                </div>
+            <!-- Dropdown para partido -->
+            <div class="factchecking-dropdown-container" id="factcheckingPartidoContainer">
+                <select class="factchecking-dropdown" id="factcheckingPartidoDropdown" onchange="handlePartidoChange()">
+                    <option value="">Seleccionar partido...</option>
+                    <!-- Opciones se generarán dinámicamente -->
+                </select>
+            </div>
+
+            <!-- Dropdown para candidato (oculto por defecto) -->
+            <div class="factchecking-dropdown-container" id="factcheckingCandidatoContainer" style="display: none;">
+                <select class="factchecking-dropdown" id="factcheckingCandidatoDropdown" onchange="handleCandidatoChange()">
+                    <option value="">Seleccionar candidato...</option>
+                    <!-- Opciones se generarán dinámicamente -->
+                </select>
             </div>
 
             <!-- Dropdown para veredicto (oculto por defecto) -->
-            <div class="factchecking-dropdown-container" id="factcheckingDropdownContainer" style="display: none;">
+            <div class="factchecking-dropdown-container" id="factcheckingVeredictoContainer" style="display: none;">
                 <select class="factchecking-dropdown" id="factcheckingVeredictoDropdown" onchange="handleVeredictoChange()">
                     <option value="">Seleccionar veredicto...</option>
                     <option value="viable">Viable</option>
                     <option value="inviable">Inviable</option>
-                    <option value="no_es_su_competencia">No es de su competencia</option>
+                    <option value="requiere_accion">Requiere acción de otros poderes del Estado</option>
                     <option value="enganosa">Engañosa</option>
                     <option value="inexacta">Inexacta</option>
                 </select>
@@ -398,7 +395,7 @@
 
             <h2>Densidad discursiva</h2>
             <p>
-                Descubre qué porcentaje del plan se dedica a cada tema. Más espacio no siempre significa propuestas más claras ni mejor sustento.
+                Descubre qué porcentaje del plan se dedica a cada tema. Cuando un tema figura con 0 %, no siempre significa que esté ausente, sino que su presencia en el documento podría ser muy baja (menor al 1 % del contenido). Más espacio no siempre implica propuestas más claras ni mejor sustento.
             </p>
             <div class="box-indicador indicador-2">
                 <img src="./img/icon-horizontal-scroll.png" alt="" width="100%">
@@ -2185,7 +2182,7 @@ window.onload = init;
     <!-- factchecking -->
     <script>
         // ============================================
-        // CONFIGURACIÓN
+        // CONFIGURACIÃ“N
         // ============================================
         
         // URL de tu Google Spreadsheet (Hoja de FactChecking)
@@ -2195,12 +2192,10 @@ window.onload = init;
         let factcheckingData = [];
         let filteredFactcheckingData = [];
         let currentFactcheckingFilter = 'partido';
-        let factcheckingSuggestions = [];
-        let selectedFactcheckingSuggestionIndex = -1;
         
-        // Paginación responsive
+        // PaginaciÃ³n responsive
         const ITEMS_DESKTOP = 8; // 2 filas de 4 cards en desktop
-        const ITEMS_MOBILE = 3;  // 3 cards en móvil
+        const ITEMS_MOBILE = 3;  // 3 cards en mÃ³vil
         const MOBILE_BREAKPOINT = 768;
         
         // Estado inicial: no mostrar cards hasta que se busque
@@ -2212,10 +2207,10 @@ window.onload = init;
         
         let visibleItems = getItemsPerPage();
         
-        // Actualizar al cambiar tamaño de ventana
+        // Actualizar al cambiar tamaÃ±o de ventana
         window.addEventListener('resize', function() {
             const newItemsPerPage = getItemsPerPage();
-            // Solo resetear si cambiamos entre móvil y desktop
+            // Solo resetear si cambiamos entre mÃ³vil y desktop
             if ((visibleItems <= ITEMS_MOBILE && newItemsPerPage > ITEMS_MOBILE) ||
                 (visibleItems > ITEMS_MOBILE && newItemsPerPage <= ITEMS_MOBILE)) {
                 visibleItems = newItemsPerPage;
@@ -2226,7 +2221,7 @@ window.onload = init;
         });
 
         // ============================================
-        // INICIALIZACIÓN
+        // INICIALIZACIÃ“N
         // ============================================
         
         document.addEventListener('DOMContentLoaded', function() {
@@ -2252,7 +2247,7 @@ window.onload = init;
             grid.style.display = 'none';
             
             try {
-                // Agregar timestamp para evitar caché (solo para URLs de Google)
+                // Agregar timestamp para evitar cachÃ© (solo para URLs de Google)
                 let url = FACTCHECKING_SPREADSHEET_URL;
                 if (url.includes('docs.google.com')) {
                     const timestamp = new Date().getTime();
@@ -2271,28 +2266,29 @@ window.onload = init;
                 factcheckingData = parseFactcheckingCSV(csvText);
                 filteredFactcheckingData = [...factcheckingData];
                 
-                console.log('📊 Datos de factchecking cargados:', factcheckingData.length, 'items');
+                console.log('ðŸ“Š Datos de factchecking cargados:', factcheckingData.length, 'items');
                 
                 // Mostrar primera fila para debug
                 if (factcheckingData.length > 0) {
-                    console.log('📄 Primera fila:', factcheckingData[0]);
+                    console.log('ðŸ“„ Primera fila:', factcheckingData[0]);
                 }
                 
                 loading.style.display = 'none';
                 grid.style.display = 'grid';
                 
+                populateFactcheckingDropdowns();
                 renderFactcheckingCards();
                 
             } catch (error) {
                 console.error('Error cargando datos de factchecking:', error);
-                console.log('⚠️ Cargando datos de ejemplo...');
+                console.log('âš ï¸ Cargando datos de ejemplo...');
                 
-                // Cargar datos de ejemplo para demostración
+                // Cargar datos de ejemplo para demostraciÃ³n
                 loadExampleFactcheckingData();
             }
         }
 
-        // Parsear CSV completo (maneja saltos de línea dentro de celdas)
+        // Parsear CSV completo (maneja saltos de lÃ­nea dentro de celdas)
         function parseFactcheckingCSV(csvText) {
             const rows = parseCSVComplete(csvText);
             
@@ -2311,17 +2307,17 @@ window.onload = init;
                     row[header] = values[index] ? values[index].trim() : '';
                 });
                 
-                // Solo agregar si tiene datos válidos (al menos partido o frase)
+                // Solo agregar si tiene datos vÃ¡lidos (al menos partido o frase)
                 if (row.partido || row.frase) {
                     data.push(row);
                 }
             }
             
-            console.log('📊 Filas parseadas:', data.length);
+            console.log('ðŸ“Š Filas parseadas:', data.length);
             return data;
         }
 
-        // Parser CSV completo que maneja saltos de línea dentro de celdas con comillas
+        // Parser CSV completo que maneja saltos de lÃ­nea dentro de celdas con comillas
         function parseCSVComplete(csvText) {
             const rows = [];
             let currentRow = [];
@@ -2367,7 +2363,7 @@ window.onload = init;
                 }
             }
             
-            // Agregar última celda y fila si existen
+            // Agregar Ãºltima celda y fila si existen
             if (currentCell || currentRow.length > 0) {
                 currentRow.push(currentCell);
                 if (currentRow.some(cell => cell.trim() !== '')) {
@@ -2378,71 +2374,71 @@ window.onload = init;
             return rows;
         }
 
-        // Datos de ejemplo para demostración
+        // Datos de ejemplo para demostraciÃ³n
         function loadExampleFactcheckingData() {
             factcheckingData = [
                 {
-                    partido: 'Perú Patria Segura',
+                    partido: 'PerÃº Patria Segura',
                     candidato: 'Rafael Santos',
-                    frase: 'Aumentar el presupuesto en salud en un 20% durante el primer año de gobierno.',
+                    frase: 'Aumentar el presupuesto en salud en un 20% durante el primer aÃ±o de gobierno.',
                     veredicto: 'Indeterminado',
-                    justificacion: 'La afirmación sobre aumentar el presupuesto en salud en un 20% no puede ser verificada ya que no se ha publicado un presupuesto específico para el primer año de gobierno de Perú Patria Segura. Además, los presupuestos anuales son aprobados por el Congreso y pueden variar según las prioridades del gobierno en el momento de su implementación.',
-                    fuentes_consultadas: 'Ministerio de Economía y Finanzas\nhttps://www.mef.gob.pe\nInstituto Nacional de Estadística e Informática\nhttps://www.gob.pe/inei/'
+                    justificacion: 'La afirmaciÃ³n sobre aumentar el presupuesto en salud en un 20% no puede ser verificada ya que no se ha publicado un presupuesto especÃ­fico para el primer aÃ±o de gobierno de PerÃº Patria Segura. AdemÃ¡s, los presupuestos anuales son aprobados por el Congreso y pueden variar segÃºn las prioridades del gobierno en el momento de su implementaciÃ³n.',
+                    fuentes_consultadas: 'Ministerio de EconomÃ­a y Finanzas\nhttps://www.mef.gob.pe\nInstituto Nacional de EstadÃ­stica e InformÃ¡tica\nhttps://www.gob.pe/inei/'
                 },
                 {
-                    partido: 'Perú Patria Segura',
+                    partido: 'PerÃº Patria Segura',
                     candidato: 'Rafael Santos',
-                    frase: 'Construir 100 nuevas escuelas en zonas rurales en los primeros dos años.',
+                    frase: 'Construir 100 nuevas escuelas en zonas rurales en los primeros dos aÃ±os.',
                     veredicto: 'Indeterminado',
-                    justificacion: 'La afirmación sobre la construcción de 100 nuevas escuelas en zonas rurales carece de datos verificables específicos que confirmen o desmientan la promesa.',
-                    fuentes_consultadas: 'Ministerio de Educación\nhttps://www.minedu.gob.pe\nInstituto Nacional de Estadística e Informática\nhttps://www.gob.pe/inei/'
+                    justificacion: 'La afirmaciÃ³n sobre la construcciÃ³n de 100 nuevas escuelas en zonas rurales carece de datos verificables especÃ­ficos que confirmen o desmientan la promesa.',
+                    fuentes_consultadas: 'Ministerio de EducaciÃ³n\nhttps://www.minedu.gob.pe\nInstituto Nacional de EstadÃ­stica e InformÃ¡tica\nhttps://www.gob.pe/inei/'
                 },
                 {
-                    partido: 'Perú Patria Segura',
+                    partido: 'PerÃº Patria Segura',
                     candidato: 'Rafael Santos',
-                    frase: 'Reducir la tasa de criminalidad en un 30% en los primeros cuatro años.',
+                    frase: 'Reducir la tasa de criminalidad en un 30% en los primeros cuatro aÃ±os.',
                     veredicto: 'Indeterminado',
-                    justificacion: 'La afirmación sobre la reducción de la tasa de criminalidad en un 30% en un plazo específico no puede ser verificada en este momento.',
+                    justificacion: 'La afirmaciÃ³n sobre la reducciÃ³n de la tasa de criminalidad en un 30% en un plazo especÃ­fico no puede ser verificada en este momento.',
                     fuentes_consultadas: 'Ministerio del Interior\nhttps://www.gob.pe/mininter\nObservatorio Nacional de Seguridad Ciudadana\nhttps://www.gob.pe/observatorio-seguridad'
                 },
                 {
                     partido: 'Partido Nacionalista Peruano',
                     candidato: 'Ollanta Humala',
-                    frase: 'Aumentar el presupuesto en salud en un 20% en los próximos tres años.',
+                    frase: 'Aumentar el presupuesto en salud en un 20% en los prÃ³ximos tres aÃ±os.',
                     veredicto: 'Indeterminado',
-                    justificacion: 'La afirmación sobre aumentar el presupuesto en salud en un 20% no puede ser verificada actualmente.',
-                    fuentes_consultadas: 'Ministerio de Economía y Finanzas\nhttps://www.gob.pe/mef\nInstituto Nacional de Estadística e Informática\nhttps://www.inei.gob.pe'
+                    justificacion: 'La afirmaciÃ³n sobre aumentar el presupuesto en salud en un 20% no puede ser verificada actualmente.',
+                    fuentes_consultadas: 'Ministerio de EconomÃ­a y Finanzas\nhttps://www.gob.pe/mef\nInstituto Nacional de EstadÃ­stica e InformÃ¡tica\nhttps://www.inei.gob.pe'
                 },
                 {
                     partido: 'Partido Nacionalista Peruano',
                     candidato: 'Ollanta Humala',
-                    frase: 'Reducir la pobreza en un 10% durante el primer año de gobierno.',
+                    frase: 'Reducir la pobreza en un 10% durante el primer aÃ±o de gobierno.',
                     veredicto: 'Indeterminado',
-                    justificacion: 'La afirmación de reducir la pobreza en un 10% en el primer año de gobierno es ambiciosa y depende de múltiples factores económicos y sociales.',
-                    fuentes_consultadas: 'Instituto Nacional de Estadística e Informática\nhttps://www.gob.pe/inei/\nMinisterio de Economía y Finanzas\nhttps://www.mef.gob.pe'
+                    justificacion: 'La afirmaciÃ³n de reducir la pobreza en un 10% en el primer aÃ±o de gobierno es ambiciosa y depende de mÃºltiples factores econÃ³micos y sociales.',
+                    fuentes_consultadas: 'Instituto Nacional de EstadÃ­stica e InformÃ¡tica\nhttps://www.gob.pe/inei/\nMinisterio de EconomÃ­a y Finanzas\nhttps://www.mef.gob.pe'
                 },
                 {
-                    partido: 'Avanza País',
+                    partido: 'Avanza PaÃ­s',
                     candidato: 'Phillip Butters',
-                    frase: 'Aumentar el presupuesto en educación en un 20% en los próximos dos años.',
+                    frase: 'Aumentar el presupuesto en educaciÃ³n en un 20% en los prÃ³ximos dos aÃ±os.',
                     veredicto: 'Indeterminado',
-                    justificacion: 'La afirmación de aumentar el presupuesto en educación en un 20% no puede ser verificada actualmente.',
-                    fuentes_consultadas: 'Ministerio de Educación\nhttps://www.minedu.gob.pe\nMinisterio de Economía y Finanzas\nhttps://www.mef.gob.pe'
+                    justificacion: 'La afirmaciÃ³n de aumentar el presupuesto en educaciÃ³n en un 20% no puede ser verificada actualmente.',
+                    fuentes_consultadas: 'Ministerio de EducaciÃ³n\nhttps://www.minedu.gob.pe\nMinisterio de EconomÃ­a y Finanzas\nhttps://www.mef.gob.pe'
                 },
                 {
                     partido: 'Frente Amplio',
                     candidato: 'Marco Arana Zegarra',
-                    frase: 'Aumentar el salario mínimo a S/ 1,500 en el primer año de gobierno.',
+                    frase: 'Aumentar el salario mÃ­nimo a S/ 1,500 en el primer aÃ±o de gobierno.',
                     veredicto: 'Indeterminado',
-                    justificacion: 'La afirmación sobre el aumento del salario mínimo a S/ 1,500 es indeterminada porque no se ha establecido oficialmente un plan de implementación.',
-                    fuentes_consultadas: 'Ministerio de Trabajo y Promoción del Empleo\nhttps://www.gob.pe/mtpe\nDiario El Comercio\nhttps://elcomercio.pe/'
+                    justificacion: 'La afirmaciÃ³n sobre el aumento del salario mÃ­nimo a S/ 1,500 es indeterminada porque no se ha establecido oficialmente un plan de implementaciÃ³n.',
+                    fuentes_consultadas: 'Ministerio de Trabajo y PromociÃ³n del Empleo\nhttps://www.gob.pe/mtpe\nDiario El Comercio\nhttps://elcomercio.pe/'
                 },
                 {
                     partido: 'Fuerza Popular',
                     candidato: 'Keiko Fujimori',
                     frase: 'Crear 2 millones de empleos formales en el quinquenio.',
-                    veredicto: 'Engañosa',
-                    justificacion: 'La propuesta no especifica los mecanismos concretos para la creación de estos empleos ni cómo se financiaría.',
+                    veredicto: 'EngaÃ±osa',
+                    justificacion: 'La propuesta no especifica los mecanismos concretos para la creaciÃ³n de estos empleos ni cÃ³mo se financiarÃ­a.',
                     fuentes_consultadas: 'Ministerio de Trabajo\nhttps://www.gob.pe/mtpe'
                 }
             ];
@@ -2452,8 +2448,9 @@ window.onload = init;
             document.getElementById('factcheckingLoading').style.display = 'none';
             document.getElementById('factcheckingGrid').style.display = 'grid';
             
-            console.log('📊 Datos de ejemplo cargados:', factcheckingData.length, 'items');
+            console.log('ðŸ“Š Datos de ejemplo cargados:', factcheckingData.length, 'items');
             
+            populateFactcheckingDropdowns();
             resetPagination();
             renderFactcheckingCards();
         }
@@ -2495,7 +2492,7 @@ window.onload = init;
             const itemsToShow = filteredFactcheckingData.slice(0, visibleItems);
             grid.innerHTML = itemsToShow.map(item => createFactcheckingCard(item)).join('');
             
-            // Mostrar/ocultar botón "ver más"
+            // Mostrar/ocultar botÃ³n "ver mÃ¡s"
             const remainingItems = filteredFactcheckingData.length - visibleItems;
             
             if (remainingItems > 0) {
@@ -2506,7 +2503,7 @@ window.onload = init;
             }
         }
         
-        // Cargar más items
+        // Cargar mÃ¡s items
         function loadMoreFactchecking() {
             visibleItems += getItemsPerPage();
             renderFactcheckingCards();
@@ -2521,7 +2518,7 @@ window.onload = init;
             }
         }
         
-        // Resetear paginación (cuando se cambia de tab o se busca)
+        // Resetear paginaciÃ³n (cuando se cambia de tab o se busca)
         function resetPagination() {
             visibleItems = getItemsPerPage();
         }
@@ -2531,7 +2528,7 @@ window.onload = init;
             const descripciones = {
                 'viable': 'Propuesta que puede ejecutarse de manera factible durante una gestión.',
                 'inviable': 'Propuesta que no puede ejecutarse dentro de una gestión o que contraviene la normativa vigente.',
-                'no_es_su_competencia': 'Propuesta cuyo desarrollo o cumplimiento no depende del ejecutivo. ',
+                'requiere_accion': 'Propuesta cuyo desarrollo o cumplimiento no depende exclusivamente del Ejecutivo, sino que requiere la acción de otros poderes del Estado.',
                 'inexacta': 'Compromiso que no presenta información concreta ni criterios medibles para su desarrollo o evaluación.',
                 'enganosa': 'Propuesta que incluye metas o cifras concretas, pero que sobredimensiona las capacidades reales del Ejecutivo, usa plazos o alcances irrealistas o presenta resultados que no son exigibles ni creíbles dadas las restricciones técnicas, presupuestales o institucionales.',
                 'indeterminado': 'No se cuenta con información suficiente para determinar la viabilidad de esta propuesta.'
@@ -2560,11 +2557,12 @@ window.onload = init;
                         </div>
                         
                         <div class="factchecking-veredicto ${veredictoClass}">
-                            <div class="factchecking-veredicto-label">${veredicto}
+                            <div class="factchecking-veredicto-label">
+                                ${veredicto}
                                 <span class="veredicto-descripcion">(${veredictoDescripcion})</span>
                             </div>
                             <div class="factchecking-veredicto-text">
-                                ${item.justificacion || 'Justificación no disponible'}
+                                ${item.justificacion || 'JustificaciÃ³n no disponible'}
                             </div>
                         </div>
                         
@@ -2583,12 +2581,12 @@ window.onload = init;
             if (v === 'viable') return 'VIABLE';
             // Inviable
             if (v === 'inviable') return 'INVIABLE';
-            // No esta en sus manos (con o sin tilde)
-            if (v.includes('no es') && v.includes('su competencia')) return 'NO ES DE SU COMPETENCIA';
-            // Enganosa (con o sin ene)
+            // Requiere acción de otros poderes del Estado
+            if (v.includes('requiere') && v.includes('acci')) return 'REQUIERE ACCIÓN DE OTROS PODERES DEL ESTADO';
+            // Engañosa (con o sin eñe)
             if (v.includes('enga')) return 'ENGAÑOSA';
             // Inexacta
-            if (v.includes('inexacta') || v === 'inex') return 'inexacta';
+            if (v.includes('inexacta') || v === 'inex') return 'INEXACTA';
             return 'INDETERMINADO';
         }
 
@@ -2599,9 +2597,9 @@ window.onload = init;
             if (v === 'viable') return 'viable';
             // Inviable
             if (v === 'inviable') return 'inviable';
-            // No esta en sus manos (con o sin tilde)
-            if (v.includes('no es') && v.includes('de su competencia')) return 'no_es_su_competencia';
-            // Enganosa (con o sin ene)
+            // Requiere acción de otros poderes del Estado
+            if (v.includes('requiere') && v.includes('acci')) return 'requiere_accion';
+            // Engañosa (con o sin eñe)
             if (v.includes('enga')) return 'enganosa';
             // Inexacta
             if (v.includes('inexacta') || v === 'inex') return 'inexacta';
@@ -2611,7 +2609,7 @@ window.onload = init;
         function formatFuentes(fuentes) {
             if (!fuentes) return 'No especificada';
             
-            // Normalizar saltos de línea (pueden venir como \n literal o como salto real)
+            // Normalizar saltos de lÃ­nea (pueden venir como \n literal o como salto real)
             let normalizedFuentes = fuentes
                 .replace(/\\n/g, '\n')  // Convertir \n literal a salto real
                 .replace(/\r\n/g, '\n') // Normalizar Windows line endings
@@ -2638,14 +2636,14 @@ window.onload = init;
                 } else {
                     // Es el nombre de una fuente, guardarlo para asociar con la URL siguiente
                     if (currentSource) {
-                        // Si ya había un nombre sin URL, agregarlo solo
+                        // Si ya habÃ­a un nombre sin URL, agregarlo solo
                         formattedParts.push(currentSource);
                     }
                     currentSource = line;
                 }
             }
             
-            // Si quedó un nombre sin URL al final
+            // Si quedÃ³ un nombre sin URL al final
             if (currentSource) {
                 formattedParts.push(currentSource);
             }
@@ -2677,42 +2675,93 @@ window.onload = init;
             
             currentFactcheckingFilter = filter;
             
-            // Mostrar/ocultar el input de búsqueda o el dropdown según el filtro
-            const searchContainer = document.getElementById('factcheckingSearchContainer');
-            const dropdownContainer = document.getElementById('factcheckingDropdownContainer');
-            const searchInput = document.getElementById('factcheckingSearchInput');
-            const dropdown = document.getElementById('factcheckingVeredictoDropdown');
+            // Referencias a los contenedores de dropdown
+            const partidoContainer = document.getElementById('factcheckingPartidoContainer');
+            const candidatoContainer = document.getElementById('factcheckingCandidatoContainer');
+            const veredictoContainer = document.getElementById('factcheckingVeredictoContainer');
             
-            if (filter === 'veredicto') {
-                // Mostrar dropdown, ocultar input de búsqueda
-                searchContainer.style.display = 'none';
-                dropdownContainer.style.display = 'block';
-                dropdown.value = ''; // Resetear selección
-            } else {
-                // Mostrar input de búsqueda, ocultar dropdown
-                searchContainer.style.display = 'block';
-                dropdownContainer.style.display = 'none';
-                searchInput.value = '';
-                searchInput.placeholder = getPlaceholder(filter);
+            // Ocultar todos los dropdowns primero
+            partidoContainer.style.display = 'none';
+            candidatoContainer.style.display = 'none';
+            veredictoContainer.style.display = 'none';
+            
+            // Mostrar el dropdown correspondiente y resetear su valor
+            if (filter === 'partido') {
+                partidoContainer.style.display = 'block';
+                document.getElementById('factcheckingPartidoDropdown').value = '';
+            } else if (filter === 'candidato') {
+                candidatoContainer.style.display = 'block';
+                document.getElementById('factcheckingCandidatoDropdown').value = '';
+            } else if (filter === 'veredicto') {
+                veredictoContainer.style.display = 'block';
+                document.getElementById('factcheckingVeredictoDropdown').value = '';
             }
             
-            // Resetear datos filtrados
+            // Resetear datos filtrados y mostrar estado inicial
             filteredFactcheckingData = [...factcheckingData];
+            hasSearched = false;
             renderFactcheckingCards();
-            hideFactcheckingAutocomplete();
         }
 
-        function getPlaceholder(filter) {
-            switch(filter) {
-                case 'partido': return 'Buscar partido...';
-                case 'candidato': return 'Buscar candidato...';
-                default: return 'Buscar...';
+        // ============================================
+        // POBLAR DROPDOWNS DE PARTIDO Y CANDIDATO
+        // ============================================
+        
+        function populateFactcheckingDropdowns() {
+            // Obtener partidos únicos
+            const partidos = [...new Set(factcheckingData.map(item => item.partido).filter(p => p))].sort();
+            const partidoDropdown = document.getElementById('factcheckingPartidoDropdown');
+            partidoDropdown.innerHTML = '<option value="">Seleccionar partido...</option>' + 
+                partidos.map(p => `<option value="${p}">${p}</option>`).join('');
+            
+            // Obtener candidatos únicos
+            const candidatos = [...new Set(factcheckingData.map(item => item.candidato).filter(c => c))].sort();
+            const candidatoDropdown = document.getElementById('factcheckingCandidatoDropdown');
+            candidatoDropdown.innerHTML = '<option value="">Seleccionar candidato...</option>' + 
+                candidatos.map(c => `<option value="${c}">${c}</option>`).join('');
+        }
+
+        // ============================================
+        // MANEJO DE DROPDOWNS
+        // ============================================
+        
+        function handlePartidoChange() {
+            const dropdown = document.getElementById('factcheckingPartidoDropdown');
+            const selectedValue = dropdown.value;
+            
+            // Marcar que se ha realizado búsqueda para mostrar las cards
+            hasSearched = true;
+            
+            if (!selectedValue) {
+                filteredFactcheckingData = [...factcheckingData];
+            } else {
+                filteredFactcheckingData = factcheckingData.filter(item => 
+                    (item.partido || '').toLowerCase() === selectedValue.toLowerCase()
+                );
             }
+            
+            resetPagination();
+            renderFactcheckingCards();
         }
-
-        // ============================================
-        // MANEJO DEL DROPDOWN DE VEREDICTO
-        // ============================================
+        
+        function handleCandidatoChange() {
+            const dropdown = document.getElementById('factcheckingCandidatoDropdown');
+            const selectedValue = dropdown.value;
+            
+            // Marcar que se ha realizado búsqueda para mostrar las cards
+            hasSearched = true;
+            
+            if (!selectedValue) {
+                filteredFactcheckingData = [...factcheckingData];
+            } else {
+                filteredFactcheckingData = factcheckingData.filter(item => 
+                    (item.candidato || '').toLowerCase() === selectedValue.toLowerCase()
+                );
+            }
+            
+            resetPagination();
+            renderFactcheckingCards();
+        }
         
         function handleVeredictoChange() {
             const dropdown = document.getElementById('factcheckingVeredictoDropdown');
@@ -2722,10 +2771,8 @@ window.onload = init;
             hasSearched = true;
             
             if (!selectedValue) {
-                // Si no hay selección, mostrar todos
                 filteredFactcheckingData = [...factcheckingData];
             } else {
-                // Filtrar por el veredicto seleccionado
                 filteredFactcheckingData = factcheckingData.filter(item => {
                     const veredictoClass = getVeredictoClass(item.veredicto);
                     return veredictoClass === selectedValue;
@@ -2735,216 +2782,6 @@ window.onload = init;
             resetPagination();
             renderFactcheckingCards();
         }
-
-        // ============================================
-        // BÚSQUEDA Y AUTOCOMPLETE (para partido y candidato)
-        // ============================================
-        
-        function handleFactcheckingSearch(event) {
-            const searchTerm = event.target.value.toLowerCase().trim();
-            
-            // Manejar navegación con teclado
-            if (event.key === 'ArrowDown') {
-                event.preventDefault();
-                navigateFactcheckingSuggestions(1);
-                return;
-            } else if (event.key === 'ArrowUp') {
-                event.preventDefault();
-                navigateFactcheckingSuggestions(-1);
-                return;
-            } else if (event.key === 'Enter') {
-                event.preventDefault();
-                selectFactcheckingHighlightedItem();
-                return;
-            } else if (event.key === 'Escape') {
-                hideFactcheckingAutocomplete();
-                return;
-            }
-            
-            // Si está vacío, mostrar todos
-            if (!searchTerm) {
-                filteredFactcheckingData = [...factcheckingData];
-                renderFactcheckingCards();
-                hideFactcheckingAutocomplete();
-                return;
-            }
-            
-            // Generar sugerencias
-            updateFactcheckingAutocomplete(searchTerm);
-        }
-        
-        // Seleccionar el item resaltado con Enter
-        function selectFactcheckingHighlightedItem() {
-            if (selectedFactcheckingSuggestionIndex >= 0 && selectedFactcheckingSuggestionIndex < factcheckingSuggestions.length) {
-                selectFactcheckingSuggestion(factcheckingSuggestions[selectedFactcheckingSuggestionIndex]);
-            }
-        }
-
-        function updateFactcheckingAutocomplete(searchTerm) {
-            const suggestions = new Set();
-            
-            factcheckingData.forEach(item => {
-                let value = '';
-                
-                switch(currentFactcheckingFilter) {
-                    case 'partido':
-                        value = item.partido || '';
-                        break;
-                    case 'candidato':
-                        value = item.candidato || '';
-                        break;
-                    case 'veredicto':
-                        value = item.veredicto || '';
-                        break;
-                }
-                
-                if (value.toLowerCase().includes(searchTerm)) {
-                    suggestions.add(JSON.stringify({
-                        value: value,
-                        type: currentFactcheckingFilter,
-                        partido: item.partido,
-                        candidato: item.candidato
-                    }));
-                }
-            });
-            
-            // Convertir a array y parsear JSON
-            factcheckingSuggestions = Array.from(suggestions).map(s => JSON.parse(s));
-            selectedFactcheckingSuggestionIndex = -1;
-            
-            renderFactcheckingSuggestions(searchTerm);
-        }
-
-        function renderFactcheckingSuggestions(searchTerm) {
-            const autocomplete = document.getElementById('factcheckingAutocomplete');
-            
-            if (factcheckingSuggestions.length === 0) {
-                autocomplete.innerHTML = '<div class="factchecking-autocomplete-item" style="cursor: default;">No se encontraron resultados</div>';
-                autocomplete.classList.add('show');
-                return;
-            }
-            
-            autocomplete.innerHTML = factcheckingSuggestions.slice(0, 8).map((item, index) => {
-                // Resaltar coincidencias
-                const highlightedValue = highlightMatch(item.value, searchTerm);
-                
-                // Determinar icono/badge según tipo
-                let iconContent = '';
-                if (item.type === 'veredicto') {
-                    const veredictoClass = getVeredictoClass(item.value);
-                    iconContent = `<span class="veredicto-badge ${veredictoClass}">${normalizeVeredicto(item.value)}</span>`;
-                } else {
-                    iconContent = item.type === 'candidato' ? '👤' : '🏛️';
-                }
-                
-                // Subtexto
-                let subText = '';
-                if (item.type === 'candidato') {
-                    subText = item.partido || '';
-                } else if (item.type === 'partido') {
-                    subText = item.candidato || '';
-                }
-                
-                return `
-                    <div class="factchecking-autocomplete-item" 
-                         data-index="${index}" 
-                         onclick="selectFactcheckingSuggestionByIndex(${index})">
-                        <div class="item-icon">${iconContent}</div>
-                        <div class="item-text">
-                            <div class="item-name">${highlightedValue}</div>
-                            ${subText ? `<div class="item-sub">${subText}</div>` : ''}
-                        </div>
-                    </div>
-                `;
-            }).join('');
-            
-            autocomplete.classList.add('show');
-        }
-
-        function highlightMatch(text, term) {
-            if (!text) return '';
-            const regex = new RegExp(`(${escapeRegex(term)})`, 'gi');
-            return text.replace(regex, '<span class="highlight">$1</span>');
-        }
-
-        function escapeRegex(string) {
-            return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        }
-
-        function navigateFactcheckingSuggestions(direction) {
-            const items = document.querySelectorAll('.factchecking-autocomplete-item[data-index]');
-            if (items.length === 0) return;
-            
-            // Remover active del anterior
-            if (selectedFactcheckingSuggestionIndex >= 0 && selectedFactcheckingSuggestionIndex < items.length) {
-                items[selectedFactcheckingSuggestionIndex].classList.remove('active');
-            }
-            
-            // Calcular nuevo índice
-            selectedFactcheckingSuggestionIndex += direction;
-            
-            if (selectedFactcheckingSuggestionIndex < 0) {
-                selectedFactcheckingSuggestionIndex = items.length - 1;
-            } else if (selectedFactcheckingSuggestionIndex >= items.length) {
-                selectedFactcheckingSuggestionIndex = 0;
-            }
-            
-            // Agregar active al nuevo
-            items[selectedFactcheckingSuggestionIndex].classList.add('active');
-            items[selectedFactcheckingSuggestionIndex].scrollIntoView({ block: 'nearest' });
-        }
-
-        function selectFactcheckingSuggestionByIndex(index) {
-            selectFactcheckingSuggestion(factcheckingSuggestions[index]);
-        }
-
-        function selectFactcheckingSuggestion(suggestion) {
-            if (!suggestion) return;
-            
-            const searchInput = document.getElementById('factcheckingSearchInput');
-            searchInput.value = suggestion.value;
-            
-            // Marcar que se ha realizado búsqueda
-            hasSearched = true;
-            
-            // Filtrar datos
-            filteredFactcheckingData = factcheckingData.filter(item => {
-                switch(currentFactcheckingFilter) {
-                    case 'partido':
-                        return (item.partido || '').toLowerCase() === suggestion.value.toLowerCase();
-                    case 'candidato':
-                        return (item.candidato || '').toLowerCase() === suggestion.value.toLowerCase();
-                    case 'veredicto':
-                        return normalizeVeredicto(item.veredicto) === normalizeVeredicto(suggestion.value);
-                    default:
-                        return true;
-                }
-            });
-            
-            resetPagination();
-            renderFactcheckingCards();
-            hideFactcheckingAutocomplete();
-        }
-
-        function showFactcheckingAutocomplete() {
-            const searchInput = document.getElementById('factcheckingSearchInput');
-            if (searchInput.value.trim().length > 0) {
-                updateFactcheckingAutocomplete(searchInput.value.toLowerCase().trim());
-            }
-        }
-
-        function hideFactcheckingAutocomplete() {
-            document.getElementById('factcheckingAutocomplete').classList.remove('show');
-            selectedFactcheckingSuggestionIndex = -1;
-        }
-
-        // Cerrar autocomplete al hacer click fuera
-        document.addEventListener('click', function(event) {
-            const searchBox = document.querySelector('.factchecking-search-box');
-            if (searchBox && !searchBox.contains(event.target)) {
-                hideFactcheckingAutocomplete();
-            }
-        });
     </script>
 
     <!-- metodología -->
