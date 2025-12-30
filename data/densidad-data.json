@@ -7,12 +7,12 @@
             "densidad": {
                 "agricultura": 1,
                 "medio-ambiente": 3,
-                "cambio-climatico": 7,
-                "cultura-turismo": 4,
+                "cambio-climatico": 4,
+                "cultura-turismo": 3,
                 "descentralizacion": 4,
                 "economia": 13,
-                "educacion": 11,
-                "energia-minera": 0,
+                "educacion": 10,
+                "energia-minera": 2,
                 "familia": 1,
                 "gobernanza-digital": 4,
                 "infraestructura": 6,
@@ -20,7 +20,7 @@
                 "programas-sociales": 14,
                 "salud": 10,
                 "seguridad": 7,
-                "transporte": 0,
+                "transporte": 2,
                 "vivienda": 3
             }
         },
@@ -37,7 +37,7 @@
                 "economia": 20,
                 "educacion": 10,
                 "energia-minera": 4,
-                "familia": 0,
+                "familia": 1,
                 "gobernanza-digital": 2,
                 "infraestructura": 24,
                 "justicia-dh": 0,
@@ -389,23 +389,23 @@
             "nombre": "Partido de los Trabajadores y Emprendedores",
             "logoUrl": "./img/logos/logo-partido-de-los-trabajadores.png",
             "densidad": {
-                "agricultura": 0,
-                "medio-ambiente": 0,
+                "agricultura": 6,
+                "medio-ambiente": 8,
                 "cambio-climatico": 0,
                 "cultura-turismo": 0,
                 "descentralizacion": 0,
-                "economia": 33,
+                "economia": 23,
                 "educacion": 0,
                 "energia-minera": 0,
                 "familia": 0,
                 "gobernanza-digital": 0,
-                "infraestructura": 33,
-                "justicia-dh": 0,
-                "programas-sociales": 0,
+                "infraestructura": 22,
+                "justicia-dh": 8,
+                "programas-sociales": 2,
                 "salud": 0,
-                "seguridad": 0,
+                "seguridad": 7,
                 "transporte": 0,
-                "vivienda": 33
+                "vivienda": 23
             }
         },
         {
@@ -442,10 +442,10 @@
                 "cambio-climatico": 0,
                 "cultura-turismo": 0,
                 "descentralizacion": 0,
-                "economia": 17,
-                "educacion": 20,
+                "economia": 15,
+                "educacion": 16,
                 "energia-minera": 0,
-                "familia": 0,
+                "familia": 6,
                 "gobernanza-digital": 3,
                 "infraestructura": 7,
                 "justicia-dh": 13,
@@ -482,30 +482,6 @@
         },
         {
             "id": "21",
-            "nombre": "Partido Democrático Federal",
-            "logoUrl": "./img/logos/logo-peru-federal.png",
-            "densidad": {
-                "agricultura": 0,
-                "medio-ambiente": 8,
-                "cambio-climatico": 1,
-                "cultura-turismo": 1,
-                "descentralizacion": 1,
-                "economia": 13,
-                "educacion": 9,
-                "energia-minera": 0,
-                "familia": 0,
-                "gobernanza-digital": 6,
-                "infraestructura": 6,
-                "justicia-dh": 19,
-                "programas-sociales": 8,
-                "salud": 14,
-                "seguridad": 11,
-                "transporte": 10,
-                "vivienda": 3
-            }
-        },
-        {
-            "id": "22",
             "nombre": "Partido Morado",
             "logoUrl": "./img/logos/logo-partido-morado.png",
             "densidad": {
@@ -529,23 +505,23 @@
             }
         },
         {
-            "id": "23",
+            "id": "22",
             "nombre": "Partido Patriótico del Perú",
             "logoUrl": "./img/logos/logo-ppp.png",
             "densidad": {
                 "agricultura": 6,
                 "medio-ambiente": 3,
                 "cambio-climatico": 0,
-                "cultura-turismo": 0,
+                "cultura-turismo": 1,
                 "descentralizacion": 4,
-                "economia": 15,
-                "educacion": 15,
-                "energia-minera": 0,
+                "economia": 14,
+                "educacion": 14,
+                "energia-minera": 2,
                 "familia": 3,
-                "gobernanza-digital": 0,
+                "gobernanza-digital": 2,
                 "infraestructura": 9,
-                "justicia-dh": 14,
-                "programas-sociales": 8,
+                "justicia-dh": 13,
+                "programas-sociales": 9,
                 "salud": 3,
                 "seguridad": 10,
                 "transporte": 4,
@@ -553,7 +529,7 @@
             }
         },
         {
-            "id": "24",
+            "id": "23",
             "nombre": "Partido Perú Moderno",
             "logoUrl": "./img/logos/logo-peru-moderno.png",
             "densidad": {
@@ -561,23 +537,23 @@
                 "medio-ambiente": 4,
                 "cambio-climatico": 5,
                 "cultura-turismo": 0,
-                "descentralizacion": 0,
-                "economia": 26,
+                "descentralizacion": 3,
+                "economia": 21,
                 "educacion": 15,
-                "energia-minera": 0,
+                "energia-minera": 3,
                 "familia": 0,
                 "gobernanza-digital": 2,
                 "infraestructura": 4,
                 "justicia-dh": 5,
                 "programas-sociales": 8,
-                "salud": 16,
-                "seguridad": 9,
+                "salud": 15,
+                "seguridad": 8,
                 "transporte": 1,
                 "vivienda": 2
             }
         },
         {
-            "id": "25",
+            "id": "24",
             "nombre": "Perú Acción",
             "logoUrl": "./img/logos/logo-peru-accion.png",
             "densidad": {
@@ -601,7 +577,7 @@
             }
         },
         {
-            "id": "26",
+            "id": "25",
             "nombre": "Perú Libre",
             "logoUrl": "./img/logos/logo-peru-libre.png",
             "densidad": {
@@ -617,15 +593,15 @@
                 "gobernanza-digital": 1,
                 "infraestructura": 6,
                 "justicia-dh": 9,
-                "programas-sociales": 18,
+                "programas-sociales": 12,
                 "salud": 15,
                 "seguridad": 8,
                 "transporte": 0,
-                "vivienda": 0
+                "vivienda": 6
             }
         },
         {
-            "id": "27",
+            "id": "26",
             "nombre": "Perú Primero",
             "logoUrl": "./img/logos/logo-peru-primero.png",
             "densidad": {
@@ -649,7 +625,7 @@
             }
         },
         {
-            "id": "28",
+            "id": "27",
             "nombre": "Podemos Perú",
             "logoUrl": "./img/logos/logo-podemos-peru.png",
             "densidad": {
@@ -673,31 +649,31 @@
             }
         },
         {
-            "id": "29",
+            "id": "28",
             "nombre": "Primero la Gente",
             "logoUrl": "./img/logos/logo-primero-la-gente.png",
             "densidad": {
-                "agricultura": 0,
+                "agricultura": 5,
                 "medio-ambiente": 1,
                 "cambio-climatico": 2,
                 "cultura-turismo": 0,
                 "descentralizacion": 3,
-                "economia": 17,
-                "educacion": 9,
-                "energia-minera": 0,
+                "economia": 7,
+                "educacion": 7,
+                "energia-minera": 4,
                 "familia": 3,
                 "gobernanza-digital": 7,
                 "infraestructura": 5,
-                "justicia-dh": 19,
-                "programas-sociales": 16,
+                "justicia-dh": 16,
+                "programas-sociales": 14,
                 "salud": 11,
-                "seguridad": 14,
+                "seguridad": 12,
                 "transporte": 0,
                 "vivienda": 5
             }
         },
         {
-            "id": "30",
+            "id": "29",
             "nombre": "PRIN",
             "logoUrl": "./img/logos/logo-prin.png",
             "densidad": {
@@ -721,7 +697,7 @@
             }
         },
         {
-            "id": "31",
+            "id": "30",
             "nombre": "Progresemos",
             "logoUrl": "./img/logos/logo-progresemos.png",
             "densidad": {
@@ -745,19 +721,19 @@
             }
         },
         {
-            "id": "32",
+            "id": "31",
             "nombre": "Renovación Popular",
             "logoUrl": "./img/logos/logo-renovacion-popular.png?v2",
             "densidad": {
                 "agricultura": 7,
-                "medio-ambiente": 9,
+                "medio-ambiente": 6,
                 "cambio-climatico": 0,
                 "cultura-turismo": 0,
                 "descentralizacion": 2,
                 "economia": 9,
                 "educacion": 4,
                 "energia-minera": 7,
-                "familia": 0,
+                "familia": 4,
                 "gobernanza-digital": 5,
                 "infraestructura": 7,
                 "justicia-dh": 9,
@@ -769,22 +745,22 @@
             }
         },
         {
-            "id": "33",
+            "id": "32",
             "nombre": "Salvemos al Perú",
             "logoUrl": "./img/logos/logo-salvemos-al-peru.png",
             "densidad": {
                 "agricultura": 1,
-                "medio-ambiente": 8,
-                "cambio-climatico": 7,
-                "cultura-turismo": 0,
+                "medio-ambiente": 7,
+                "cambio-climatico": 6,
+                "cultura-turismo": 5,
                 "descentralizacion": 4,
-                "economia": 17,
-                "educacion": 9,
+                "economia": 14,
+                "educacion": 8,
                 "energia-minera": 4,
                 "familia": 0,
                 "gobernanza-digital": 3,
                 "infraestructura": 5,
-                "justicia-dh": 8,
+                "justicia-dh": 7,
                 "programas-sociales": 12,
                 "salud": 13,
                 "seguridad": 7,
@@ -793,7 +769,7 @@
             }
         },
         {
-            "id": "34",
+            "id": "33",
             "nombre": "Sí Creo",
             "logoUrl": "./img/logos/logo-si-creo.png",
             "densidad": {
@@ -801,9 +777,9 @@
                 "medio-ambiente": 5,
                 "cambio-climatico": 0,
                 "cultura-turismo": 0,
-                "descentralizacion": 0,
-                "economia": 16,
-                "educacion": 10,
+                "descentralizacion": 3,
+                "economia": 14,
+                "educacion": 9,
                 "energia-minera": 3,
                 "familia": 0,
                 "gobernanza-digital": 3,
@@ -817,7 +793,7 @@
             }
         },
         {
-            "id": "35",
+            "id": "34",
             "nombre": "Somos Perú",
             "logoUrl": "./img/logos/logo-somos-peru.png",
             "densidad": {
@@ -841,27 +817,27 @@
             }
         },
         {
-            "id": "36",
+            "id": "35",
             "nombre": "Un Camino Diferente",
             "logoUrl": "./img/logos/logo-un-camino-diferente.png",
             "densidad": {
-                "agricultura": 0,
-                "medio-ambiente": 12,
+                "agricultura": 2,
+                "medio-ambiente": 2,
                 "cambio-climatico": 2,
                 "cultura-turismo": 0,
                 "descentralizacion": 0,
-                "economia": 24,
-                "educacion": 10,
-                "energia-minera": 16,
+                "economia": 20,
+                "educacion": 6,
+                "energia-minera": 1,
                 "familia": 0,
-                "gobernanza-digital": 0,
-                "infraestructura": 12,
-                "justicia-dh": 0,
-                "programas-sociales": 0,
-                "salud": 12,
-                "seguridad": 12,
-                "transporte": 0,
-                "vivienda": 2
+                "gobernanza-digital": 3,
+                "infraestructura": 16,
+                "justicia-dh": 12,
+                "programas-sociales": 12,
+                "salud": 2,
+                "seguridad": 15,
+                "transporte": 6,
+                "vivienda": 0
             }
         }
     ]
