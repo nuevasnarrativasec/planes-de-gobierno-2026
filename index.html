@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v43">
+    <link rel="stylesheet" href="./css/style.css?v47">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -191,9 +191,11 @@
             <div class="factchecking-dropdown-container" id="factcheckingDropdownContainer" style="display: none;">
                 <select class="factchecking-dropdown" id="factcheckingVeredictoDropdown" onchange="handleVeredictoChange()">
                     <option value="">Seleccionar veredicto...</option>
-                    <option value="verdadera">Verdadero</option>
-                    <option value="falsa">Falso</option>
-                    <option value="enganosa">Engañoso</option>
+                    <option value="viable">Viable</option>
+                    <option value="inviable">Inviable</option>
+                    <option value="no_en_sus_manos">No está en sus manos</option>
+                    <option value="enganosa">Engañosa</option>
+                    <option value="propuesta_vaga">Propuesta vaga</option>
                 </select>
             </div>
 
@@ -2500,17 +2502,32 @@ window.onload = init;
         function normalizeVeredicto(veredicto) {
             if (!veredicto) return 'INDETERMINADO';
             const v = veredicto.toLowerCase().trim();
-            if (v.includes('verdad')) return 'VERDADERA';
-            if (v.includes('fals')) return 'FALSA';
-            if (v.includes('engañ') || v.includes('engan')) return 'ENGAÑOSA';
+            // Viable (pero no inviable)
+            if (v === 'viable') return 'VIABLE';
+            // Inviable
+            if (v === 'inviable') return 'INVIABLE';
+            // No esta en sus manos (con o sin tilde)
+            if (v.includes('no est') && v.includes('en sus manos')) return 'NO ESTA EN SUS MANOS';
+            // Enganosa (con o sin ene)
+            if (v.includes('enga')) return 'ENGAÑOSA';
+            // Propuesta vaga
+            if (v.includes('propuesta vaga') || v === 'vaga') return 'PROPUESTA VAGA';
             return 'INDETERMINADO';
         }
 
         function getVeredictoClass(veredicto) {
-            const v = veredicto.toLowerCase();
-            if (v.includes('verdad')) return 'verdadera';
-            if (v.includes('fals')) return 'falsa';
-            if (v.includes('engañ') || v.includes('engan')) return 'enganosa';
+            if (!veredicto) return 'indeterminado';
+            const v = veredicto.toLowerCase().trim();
+            // Viable (pero no inviable)
+            if (v === 'viable') return 'viable';
+            // Inviable
+            if (v === 'inviable') return 'inviable';
+            // No esta en sus manos (con o sin tilde)
+            if (v.includes('no est') && v.includes('en sus manos')) return 'no_en_sus_manos';
+            // Enganosa (con o sin ene)
+            if (v.includes('enga')) return 'enganosa';
+            // Propuesta vaga
+            if (v.includes('propuesta vaga') || v === 'vaga') return 'propuesta_vaga';
             return 'indeterminado';
         }
 
