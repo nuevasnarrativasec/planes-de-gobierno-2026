@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v50">
+    <link rel="stylesheet" href="./css/style.css?v51">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
 </head>
@@ -195,7 +195,7 @@
                     <option value="inviable">Inviable</option>
                     <option value="no_en_sus_manos">No está en sus manos</option>
                     <option value="enganosa">Engañosa</option>
-                    <option value="propuesta_vaga">Propuesta vaga</option>
+                    <option value="inexacta">Inexacta</option>
                 </select>
             </div>
 
@@ -1384,9 +1384,12 @@ function renderComparisonCard(item, index) {
                     ${propuestasHTML}
                 </div>
                 ${compData.tonoDiscursivo || compData.coherencia ? `
-                    <div class="discourse-tone">
+                    <div class="discourse-tone no-bg">
                         <p><strong>TONO DISCURSIVO:</strong> ${compData.tonoDiscursivo || 'N/A'}</p>
                         <p><strong>COHERENCIA:</strong> ${compData.coherencia || 'N/A'}</p>
+                    </div>
+                    <div class="discourse-tone ancla">
+                        <p>Ver criterios de análisis</p>
                     </div>
                 ` : ''}
             </div>
@@ -2510,8 +2513,8 @@ window.onload = init;
             if (v.includes('no est') && v.includes('en sus manos')) return 'NO ESTA EN SUS MANOS';
             // Enganosa (con o sin ene)
             if (v.includes('enga')) return 'ENGAÑOSA';
-            // Propuesta vaga
-            if (v.includes('propuesta vaga') || v === 'vaga') return 'PROPUESTA VAGA';
+            // Inexacta
+            if (v.includes('inexacta') || v === 'inex') return 'inexacta';
             return 'INDETERMINADO';
         }
 
@@ -2526,8 +2529,8 @@ window.onload = init;
             if (v.includes('no est') && v.includes('en sus manos')) return 'no_en_sus_manos';
             // Enganosa (con o sin ene)
             if (v.includes('enga')) return 'enganosa';
-            // Propuesta vaga
-            if (v.includes('propuesta vaga') || v === 'vaga') return 'propuesta_vaga';
+            // Inexacta
+            if (v.includes('inexacta') || v === 'inex') return 'inexacta';
             return 'indeterminado';
         }
 
@@ -2887,6 +2890,29 @@ window.onload = init;
                     // Si está visible, lo ocultamos
                     contenidoOculto.style.display = "none";
                     botonLeerMas.innerText = "Conoce el detalle del método de análisis aquí"; // Restauramos el texto
+                }
+            });
+
+            // Función para "Ver criterios de análisis" en las tarjetas del comparador
+            document.addEventListener('click', function(e) {
+                // Verificar si se hizo clic en el enlace de criterios de análisis
+                if (e.target.closest('.discourse-tone.ancla')) {
+                    e.preventDefault();
+                    
+                    // Mostrar el detalle de metodología si está oculto
+                    if (contenidoOculto.style.display === "none") {
+                        contenidoOculto.style.display = "block";
+                        botonLeerMas.innerText = "Ocultar detalle del método";
+                    }
+                    
+                    // Scroll suave hacia la sección de metodología
+                    const boxMetodologia = document.querySelector('.box-metodologia');
+                    if (boxMetodologia) {
+                        boxMetodologia.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
                 }
             });
         });
