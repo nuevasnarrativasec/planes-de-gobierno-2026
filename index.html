@@ -38,8 +38,7 @@
 
         <div class="btn-ver-hojas">
             <a href="https://elcomercio.pe/politica/elecciones-peru-2026-candidatos-presidenciales-hojas-de-vida-especdis-noticia/" target="_blank">Ver Hojas de vida de candidatos</a>
-        </div>   
-        
+        </div>  
 
         <p class="bajada">
             <b>Analizamos los planes, sintetizamos la información con ayuda de la IA y lo verificamos editorialmente. </b> Ahora podrás elegir un candidato o partido, filtrar por tema, mirar resúmenes y detectar de un vistazo qué proponen y qué omiten. Disminuimos el ruido para ofrecerte más claridad para que estés bien informado antes de emitir tu voto.
@@ -150,8 +149,8 @@
         <!-- Sección de Factchecking -->
         <section class="factchecking-section" id="factcheckingSection">
             <div class="factchecking-header">
-                <h2>FactChecking</h2>
-                <p>¿Qué tan ciertas son las propuestas? Nuestro equipo eligió 3 frases clave por plan y las sometió a verificación. Aquí verás qué se dijo, qué dicen los datos y cómo lo comprobamos, con un veredicto al final.</p>
+                <h2>Viabilidad de promesas</h2>
+                <p>¿Qué tan factibles son las propuestas? Nuestro equipo seleccionó tres frases clave por plan y las sometió a una verificación. Aquí verás qué se dijo, qué dicen los datos y cómo analizamos que sean realizables.</p>
             </div>
 
             <span class="filtrar">Filtrar por:</span>
@@ -243,7 +242,6 @@
             <span>Has scroll horizontal</span>
         
         </div>
-
         
         <div class="main-tarjetas">
             <div class="scroll-container">
@@ -254,7 +252,7 @@
                     </div>
                     <h3>Cobertura por plan</h3>
                     <div class="color-line"></div>
-                    <p>La amplitud temática varía con fuerza: <span>hay planes que cubren hasta 17 ejes, frente a otros que apenas llegan a 3.</span> El promedio se mantiene en 14 temas por partido.</p>
+                    <p>La amplitud temática varíable: <span>hay planes que cubren hasta 17 ejes, frente a otros que apenas llegan a 9.</span> El promedio se mantiene en 15 temas por partido.</p>
                     <div class="separator-dotted"></div>
                     <p>Muchos temas indican amplitud, no necesariamente mejor sustento.</p>
                 </div>
@@ -298,7 +296,7 @@
                     </div>
                     <h3>Menos espacio en los planes (promedio)</h3>
                     <div class="color-line"></div>
-                    <p style="margin-top: auto; margin-bottom: auto;">Pese a su importancia ciudadana, temas como  <span>Transporte (1.2%) y Cultura (1.4%)</span> ocupan un espacio insignificante en la redacción de los documentos.</p>
+                    <p style="margin-top: auto; margin-bottom: auto;">Pese a su importancia ciudadana, temas como <span>Familia (0.58%), Transporte (1.25%) y Cultura (1.43%) </span> ocupan un espacio insignificante en la redacción de los documentos.</p>
                     <div class="separator-dotted"></div>
                     <p>Poco espacio no representa calidad.</p>
                 </div>
@@ -309,7 +307,7 @@
                     </div>
                     <h3>Tema dominante por plan</h3>
                     <div class="color-line"></div>
-                    <p style="margin-top: auto; margin-bottom: auto;">La Economía no solo es transversal, <span>sino que es el tema que acapara el mayor volumen de palabras (14.2%) </span>en el promedio nacional.</p>
+                    <p style="margin-top: auto; margin-bottom: auto;">La Economía no solo es transversal, <span>sino que es el tema que acapara el mayor volumen de palabras (14.23%) </span>en el promedio nacional.</p>
                     <div class="separator-dotted"></div>
                     <p>Muestra prioridad, mas no la profundidad.</p>
                 </div>
@@ -341,7 +339,6 @@
             <h2>Densidad discursiva</h2>
             <p>
                 Descubre qué porcentaje del plan se dedica a cada tema. Más espacio no siempre significa propuestas más claras ni mejor sustento.
-
             </p>
             <div class="box-indicador indicador-2">
                 <img src="./img/icon-horizontal-scroll.png" alt="" width="100%">
@@ -1059,18 +1056,27 @@ function renderDensityBars() {
                 ? `<img src="${partido.logoUrl}" alt="${partido.partido}" onerror="this.style.display='none';">` 
                 : '🍎';
             
+            // Calcular suma total de porcentajes para normalizar (una sola vez)
+            const totalPercentage = themes.reduce((sum, theme) => {
+                return sum + (partido.temas[theme.id] || 0);
+            }, 0);
+            
             const segmentsHTML = themes.map((theme, themeIndex) => {
-                const percentage = partido.temas[theme.id] || 0;
+                const originalPercentage = partido.temas[theme.id] || 0;
+                // Normalizar para que la barra ocupe el 100% del ancho
+                const normalizedPercentage = totalPercentage > 0 
+                    ? (originalPercentage / totalPercentage) * 100 
+                    : 0;
                 const isSelected = theme.id === selectedTheme;
                 const dimmedClass = selectedTheme ? (isSelected ? 'highlighted' : 'dimmed') : '';
                 
                 return `
                     <div class="density-segment theme-${theme.id} ${dimmedClass}" 
-                         style="width: ${percentage}%"
+                         style="width: ${normalizedPercentage}%"
                          data-theme="${theme.id}"
                          data-theme-index="${themeIndex}"
                          onclick="selectThemeFromBar(${themeIndex})">
-                        <div class="density-tooltip">${theme.name}: ${percentage}%</div>
+                        <div class="density-tooltip">${theme.name}: ${originalPercentage}%</div>
                     </div>
                 `;
             }).join('');
@@ -1120,18 +1126,27 @@ function renderDensityBars() {
             const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
             const selectedPercentage = partido.temas[selectedTheme] || 0;
             
+            // Calcular suma total de porcentajes para normalizar
+            const totalPercentage = themes.reduce((sum, theme) => {
+                return sum + (partido.temas[theme.id] || 0);
+            }, 0);
+            
             const segmentsHTML = themes.map((theme, themeIndex) => {
-                const percentage = partido.temas[theme.id] || 0;
+                const originalPercentage = partido.temas[theme.id] || 0;
+                // Normalizar para que la barra ocupe el 100% del ancho
+                const normalizedPercentage = totalPercentage > 0 
+                    ? (originalPercentage / totalPercentage) * 100 
+                    : 0;
                 const isSelected = theme.id === selectedTheme;
                 const dimmedClass = selectedTheme ? (isSelected ? 'highlighted' : 'dimmed') : '';
                 
                 return `
                     <div class="density-segment theme-${theme.id} ${dimmedClass}" 
-                         style="width: ${percentage}%"
+                         style="width: ${normalizedPercentage}%"
                          data-theme="${theme.id}"
                          data-theme-index="${themeIndex}"
                          onclick="selectThemeFromBar(${themeIndex})">
-                        <div class="density-tooltip">${theme.name}: ${percentage}%</div>
+                        <div class="density-tooltip">${theme.name}: ${originalPercentage}%</div>
                     </div>
                 `;
             }).join('');
@@ -1300,7 +1315,7 @@ function renderComparisonCard(item, index) {
                     <div class="card-party">${item.nombre}</div>
                 </div>
                 <p style="text-align: center; color: #999; padding: 40px 20px;">
-                    No hay información disponible para este tema
+                    <b>Sin propuestas concretas:</b> Tema ausente o mencionado solo de manera transversal, careciendo de proyectos o medidas específicas que lo sustenten como eje autónomo.
                 </p>
             </div>
         `;
