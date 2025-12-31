@@ -461,7 +461,7 @@ html {
             font: 1rem / 1.5 "Roboto", sans-serif;
             font-weight: 400;
             margin: 0 auto;
-            max-width: 800px;
+            max-width: 600px;
             text-align: center;
         }
 
@@ -1802,7 +1802,7 @@ html {
             font: 1rem / 1.5 "Roboto", sans-serif;
             font-weight: 400;
             margin: 0 auto 25px;
-            max-width: 600px;
+            max-width: 550px;
             text-align: center;
         }
 
