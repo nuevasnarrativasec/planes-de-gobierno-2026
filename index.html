@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v55">
+    <link rel="stylesheet" href="./css/style.css?v56">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
     <style>
@@ -76,8 +76,11 @@
     <div id="header" class="header">
         <div class="ctn-header">
             <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/logo-tu-decides-color.png" alt="Tú Decides" width="100%" class="logo-tu-decides">
-            <h1>¿Qué propone tu candidato?</h1>
-            <h2>Una guía rápida para comparar planes de gobierno 2026–2031.</h2>
+            <div class="box-titulo-altura">
+                <h1>¿Qué propone tu candidato?</h1>
+                <span class="separador"></span>
+                <h2>Una guía rápida para comparar planes de gobierno 2026–2031.</h2>
+            </div>            
 
             <div id="social">
                 <button id="fb" class="sharer button" data-sharer="facebook" data-hashtag="" data-url="https://elcomercio.pe/politica/elecciones-peru-2026-planes-de-gobierno-propuestas-comparacion-fact-checking-candidatos-presidenciales-especdis-noticia/">Facebook</button>
@@ -99,7 +102,7 @@
         </div>  
 
         <p class="bajada">
-            <b>Analizamos los planes, sintetizamos la información con ayuda de la IA y lo verificamos editorialmente. </b> Ahora podrás elegir un candidato o partido, filtrar por tema, mirar resúmenes y detectar de un vistazo qué proponen y qué omiten. Disminuimos el ruido para ofrecerte más claridad para que estés bien informado antes de emitir tu voto.
+            <b>Analizamos los planes de gobierno, sintetizamos miles de páginas con inteligencia artificial y verificamos cada dato editorialmente. </b> Esta herramienta no te dirá por quién votar ni cuál plan es 'mejor', pero te permitirá explorar, filtrar y comparar objetivamente qué proponen (y qué omiten) los candidatos. A través de algunos indicadores disminuimos el ruido para que tomes una decisión basada en los documentos oficiales. 
         </p>
         <span class="update">Actualizado al 30/12/2025</span>    
         <span class="aviso" style="color: #9e9d9d; display: block; font: .9rem/1.5 'roboto'; margin: 5px auto; max-width: 630px; padding: 0 10px; text-align: center;">El Plan de Gobierno del candidato Armando Massé de Perú Federal aún no se encuentra disponible. El plan de Marisol Pérez Tello de Primero la Gente se obtuvo de su cuenta oficial en X.</span>
@@ -470,7 +473,7 @@
             <div id="detalle-oculto" style="display: none;">
                 <h6>¿Cómo se realizó el análisis?</h6>
                 <p>
-                    El análisis se basa en los planes de gobierno presentados ante el JNE, procesados mediante flujos de automatización con n8n para su lectura, limpieza y estandarización.
+                    El análisis se basa en los planes de gobierno presentados ante el JNE, procesados mediante la plataforma de automatización de flujos n8n para su lectura, limpieza y estandarización.
                 </p>
                 <p>
                     Cada plan fue segmentado en unidades de análisis comparables (fragmentos), lo que permitió evaluar de forma consistente los temas, el tono y la coherencia del discurso.
