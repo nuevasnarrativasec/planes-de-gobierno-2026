@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v56">
+    <link rel="stylesheet" href="./css/style.css?v57">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
     <style>
@@ -169,6 +169,34 @@
                     </div>
                 </div>
             </div>  
+        </div>
+
+        <!-- Popup Explicativo del Comparador -->
+        <div class="comparison-popup-container" id="comparisonPopupContainer">
+            <div class="comparison-popup-blur" id="comparisonPopupBlur"></div>
+            <div class="comparison-popup" id="comparisonPopup">
+                <div class="popup-icon">
+                    <img src="./img/icon-concepto.jpg" alt="" width="90%" style="margin: 0 auto; display: block;">
+                </div>
+                
+                <div class="popup-content">
+                    <div class="popup-section">
+                        <h4>CONSISTENCIA INTERNA</h4>
+                        <p>Clasifica el plan según su completitud estructural (alineación entre problema, solución y resultado).De esta forma tenemos:</p>
+                        <p class="popup-item">• <strong>Estructurada:</strong> Cumple el ciclo lógico completo: Diagnóstico + Propuesta + Meta cuantificable.</p>
+                        <p class="popup-item">• <strong>Parcialmente Estructurada:</strong> Propuestas claras, pero carece de diagnóstico preciso o metas medibles.</p>
+                        <p class="popup-item">• <strong>Declarativa:</strong> Enunciados de intenciones o deseos sin ruta de implementación clara.</p>
+                    </div>
+                    
+                    <div class="popup-section">
+                        <h4>El ENFOQUE DISCURSIVO</h4>
+                        <p>Identifica la carga semántica predominante en la redacción. Clasificados como:</p>
+                        <p class="popup-item">• <strong>Normativo:</strong> Énfasis en valores, principios doctrinarios y el "deber ser".</p>
+                        <p class="popup-item">• <strong>Operativo:</strong> Énfasis en acciones concretas, ejecución inmediata y "el cómo".</p>
+                        <p class="popup-item">• <strong>Tecnocrático:</strong> Énfasis en diagnósticos técnicos, evidencia estadística y viabilidad presupuestal.</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Sección de Comparador -->
@@ -2874,6 +2902,189 @@
                 boton.style.pointerEvents = 'all';
             }
         });
+    </script>
+
+    <!-- Popup Explicativo del Comparador - Control de Scroll -->
+    <script>
+        (function() {
+            // Variables para el control del popup
+            const popupContainer = document.getElementById('comparisonPopupContainer');
+            const comparisonSection = document.getElementById('comparisonSection');
+            
+            if (!popupContainer || !comparisonSection) return;
+            
+            // Configuración
+            const CONFIG = {
+                triggerOffset: 200,      // Píxeles antes de llegar a la sección
+                exitOffset: 400,         // Píxeles de scroll adicional para cerrar
+                minDisplayTime: 1500,    // Tiempo mínimo de visualización (ms)
+                parallaxFactor: 0.3      // Factor de movimiento parallax
+            };
+            
+            // Estado
+            let popupState = {
+                isActive: false,
+                hasBeenShown: false,
+                showTimestamp: 0,
+                lastScrollY: 0,
+                triggerPoint: 0,
+                exitPoint: 0
+            };
+            
+            // Calcular puntos de trigger
+            function calculateTriggerPoints() {
+                const sectionRect = comparisonSection.getBoundingClientRect();
+                const sectionTop = sectionRect.top + window.pageYOffset;
+                
+                popupState.triggerPoint = sectionTop - window.innerHeight + CONFIG.triggerOffset;
+                popupState.exitPoint = popupState.triggerPoint + CONFIG.exitOffset;
+            }
+            
+            // Mostrar popup
+            function showPopup() {
+                if (popupState.isActive) return;
+                
+                popupState.isActive = true;
+                popupState.hasBeenShown = true;
+                popupState.showTimestamp = Date.now();
+                
+                popupContainer.classList.add('active');
+                document.body.style.overflow = 'hidden';
+                
+                console.log('🎯 Popup mostrado');
+            }
+            
+            // Ocultar popup
+            function hidePopup() {
+                if (!popupState.isActive) return;
+                
+                // Verificar tiempo mínimo de visualización
+                const timeElapsed = Date.now() - popupState.showTimestamp;
+                if (timeElapsed < CONFIG.minDisplayTime) {
+                    setTimeout(hidePopup, CONFIG.minDisplayTime - timeElapsed);
+                    return;
+                }
+                
+                popupState.isActive = false;
+                popupContainer.classList.remove('active');
+                document.body.style.overflow = '';
+                
+                console.log('🎯 Popup ocultado');
+            }
+            
+            // Manejar scroll
+            function handleScroll() {
+                const currentScrollY = window.pageYOffset;
+                
+                calculateTriggerPoints();
+                
+                // Lógica de aparición - solo mostrar una vez
+                if (!popupState.isActive && !popupState.hasBeenShown) {
+                    // Mostrar popup cuando llegamos al punto de trigger
+                    if (currentScrollY >= popupState.triggerPoint && 
+                        currentScrollY < popupState.exitPoint) {
+                        showPopup();
+                    }
+                }
+                
+                popupState.lastScrollY = currentScrollY;
+            }
+            
+            // Manejar wheel cuando el popup está activo
+            function handleWheel(e) {
+                if (!popupState.isActive) return;
+                
+                // Verificar tiempo mínimo
+                const timeElapsed = Date.now() - popupState.showTimestamp;
+                if (timeElapsed < CONFIG.minDisplayTime) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Cualquier scroll cierra el popup y lleva a la sección
+                hidePopup();
+                
+                // Pequeño delay y luego hacer scroll a la sección del comparador
+                setTimeout(() => {
+                    const sectionRect = comparisonSection.getBoundingClientRect();
+                    const targetScroll = sectionRect.top + window.pageYOffset - 50;
+                    
+                    window.scrollTo({
+                        top: targetScroll,
+                        behavior: 'smooth'
+                    });
+                }, 100);
+                
+                e.preventDefault();
+            }
+            
+            // Manejar touch para móviles
+            let touchStartY = 0;
+            
+            function handleTouchStart(e) {
+                if (!popupState.isActive) return;
+                touchStartY = e.touches[0].clientY;
+            }
+            
+            function handleTouchMove(e) {
+                if (!popupState.isActive) return;
+                
+                const timeElapsed = Date.now() - popupState.showTimestamp;
+                if (timeElapsed < CONFIG.minDisplayTime) {
+                    e.preventDefault();
+                    return;
+                }
+                
+                const touchY = e.touches[0].clientY;
+                const deltaY = touchStartY - touchY;
+                
+                // Si el swipe es mayor a 50px, cerrar y continuar
+                if (Math.abs(deltaY) > 50) {
+                    hidePopup();
+                    setTimeout(() => {
+                        comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                    e.preventDefault();
+                }
+            }
+            
+            // También cerrar con click en el blur
+            popupContainer.querySelector('.comparison-popup-blur').addEventListener('click', () => {
+                const timeElapsed = Date.now() - popupState.showTimestamp;
+                if (timeElapsed >= CONFIG.minDisplayTime) {
+                    hidePopup();
+                    setTimeout(() => {
+                        comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            });
+            
+            // Cerrar con tecla Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && popupState.isActive) {
+                    const timeElapsed = Date.now() - popupState.showTimestamp;
+                    if (timeElapsed >= CONFIG.minDisplayTime) {
+                        hidePopup();
+                        setTimeout(() => {
+                            comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
+                }
+            });
+            
+            // Event listeners
+            window.addEventListener('scroll', handleScroll, { passive: true });
+            window.addEventListener('wheel', handleWheel, { passive: false });
+            window.addEventListener('touchstart', handleTouchStart, { passive: true });
+            window.addEventListener('touchmove', handleTouchMove, { passive: false });
+            window.addEventListener('resize', calculateTriggerPoints);
+            
+            // Inicializar
+            calculateTriggerPoints();
+            popupState.lastScrollY = window.pageYOffset;
+            
+            console.log('✅ Popup del comparador inicializado');
+        })();
     </script>
    
    
