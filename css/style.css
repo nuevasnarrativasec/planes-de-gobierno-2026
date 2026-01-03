@@ -2367,8 +2367,11 @@ html {
         #header .ctn-header h1{
             font: 2.2rem / 1.1 'Guardian Egyp Bold';
             margin-top: 10px;
+            display: block;
+        text-align: center;
         }
-        .ctn-header h2{
+        #header .ctn-header h2{
+            display: block;
             max-width: 300px;
         }
 
@@ -2494,6 +2497,13 @@ html {
 
     .footer-section .footer-content ul{
         display: block;
+    }
+
+    .ctn-header .box-titulo-altura{
+        text-align: inherit;
+    }
+    .ctn-header span.separador{
+        display: none;
     }
 
 }       
