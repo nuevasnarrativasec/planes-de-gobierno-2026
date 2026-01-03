@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v57">
+    <link rel="stylesheet" href="./css/style.css?v59">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
     <style>
@@ -202,6 +202,10 @@
         <!-- Sección de Comparador -->
         <div class="comparison-section" id="comparisonSection">
             <div class="comparison-header">
+                <div class="btn-ver-conceptos">
+                    <img src="./img/icon-concepto.jpg" alt="" width="100%">
+                </div>
+                
                 <span class="linea-titulo-seccion"></span>
                 <h2>¿Aún con dudas? Compara tus principales opciones</h2>
                 <p>Elige hasta 3 candidatos o partidos y revisa qué proponen en cada eje temático. Los espacios vacíos indican temas no mencionados en el plan de gobierno.</p>
@@ -2990,6 +2994,9 @@
                 popupState.lastScrollY = currentScrollY;
             }
             
+            // Referencia al popup para detectar scroll interno
+            const popupElement = document.getElementById('comparisonPopup');
+            
             // Manejar wheel cuando el popup está activo
             function handleWheel(e) {
                 if (!popupState.isActive) return;
@@ -3001,10 +3008,41 @@
                     return;
                 }
                 
-                // Cualquier scroll cierra el popup y lleva a la sección
+                // Verificar si el scroll ocurre dentro del popup
+                const isInsidePopup = popupElement && popupElement.contains(e.target);
+                
+                if (isInsidePopup) {
+                    // Permitir scroll interno si hay contenido para scrollear
+                    const scrollTop = popupElement.scrollTop;
+                    const scrollHeight = popupElement.scrollHeight;
+                    const clientHeight = popupElement.clientHeight;
+                    const isScrollable = scrollHeight > clientHeight;
+                    
+                    if (isScrollable) {
+                        // Scroll hacia abajo y no está al final
+                        if (e.deltaY > 0 && scrollTop < scrollHeight - clientHeight - 5) {
+                            return; // Permitir scroll normal dentro del popup
+                        }
+                        // Scroll hacia arriba y no está al inicio
+                        if (e.deltaY < 0 && scrollTop > 5) {
+                            return; // Permitir scroll normal dentro del popup
+                        }
+                    }
+                    
+                    // Si llegó al límite del scroll interno, cerrar popup
+                    hidePopup();
+                    setTimeout(() => {
+                        const sectionRect = comparisonSection.getBoundingClientRect();
+                        const targetScroll = sectionRect.top + window.pageYOffset - 50;
+                        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
+                    }, 100);
+                    e.preventDefault();
+                    return;
+                }
+                
+                // Scroll fuera del popup (en el blur), cerrar y continuar
                 hidePopup();
                 
-                // Pequeño delay y luego hacer scroll a la sección del comparador
                 setTimeout(() => {
                     const sectionRect = comparisonSection.getBoundingClientRect();
                     const targetScroll = sectionRect.top + window.pageYOffset - 50;
@@ -3020,10 +3058,14 @@
             
             // Manejar touch para móviles
             let touchStartY = 0;
+            let touchStartScrollTop = 0;
+            let touchStartedInsidePopup = false;
             
             function handleTouchStart(e) {
                 if (!popupState.isActive) return;
                 touchStartY = e.touches[0].clientY;
+                touchStartedInsidePopup = popupElement && popupElement.contains(e.target);
+                touchStartScrollTop = popupElement ? popupElement.scrollTop : 0;
             }
             
             function handleTouchMove(e) {
@@ -3036,10 +3078,29 @@
                 }
                 
                 const touchY = e.touches[0].clientY;
-                const deltaY = touchStartY - touchY;
+                const deltaY = touchStartY - touchY; // positivo = swipe hacia arriba
                 
-                // Si el swipe es mayor a 50px, cerrar y continuar
-                if (Math.abs(deltaY) > 50) {
+                // Si el touch comenzó dentro del popup
+                if (touchStartedInsidePopup && popupElement) {
+                    const scrollTop = popupElement.scrollTop;
+                    const scrollHeight = popupElement.scrollHeight;
+                    const clientHeight = popupElement.clientHeight;
+                    const isScrollable = scrollHeight > clientHeight;
+                    
+                    if (isScrollable) {
+                        // Swipe hacia arriba (scroll hacia abajo) y no está al final
+                        if (deltaY > 0 && scrollTop < scrollHeight - clientHeight - 10) {
+                            return; // Permitir scroll natural
+                        }
+                        // Swipe hacia abajo (scroll hacia arriba) y no está al inicio
+                        if (deltaY < 0 && scrollTop > 10) {
+                            return; // Permitir scroll natural
+                        }
+                    }
+                }
+                
+                // Si el swipe es mayor a 80px y llegó al límite, cerrar
+                if (Math.abs(deltaY) > 80) {
                     hidePopup();
                     setTimeout(() => {
                         comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -3071,6 +3132,19 @@
                     }
                 }
             });
+            
+            // Botón para mostrar el popup manualmente
+            const btnVerConceptos = document.querySelector('.btn-ver-conceptos');
+            if (btnVerConceptos) {
+                btnVerConceptos.addEventListener('click', () => {
+                    if (!popupState.isActive) {
+                        popupState.isActive = true;
+                        popupState.showTimestamp = Date.now();
+                        popupContainer.classList.add('active');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+            }
             
             // Event listeners
             window.addEventListener('scroll', handleScroll, { passive: true });
