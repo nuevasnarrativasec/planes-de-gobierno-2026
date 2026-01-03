@@ -980,6 +980,7 @@ html {
     .comparison-header {
         text-align: center;
         margin-bottom: 40px;
+        position: relative;
     }
 
         .comparison-header h2 {
@@ -3111,4 +3112,22 @@ span.separador-logo {
     .popup-section p.popup-item {
         font-size: 0.88rem;
     }
+    .comparison-section .btn-ver-conceptos{
+        margin-left: 20%;
+    }
 }
+
+.btn-ver-conceptos{
+    border: 2px solid #e9ba4c;
+    border-radius: 32px;
+    cursor: pointer;
+    height: 40px;
+    position: relative;
+    width: 40px;
+    margin-left: 30%;
+    transform: translateY(15px);
+}
+    .btn-ver-conceptos img{
+        margin-top: 5px;
+        max-width: 25px;
+    }
