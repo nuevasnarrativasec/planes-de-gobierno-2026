@@ -2887,7 +2887,7 @@ span.separador-logo {
     right: 5px;
     text-align: center;
     text-decoration: none;    
-    z-index: 10;
+    z-index: 30;
 
     transition: opacity 0.3s ease; 
        /* Empieza oculto hasta que hagas scroll */
@@ -3168,3 +3168,171 @@ span.separador-logo {
         margin-top: 5px;
         max-width: 25px;
     }
+
+
+/* ============================================
+   ACORDEÓN DE DEFINICIÓN DE CONCEPTOS
+   ============================================ */
+
+.conceptos-accordion {
+    max-width: 500px;
+    margin: 25px auto;
+    border-radius: 30px;
+    overflow: hidden;
+}
+
+.conceptos-accordion-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 10px;
+    background: #e9ba4c;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 20;
+}
+
+.conceptos-accordion-header:hover {
+    background: #d4a83f;
+}
+
+.conceptos-accordion-icon {
+    width: 45px;
+    height: 45px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.conceptos-accordion-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.conceptos-accordion-title {
+    flex: 1;
+    font: .9rem/1.2 'Guardian Egyp Bold', Arial, sans-serif;
+    font-weight: 700;
+    color: #1a1a1a;
+    text-align: left;
+    letter-spacing: 0.3px;
+}
+
+.conceptos-accordion-chevron {
+    flex-shrink: 0;
+    stroke: #1a1a1a;
+    transition: transform 0.3s ease;
+}
+
+.conceptos-accordion.open .conceptos-accordion-chevron {
+    transform: rotate(180deg);
+}
+
+.conceptos-accordion-content {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+
+    transform: translatey(-30px);
+}
+
+.conceptos-accordion.open .conceptos-accordion-content {
+    max-height: 800px;
+}
+
+.conceptos-accordion-body {
+    /*background: #fff;*/
+    border: 3px solid #e9ba4c;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+    padding: 65px 30px 25px;
+    margin-top: -15px;
+    text-align: left;
+}
+
+.concepto-section {
+    margin-bottom: 25px;
+}
+
+.concepto-section:last-child {
+    margin-bottom: 0;
+}
+
+.concepto-section h4 {
+    font: 1rem/1.3 'Guardian Egyp Bold', Arial, sans-serif;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+.concepto-section > p:first-of-type {
+    font: 0.92rem/1.55 'Roboto', sans-serif;
+    color: #333;
+    margin: 0 0 12px 0;
+    text-align: left;
+}
+
+.concepto-section p.concepto-item {
+    font: 0.92rem/1.5 'Roboto', sans-serif;
+    color: #333;
+    margin: 0 0 8px 0;
+    padding-left: 0;
+    text-align: left;
+}
+
+.concepto-section p.concepto-item:last-child {
+    margin-bottom: 0;
+}
+
+.concepto-section p.concepto-item strong {
+    color: #1a1a1a;
+    font-weight: 600;
+}
+
+/* Responsive para el acordeón */
+@media (max-width: 640px) {
+    .conceptos-accordion {
+        max-width: 90%;
+        margin: 20px auto;
+    }
+    
+    .conceptos-accordion-header {
+        padding: 10px 15px;
+        gap: 10px;
+    }
+    
+    .conceptos-accordion-icon {
+        width: 38px;
+        height: 38px;
+        padding: 6px;
+    }
+    
+    .conceptos-accordion-title {
+        font-size: 0.85rem;
+    }
+    
+    .conceptos-accordion-body {
+        /*padding: 20px;*/
+    }
+    
+    .concepto-section h4 {
+        font-size: 0.95rem;
+    }
+    
+    .concepto-section > p:first-of-type,
+    .concepto-section p.concepto-item {
+        font-size: 0.88rem;
+    }
+}
