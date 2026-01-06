@@ -245,6 +245,13 @@
 .party-name-item {
     padding: var(--spacing-md-party-item);
 }
+    
+    .party-name-item:nth-child(26),
+    .party-name-item:nth-child(28),
+    .party-bar-item:nth-child(26),
+    .party-bar-item:nth-child(28){
+        display: none;
+    }
 
 .party-density-item {
     display: flex;

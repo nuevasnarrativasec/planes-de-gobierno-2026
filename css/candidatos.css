@@ -247,6 +247,13 @@
     background: #f0f0f0;
     border-left: 4px solid var(--color-secondary);
 }
+    .party-item[data-id="29"],
+    .party-item[data-id="30"],
+    .party-item[data-id="61"],
+    .party-item[data-id="62"] {
+        display: none;
+    }
+
 
 .party-icon {
     width: 40px;
