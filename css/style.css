@@ -220,6 +220,7 @@ html {
             padding: 10px 20px;
             vertical-align: top;
 
+            text-transform: uppercase;
             transition: all 0.3s ease;
         }
             ul.anclas li:hover {
@@ -3187,9 +3188,9 @@ span.separador-logo {
     align-items: center;
     gap: 15px;
     padding: 10px;
-    background: #e9ba4c;
-    border: none;
-    border-radius: 30px;
+    background: #fdfdfd;
+    border: 2px solid #f7bc46;
+    border-radius: 45px;
     cursor: pointer;
     transition: all 0.3s ease;
     position: relative;
@@ -3197,13 +3198,13 @@ span.separador-logo {
 }
 
 .conceptos-accordion-header:hover {
-    background: #d4a83f;
+    /*background: #d4a83f;*/
 }
 
 .conceptos-accordion-icon {
     width: 45px;
     height: 45px;
-    background: #fff;
+    background: #f7bc46;
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -3225,7 +3226,6 @@ span.separador-logo {
     font-weight: 700;
     color: #1a1a1a;
     text-align: left;
-    letter-spacing: 0.3px;
 }
 
 .conceptos-accordion-chevron {
@@ -3252,7 +3252,7 @@ span.separador-logo {
 
 .conceptos-accordion-body {
     /*background: #fff;*/
-    border: 3px solid #e9ba4c;
+    border: 2px solid #f7bc46;
     border-top: none;
     border-radius: 0 0 20px 20px;
     padding: 65px 30px 25px;
