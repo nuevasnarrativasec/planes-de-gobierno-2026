@@ -110,6 +110,8 @@ span.update {
     font-weight: 700;
     margin: var(--spacing-md) auto 0;
     text-align: center;
+
+    margin: 20px auto;
 }
 
 img.icon-click {

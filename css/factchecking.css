@@ -20,9 +20,13 @@
 .factchecking-header p {
     font: 1rem/1.5 "Roboto", sans-serif;
     margin: 0 auto 25px;
-    max-width: 550px;
+    max-width: 630px;
     text-align: center;
 }
+    .factchecking-header p span{
+        display: block;
+        font-style: italic;
+    }
 
 span.filtrar {
     color: #5f5f5f;
