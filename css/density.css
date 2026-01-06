@@ -234,14 +234,22 @@
     transition: all var(--transition-normal);
 }
 
+.party-bar-item{
+    padding-bottom: 0;
+}
+
+.party-name-item {
+    padding: var(--spacing-md-party-item);
+}
+
 .party-density-item {
     display: flex;
     align-items: center;
 }
 
 .party-density-icon {
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     border-radius: var(--radius-sm);
     background: #d0d0d0;
     margin-right: 15px;

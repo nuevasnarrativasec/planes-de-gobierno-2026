@@ -124,6 +124,8 @@ body {
     --spacing-md: 20px;
     --spacing-lg: 40px;
     --spacing-xl: 60px;
+
+    --spacing-md-party-item: 0 20px;
     
     /* Border Radius */
     --radius-sm: 8px;

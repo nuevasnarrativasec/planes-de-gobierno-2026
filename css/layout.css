@@ -533,6 +533,10 @@ span.separador-logo {
     .party-complete-item {
         width: 93%;
     }
+
+    .party-density-name{
+        margin: 10px 0;
+    }
     
     .box-indicacion {
         display: block;
