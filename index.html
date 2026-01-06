@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v59">
+    <link rel="stylesheet" href="./css/style.css?v61">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
     <style>
@@ -102,7 +102,7 @@
         </div>  
 
         <p class="bajada">
-            <b>Analizamos los planes de gobierno, sintetizamos miles de páginas con inteligencia artificial y verificamos cada dato editorialmente. </b> Esta herramienta no te dirá por quién votar ni cuál plan es 'mejor', pero te permitirá explorar, filtrar y comparar objetivamente qué proponen (y qué omiten) los candidatos. A través de algunos indicadores disminuimos el ruido para que tomes una decisión basada en los documentos oficiales. 
+            Revisamos los planes de gobierno, sintetizamos miles de páginas con inteligencia artificial y verificamos cada dato editorialmente. <b>Esta herramienta no te dirá por quién votar ni cuál plan es 'mejor', pero te permitirá explorar, filtrar y comparar objetivamente qué proponen (y qué omiten) los candidatos. </b> A través de indicadores de diversidad, densidad y prevalencia temática, disminuimos el ruido para que tomes una decisión basada en los documentos oficiales. 
         </p>
         <span class="update">Actualizado al 30/12/2025</span>    
         <span class="aviso" style="color: #9e9d9d; display: block; font: .9rem/1.5 'roboto'; margin: 5px auto; max-width: 630px; padding: 0 10px; text-align: center;">El Plan de Gobierno del candidato Armando Massé de Perú Federal aún no se encuentra disponible. El plan de Marisol Pérez Tello de Primero la Gente se obtuvo de su cuenta oficial en X.</span>
@@ -175,6 +175,12 @@
         <div class="comparison-popup-container" id="comparisonPopupContainer">
             <div class="comparison-popup-blur" id="comparisonPopupBlur"></div>
             <div class="comparison-popup" id="comparisonPopup">
+                <button class="popup-close-btn" id="popupCloseBtn" aria-label="Cerrar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
                 <div class="popup-icon">
                     <img src="./img/icon-concepto.jpg" alt="" width="90%" style="margin: 0 auto; display: block;">
                 </div>
@@ -245,7 +251,7 @@
         <section class="factchecking-section" id="factcheckingSection">
             <div class="factchecking-header">
                 <h2>¿Se pueden ejecutar estas promesas?</h2>
-                <p>Se analizaron tres propuestas por candidato para evaluar su viabilidad técnica, considerando datos y capacidades institucionales. No evalúa el plan de gobierno en su conjunto.</p>
+                <p>Se analizaron tres propuestas por candidato - principalmente en los ejes salud y educación, para evaluar su viabilidad técnica, considerando datos y capacidades institucionales. No evalúa el plan de gobierno en su conjunto.</p>
             </div>
 
             <span class="filtrar">Filtrar por:</span>
@@ -417,7 +423,7 @@
         <div class="box-main-panorama">
             <h2>Diversidad temática</h2>
             <p>
-                Aquí verás la variedad de temas que aborda el plan de gobierno. Un plan con más temas cubre más áreas, aunque no necesariamente profundiza ni sustenta cada una.
+                Aquí verás la variedad de temas que aborda el plan de gobierno. <b>Un plan con más temas cubre más áreas, aunque no necesariamente profundiza ni sustenta cada una.</b>
             </p>
             <div class="box-indicador">
                 <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-click.jpg" alt="" width="100%">
@@ -432,7 +438,7 @@
 
             <h2>Densidad discursiva</h2>
             <p>
-                Descubre qué porcentaje del plan se dedica a cada tema. Cuando un tema figura con 0 %, no siempre significa que esté ausente, sino que su presencia en el documento podría ser muy baja (menor al 1 % del contenido). Más espacio no siempre implica propuestas más claras ni mejor sustento.
+                Descubre qué porcentaje del plan se dedica a cada tema. Cuando un tema figura con 0 %, no siempre significa que esté ausente, sino que su presencia en el documento podría ser muy baja (menor al 1 % del contenido). <b>Más espacio no siempre implica propuestas más claras ni mejor sustento.</b>
             </p>
             <div class="box-indicador indicador-2">
                 <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-horizontal-scroll.png" alt="" width="100%">
@@ -472,7 +478,7 @@
 
             <h2>Prevalencia temática</h2>
             <p>
-                Señala en cuántos partidos aparece un mismo tema. Un valor alto indica que es un tema transversal en la agenda pero no evalúa profundidad, coherencia ni evidencia.
+                Señala en cuántos partidos aparece un mismo tema. <b>Un valor alto indica que es un tema transversal en la agenda pero no evalúa profundidad, coherencia ni evidencia.</b>
             </p>
             <div class="box-indicador">
                 <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-click.jpg" alt="" width="100%">
@@ -519,13 +525,13 @@
 
                 <h6>Tono y coherencia</h6>
                 <p>
-                    El análisis del tono y la coherencia se basa en enfoques clásicos de análisis del discurso político y coherencia programática (referencias: van Dijk, Fairclough, Habermas; Klingemann et al.).
+                    El análisis del Enfoque Discursivo y la Consistencia Interna no representa una opinión editorial sobre la calidad o viabilidad de las propuestas. Se trata de una clasificación técnica basada en el Análisis Crítico del Discurso (ACD) y metodologías de coherencia programática (siguiendo los marcos teóricos de T.A. van Dijk y H. Klingemann).
                 </p>
                 <p>
-                    Tono del discurso: Cada fragmento fue clasificado según su enfoque predominante: Técnico: gestión pública, evidencia, indicadores; ideológico: valores, principios, identidad, pragmático: acciones viables, implementación y social: inclusión, bienestar, equidad.
+                    <b>Consistencia Interna:</b> Clasifica el documento según su estructura lógica (si alinea diagnóstico, solución y meta cuantificable), sin juzgar la bondad de la idea. Con la escala: Estructurada, parcialmente estructurada y declarativa.
                 </p>
                 <p>
-                    Coherencia interna: Se evalúa como Alta, Media o Baja, considerando el alineamiento entre diagnóstico y propuestas, la ausencia de contradicciones y la claridad de metas.
+                    <b>Enfoque Discursivo:</b> Identifica la carga semántica predominante en el texto. Categorías: Normativo (énfasis en valores/deber ser), Tecnocrático (énfasis en datos/evidencia), Operativo (énfasis en acciones/implementación).
                 </p>
             </div>
         </div>
@@ -1478,8 +1484,8 @@
                         ${compData.tonoDiscursivo || compData.coherencia ? `
                             <div class="discourse-tone no-bg">
                                 <p><strong>TONO DISCURSIVO:</strong> ${compData.tonoDiscursivo || 'N/A'}</p>
-                                <p><strong>*CONSISTENCIA INTERNA:</strong> ${compData.coherencia || 'N/A'}</p>
-                                <span style="font-size: .8rem;">*Este indicador mide qué tan consistente es el plan consigo mismo. No evalúa si las propuestas son viables, realistas ni su impacto económico.</span>
+                                <p><strong>CONSISTENCIA INTERNA:</strong> ${compData.coherencia || 'N/A'}</p>
+                                <span style="font-size: .8rem;">Estos indicadores clasifican la estructura lógica y el enfoque semántico del texto. No representan una opinión editorial sobre la calidad, el realismo ni la viabilidad política de las propuestas.</span>
                             </div>
                             <div class="discourse-tone ancla">
                                 <p>Ver criterios de análisis</p>
@@ -2914,23 +2920,20 @@
             // Variables para el control del popup
             const popupContainer = document.getElementById('comparisonPopupContainer');
             const comparisonSection = document.getElementById('comparisonSection');
+            const popupCloseBtn = document.getElementById('popupCloseBtn');
             
             if (!popupContainer || !comparisonSection) return;
             
             // Configuración
             const CONFIG = {
                 triggerOffset: 200,      // Píxeles antes de llegar a la sección
-                exitOffset: 400,         // Píxeles de scroll adicional para cerrar
-                minDisplayTime: 1500,    // Tiempo mínimo de visualización (ms)
-                parallaxFactor: 0.3      // Factor de movimiento parallax
+                exitOffset: 400          // Píxeles de scroll adicional para cerrar
             };
             
             // Estado
             let popupState = {
                 isActive: false,
                 hasBeenShown: false,
-                showTimestamp: 0,
-                lastScrollY: 0,
                 triggerPoint: 0,
                 exitPoint: 0
             };
@@ -2950,33 +2953,21 @@
                 
                 popupState.isActive = true;
                 popupState.hasBeenShown = true;
-                popupState.showTimestamp = Date.now();
                 
                 popupContainer.classList.add('active');
                 document.body.style.overflow = 'hidden';
-                
-                console.log('🎯 Popup mostrado');
             }
             
             // Ocultar popup
             function hidePopup() {
                 if (!popupState.isActive) return;
                 
-                // Verificar tiempo mínimo de visualización
-                const timeElapsed = Date.now() - popupState.showTimestamp;
-                if (timeElapsed < CONFIG.minDisplayTime) {
-                    setTimeout(hidePopup, CONFIG.minDisplayTime - timeElapsed);
-                    return;
-                }
-                
                 popupState.isActive = false;
                 popupContainer.classList.remove('active');
                 document.body.style.overflow = '';
-                
-                console.log('🎯 Popup ocultado');
             }
             
-            // Manejar scroll
+            // Manejar scroll - solo para mostrar el popup automáticamente
             function handleScroll() {
                 const currentScrollY = window.pageYOffset;
                 
@@ -2984,178 +2975,36 @@
                 
                 // Lógica de aparición - solo mostrar una vez
                 if (!popupState.isActive && !popupState.hasBeenShown) {
-                    // Mostrar popup cuando llegamos al punto de trigger
                     if (currentScrollY >= popupState.triggerPoint && 
                         currentScrollY < popupState.exitPoint) {
                         showPopup();
                     }
                 }
-                
-                popupState.lastScrollY = currentScrollY;
             }
             
-            // Referencia al popup para detectar scroll interno
-            const popupElement = document.getElementById('comparisonPopup');
-            
-            // Manejar wheel cuando el popup está activo
-            function handleWheel(e) {
-                if (!popupState.isActive) return;
-                
-                // Verificar tiempo mínimo
-                const timeElapsed = Date.now() - popupState.showTimestamp;
-                if (timeElapsed < CONFIG.minDisplayTime) {
-                    e.preventDefault();
-                    return;
-                }
-                
-                // Verificar si el scroll ocurre dentro del popup
-                const isInsidePopup = popupElement && popupElement.contains(e.target);
-                
-                if (isInsidePopup) {
-                    // Permitir scroll interno si hay contenido para scrollear
-                    const scrollTop = popupElement.scrollTop;
-                    const scrollHeight = popupElement.scrollHeight;
-                    const clientHeight = popupElement.clientHeight;
-                    const isScrollable = scrollHeight > clientHeight;
-                    
-                    if (isScrollable) {
-                        // Scroll hacia abajo y no está al final
-                        if (e.deltaY > 0 && scrollTop < scrollHeight - clientHeight - 5) {
-                            return; // Permitir scroll normal dentro del popup
-                        }
-                        // Scroll hacia arriba y no está al inicio
-                        if (e.deltaY < 0 && scrollTop > 5) {
-                            return; // Permitir scroll normal dentro del popup
-                        }
-                    }
-                    
-                    // Si llegó al límite del scroll interno, cerrar popup
+            // Botón X para cerrar el popup
+            if (popupCloseBtn) {
+                popupCloseBtn.addEventListener('click', () => {
                     hidePopup();
-                    setTimeout(() => {
-                        const sectionRect = comparisonSection.getBoundingClientRect();
-                        const targetScroll = sectionRect.top + window.pageYOffset - 50;
-                        window.scrollTo({ top: targetScroll, behavior: 'smooth' });
-                    }, 100);
-                    e.preventDefault();
-                    return;
-                }
-                
-                // Scroll fuera del popup (en el blur), cerrar y continuar
-                hidePopup();
-                
-                setTimeout(() => {
-                    const sectionRect = comparisonSection.getBoundingClientRect();
-                    const targetScroll = sectionRect.top + window.pageYOffset - 50;
-                    
-                    window.scrollTo({
-                        top: targetScroll,
-                        behavior: 'smooth'
-                    });
-                }, 100);
-                
-                e.preventDefault();
+                });
             }
-            
-            // Manejar touch para móviles
-            let touchStartY = 0;
-            let touchStartScrollTop = 0;
-            let touchStartedInsidePopup = false;
-            
-            function handleTouchStart(e) {
-                if (!popupState.isActive) return;
-                touchStartY = e.touches[0].clientY;
-                touchStartedInsidePopup = popupElement && popupElement.contains(e.target);
-                touchStartScrollTop = popupElement ? popupElement.scrollTop : 0;
-            }
-            
-            function handleTouchMove(e) {
-                if (!popupState.isActive) return;
-                
-                const timeElapsed = Date.now() - popupState.showTimestamp;
-                if (timeElapsed < CONFIG.minDisplayTime) {
-                    e.preventDefault();
-                    return;
-                }
-                
-                const touchY = e.touches[0].clientY;
-                const deltaY = touchStartY - touchY; // positivo = swipe hacia arriba
-                
-                // Si el touch comenzó dentro del popup
-                if (touchStartedInsidePopup && popupElement) {
-                    const scrollTop = popupElement.scrollTop;
-                    const scrollHeight = popupElement.scrollHeight;
-                    const clientHeight = popupElement.clientHeight;
-                    const isScrollable = scrollHeight > clientHeight;
-                    
-                    if (isScrollable) {
-                        // Swipe hacia arriba (scroll hacia abajo) y no está al final
-                        if (deltaY > 0 && scrollTop < scrollHeight - clientHeight - 10) {
-                            return; // Permitir scroll natural
-                        }
-                        // Swipe hacia abajo (scroll hacia arriba) y no está al inicio
-                        if (deltaY < 0 && scrollTop > 10) {
-                            return; // Permitir scroll natural
-                        }
-                    }
-                }
-                
-                // Si el swipe es mayor a 80px y llegó al límite, cerrar
-                if (Math.abs(deltaY) > 80) {
-                    hidePopup();
-                    setTimeout(() => {
-                        comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
-                    e.preventDefault();
-                }
-            }
-            
-            // También cerrar con click en el blur
-            popupContainer.querySelector('.comparison-popup-blur').addEventListener('click', () => {
-                const timeElapsed = Date.now() - popupState.showTimestamp;
-                if (timeElapsed >= CONFIG.minDisplayTime) {
-                    hidePopup();
-                    setTimeout(() => {
-                        comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
-                }
-            });
-            
-            // Cerrar con tecla Escape
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && popupState.isActive) {
-                    const timeElapsed = Date.now() - popupState.showTimestamp;
-                    if (timeElapsed >= CONFIG.minDisplayTime) {
-                        hidePopup();
-                        setTimeout(() => {
-                            comparisonSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                        }, 100);
-                    }
-                }
-            });
             
             // Botón para mostrar el popup manualmente
             const btnVerConceptos = document.querySelector('.btn-ver-conceptos');
             if (btnVerConceptos) {
                 btnVerConceptos.addEventListener('click', () => {
                     if (!popupState.isActive) {
-                        popupState.isActive = true;
-                        popupState.showTimestamp = Date.now();
-                        popupContainer.classList.add('active');
-                        document.body.style.overflow = 'hidden';
+                        showPopup();
                     }
                 });
             }
             
             // Event listeners
             window.addEventListener('scroll', handleScroll, { passive: true });
-            window.addEventListener('wheel', handleWheel, { passive: false });
-            window.addEventListener('touchstart', handleTouchStart, { passive: true });
-            window.addEventListener('touchmove', handleTouchMove, { passive: false });
             window.addEventListener('resize', calculateTriggerPoints);
             
             // Inicializar
             calculateTriggerPoints();
-            popupState.lastScrollY = window.pageYOffset;
             
             console.log('✅ Popup del comparador inicializado');
         })();
