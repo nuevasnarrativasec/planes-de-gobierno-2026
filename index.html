@@ -9,7 +9,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="./css/style.css?v61">
+    <link rel="stylesheet" href="./css/style.css?v62">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bxslider@4.2.17/dist/jquery.bxslider.min.css">
     
     <style>
@@ -127,9 +127,30 @@
             <h3>Explora por candidato o partido</h3>
             <p class="bajada-candidatos">
                 Encuentra resúmenes claros de cada plan y accede a una versión concisa de los temas principales que aborda.
-                La extensión varía para reflejar el nivel de detalle de cada plan, evitando una uniformidad artificial que distorsione su contenido
-
+                La extensión varía para reflejar el nivel de detalle de cada plan, evitando una uniformidad artificial que distorsione su contenido.
             </p>
+
+            <div class="conceptos-accordion" id="conceptosAccordion2">
+                <button class="conceptos-accordion-header" onclick="toggleConceptosAccordion('conceptosAccordion2')">
+                    <div class="conceptos-accordion-icon">
+                        <img src="./img/icon-concepto.jpg" alt="" width="100%">
+                    </div>
+                    <span class="conceptos-accordion-title">DEFINICIÓN DE LOS CONCEPTOS</span>
+                    <svg class="conceptos-accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="conceptos-accordion-content">
+                    <div class="conceptos-accordion-body">
+                        <div class="concepto-section">
+                            <p>
+                                Estos textos resumen el ideario y las propuestas tal como figuran en el plan de gobierno oficial presentado ante el JNE. Los términos y calificativos empleados corresponden estrictamente a la <b>narrativa y autodefinición del partido</b>, y se reproducen para describir fielmente su identidad política, sin que ello implique una valoración editorial del medio.
+                            </p>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="container">
                 <div class="tabs">
                     <button class="tab active" onclick="switchTab('partido')">Partidos</button>
@@ -171,51 +192,47 @@
             </div>  
         </div>
 
-        <!-- Popup Explicativo del Comparador -->
-        <div class="comparison-popup-container" id="comparisonPopupContainer">
-            <div class="comparison-popup-blur" id="comparisonPopupBlur"></div>
-            <div class="comparison-popup" id="comparisonPopup">
-                <button class="popup-close-btn" id="popupCloseBtn" aria-label="Cerrar">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
-                        <line x1="18" y1="6" x2="6" y2="18"></line>
-                        <line x1="6" y1="6" x2="18" y2="18"></line>
-                    </svg>
-                </button>
-                <div class="popup-icon">
-                    <img src="./img/icon-concepto.jpg" alt="" width="90%" style="margin: 0 auto; display: block;">
-                </div>
-                
-                <div class="popup-content">
-                    <div class="popup-section">
-                        <h4>CONSISTENCIA INTERNA</h4>
-                        <p>Clasifica el plan según su completitud estructural (alineación entre problema, solución y resultado).De esta forma tenemos:</p>
-                        <p class="popup-item">• <strong>Estructurada:</strong> Cumple el ciclo lógico completo: Diagnóstico + Propuesta + Meta cuantificable.</p>
-                        <p class="popup-item">• <strong>Parcialmente Estructurada:</strong> Propuestas claras, pero carece de diagnóstico preciso o metas medibles.</p>
-                        <p class="popup-item">• <strong>Declarativa:</strong> Enunciados de intenciones o deseos sin ruta de implementación clara.</p>
-                    </div>
-                    
-                    <div class="popup-section">
-                        <h4>El ENFOQUE DISCURSIVO</h4>
-                        <p>Identifica la carga semántica predominante en la redacción. Clasificados como:</p>
-                        <p class="popup-item">• <strong>Normativo:</strong> Énfasis en valores, principios doctrinarios y el "deber ser".</p>
-                        <p class="popup-item">• <strong>Operativo:</strong> Énfasis en acciones concretas, ejecución inmediata y "el cómo".</p>
-                        <p class="popup-item">• <strong>Tecnocrático:</strong> Énfasis en diagnósticos técnicos, evidencia estadística y viabilidad presupuestal.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Sección de Comparador -->
         <div class="comparison-section" id="comparisonSection">
             <div class="comparison-header">
-                <div class="btn-ver-conceptos">
-                    <img src="./img/icon-concepto.jpg" alt="" width="100%">
-                </div>
                 
                 <span class="linea-titulo-seccion"></span>
                 <h2>¿Aún con dudas? Compara tus principales opciones</h2>
                 <p>Elige hasta 3 candidatos o partidos y revisa qué proponen en cada eje temático. Los espacios vacíos indican temas no mencionados en el plan de gobierno.</p>
                 
+                <!-- Acordeón explicativo -->
+                <div class="conceptos-accordion" id="conceptosAccordion1">
+                    <button class="conceptos-accordion-header" onclick="toggleConceptosAccordion('conceptosAccordion1')">
+                        <div class="conceptos-accordion-icon">
+                            <img src="./img/icon-concepto.jpg" alt="" width="100%">
+                        </div>
+                        <span class="conceptos-accordion-title">DEFINICIÓN DE LOS CONCEPTOS</span>
+                        <svg class="conceptos-accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="conceptos-accordion-content">
+                        <div class="conceptos-accordion-body">
+                            <div class="concepto-section">
+                                <h4>CONSISTENCIA INTERNA</h4>
+                                <p>Clasifica el plan según su completitud estructural (alineación entre problema, solución y resultado). De esta forma tenemos:</p>
+                                <p class="concepto-item">• <strong>Estructurada:</strong> Cumple el ciclo lógico completo: Diagnóstico + Propuesta + Meta cuantificable.</p>
+                                <p class="concepto-item">• <strong>Parcialmente Estructurada:</strong> Propuestas claras, pero carece de diagnóstico preciso o metas medibles.</p>
+                                <p class="concepto-item">• <strong>Declarativa:</strong> Enunciados de intenciones o deseos sin ruta de implementación clara.</p>
+                            </div>
+                            
+                            <div class="concepto-section">
+                                <h4>EL ENFOQUE DISCURSIVO</h4>
+                                <p>Identifica la carga semántica predominante en la redacción. Clasificados como:</p>
+                                <p class="concepto-item">• <strong>Normativo:</strong> Énfasis en valores, principios doctrinarios y el "deber ser".</p>
+                                <p class="concepto-item">• <strong>Operativo:</strong> Énfasis en acciones concretas, ejecución inmediata y "el cómo".</p>
+                                <p class="concepto-item">• <strong>Tecnocrático:</strong> Énfasis en diagnósticos técnicos, evidencia estadística y viabilidad presupuestal.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
                 <div class="theme-selector">
                     <div class="theme-dropdown">
                         <select id="themeSelector" onchange="updateComparisonTheme()">
@@ -3008,6 +3025,23 @@
             
             console.log('✅ Popup del comparador inicializado');
         })();
+    </script>
+
+    <!-- Función para el acordeón explicativo -->
+    <script>
+        function toggleConceptosAccordion(accordionId) {
+            const accordion = document.getElementById(accordionId);
+            if (!accordion) return;
+            
+            const isOpen = accordion.classList.contains('open');
+            
+            // Toggle el estado del acordeón actual
+            if (isOpen) {
+                accordion.classList.remove('open');
+            } else {
+                accordion.classList.add('open');
+            }
+        }
     </script>
    
    
