@@ -291,6 +291,7 @@
 }
 
 .discourse-tone.ancla {
+    display: none;
     padding: 8px 10px;
 }
 
