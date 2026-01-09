@@ -253,7 +253,7 @@
     .party-item[data-id="40"],
     .party-item[data-id="61"],
     .party-item[data-id="62"] {
-        display: none;
+        /*display: none;*/
     }
 
 
