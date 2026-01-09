@@ -250,7 +250,7 @@
     .party-name-item:nth-child(28),
     .party-bar-item:nth-child(26),
     .party-bar-item:nth-child(28){
-        display: none;
+        /*display: none;*/
     }
 
 .party-density-item {
