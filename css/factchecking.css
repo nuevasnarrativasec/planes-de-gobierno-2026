@@ -190,7 +190,7 @@ span.filtrar {
 }
 
 /* Veredicto Colors */
-.factchecking-veredicto.viable .factchecking-veredicto-label {
+.factchecking-veredicto.factible .factchecking-veredicto-label {
     color: white;
     background: var(--color-viable);
 }
@@ -228,6 +228,16 @@ span.filtrar {
 .factchecking-veredicto.falsa .factchecking-veredicto-label {
     color: white;
     background: var(--color-inviable);
+}
+
+.factchecking-veredicto.no_en_sus_manos .factchecking-veredicto-label {
+    color: #fff;
+    background: #5a6478;
+}
+
+.factchecking-veredicto.sin_sustento .factchecking-veredicto-label {
+    color: #fff;
+    background: #76664a;
 }
 
 /* ============================================
