@@ -210,42 +210,52 @@ function createFactcheckingCard(item) {
  * Normalizar veredicto
  */
 function normalizeVeredicto(veredicto) {
-    if (!veredicto) return 'INDETERMINADO';
-    const v = veredicto.toLowerCase().trim();
-    if (v === 'viable') return 'VIABLE';
-    if (v === 'inviable') return 'INVIABLE';
-    if (v.includes('requiere') && v.includes('acci')) return 'REQUIERE ACCIÓN DE OTROS PODERES DEL ESTADO';
-    if (v.includes('enga')) return 'ENGAÑOSA';
-    if (v.includes('inexacta') || v === 'inex') return 'INEXACTA';
-    return 'INDETERMINADO';
-}
+            if (!veredicto) return 'INDETERMINADO';
+            const v = veredicto.toLowerCase().trim();
+            // Viable (pero no inviable)
+            if (v === 'factible') return 'FACTIBLE';
+            // Inviable
+            if (v === 'inviable') return 'INVIABLE';
+            // Requiere acción de otros poderes del Estado
+            if (v.includes('sin') && v.includes('sin')) return 'SIN SUSTENTO';
+            // Engañosa (con o sin eñe)
+            if (v.includes('enga')) return 'ENGAÑOSA';
+            // No está en sus manos
+            if (v.includes('no') || v === 'No') return 'no está en sus manos';
+            return 'INDETERMINADO';
+        }
 
 /**
  * Obtener clase CSS del veredicto
  */
 function getVeredictoClass(veredicto) {
-    if (!veredicto) return 'indeterminado';
-    const v = veredicto.toLowerCase().trim();
-    if (v === 'viable') return 'viable';
-    if (v === 'inviable') return 'inviable';
-    if (v.includes('requiere') && v.includes('acci')) return 'requiere_accion';
-    if (v.includes('enga')) return 'enganosa';
-    if (v.includes('inexacta') || v === 'inex') return 'inexacta';
-    return 'indeterminado';
-}
+            if (!veredicto) return 'indeterminado';
+            const v = veredicto.toLowerCase().trim();
+            // Viable (pero no inviable)
+            if (v === 'factible') return 'factible';
+            // Inviable
+            if (v === 'inviable') return 'inviable';
+            // Requiere acción de otros poderes del Estado
+            if (v.includes('sin') && v.includes('sin')) return 'sin_sustento';
+            // Engañosa (con o sin eñe)
+            if (v.includes('enga')) return 'enganosa';
+            // No está en sus manos
+            if (v.includes('no') || v === 'No') return 'no_en_sus_manos';
+            return 'indeterminado';
+        }
 
 /**
  * Obtener descripción del veredicto
  */
 function getVeredictoDescripcion(veredictoClass) {
     const descripciones = {
-        'viable': 'Propuesta que puede ejecutarse de manera factible durante una gestión.',
-        'inviable': 'Propuesta que no puede ejecutarse dentro de una gestión o que contraviene la normativa vigente.',
-        'requiere_accion': 'Propuesta cuyo desarrollo no depende exclusivamente del Ejecutivo.',
-        'inexacta': 'Compromiso que no presenta información concreta ni criterios medibles.',
-        'enganosa': 'Propuesta que sobredimensiona las capacidades reales del Ejecutivo.',
-        'indeterminado': 'No se cuenta con información suficiente para determinar la viabilidad.'
-    };
+                'factible': 'Propuesta que puede ejecutarse de manera factible durante una gestión.',
+                'inviable': 'Propuesta que no puede ejecutarse dentro de una gestión o que contraviene la normativa vigente.',
+                'no_en_sus_manos': 'Propuesta cuyo desarrollo o cumplimiento no depende exclusivamente del Ejecutivo, sino que requiere la acción de otros poderes del Estado.',
+                'inexacta': 'Compromiso que no presenta información concreta ni criterios medibles para su desarrollo o evaluación.',
+                'enganosa': 'Propuesta que incluye metas o cifras concretas, pero que sobredimensiona las capacidades reales del Ejecutivo, usa plazos o alcances irrealistas o presenta resultados que no son exigibles ni creíbles dadas las restricciones técnicas, presupuestales o institucionales.',
+                'sin_sustento': 'No se cuenta con información suficiente para determinar la viabilidad de esta propuesta.'
+            };
     return descripciones[veredictoClass] || '';
 }
 
