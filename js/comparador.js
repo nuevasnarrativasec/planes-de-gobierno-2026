@@ -148,7 +148,7 @@ function renderComparisonCard(item, index) {
                 ${compData.tonodiscursivo || compData.coherencia ? `
                     <div class="discourse-tone no-bg">
                         <p><strong>ENFOQUE DISCURSIVO:</strong> ${compData.tonodiscursivo || 'N/A'}</p>
-                        <p><strong>FORMULACIÓN DE PROPUESTAS:</strong> ${compData.coherencia || 'N/A'}</p>
+                        <p><strong>FORMULACIÓN DE PROPUESTA:</strong> ${compData.coherencia || 'N/A'}</p>
                         <span style="font-size: .8rem;">Estos indicadores clasifican la estructura lógica y el enfoque semántico del texto.</span>
                     </div>
                     <div class="discourse-tone ancla">
