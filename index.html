@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     
     <!-- CSS Principal (importa todos los módulos) -->
-    <link rel="stylesheet" href="./css/style.css?v5">
+    <link rel="stylesheet" href="./css/style.css?v4">
 </head>
 <body>
 
@@ -142,9 +142,35 @@
         <div class="comparison-section" id="comparisonSection">
             <div class="comparison-header">
                 <span class="linea-titulo-seccion"></span>
-                <h2>¿Aún con dudas? Compara tus principales opciones</h2>
-                <p>Selecciona hasta 3 candidatos y contrasta sus propuestas por tema, tono y coherencia. Además, incluye un breve fact-checking.</p>
+                <h2>Compara a tus candidatos </h2>
+                <p>Selecciona hasta 3 opciones y revisa sus planteamientos. Si ves un espacio vacío, es porque el plan no desarrolla ese tema de manera sustancial.</p>
                 
+                <!-- Acordeón explicativo -->
+                <div class="conceptos-accordion" id="conceptosAccordion1">
+                    <button class="conceptos-accordion-header" onclick="toggleConceptosAccordion('conceptosAccordion1')">
+                        <div class="conceptos-accordion-icon">
+                            <img src="./img/icon-concepto-amarillo.jpg" alt="" width="100%">
+                        </div>
+                        <span class="conceptos-accordion-title">Guía de indicadores</span>
+                        <svg class="conceptos-accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="6 9 12 15 18 9"></polyline>
+                        </svg>
+                    </button>
+                    <div class="conceptos-accordion-content">
+                        <div class="conceptos-accordion-body">
+                            <div class="concepto-section">
+                                <p>
+                                    La clasificación de cada candidato se basa en un análisis técnico de los Planes de Gobierno oficiales ante el JNE. El texto es un resumen de los planteamientos más relevantes, evaluando únicamente la precisión de la redacción original (la forma) y no la viabilidad de las promesas (el fondo).
+                                </p>
+                                <p style="font: 0.92rem / 1.55 'Roboto', sans-serif; text-align: left;">
+                                    Para el análisis, identificamos el Enfoque del texto como <b>'Operativo' (obras)</b>, <b>'Tecnocrático' (gestión)</b> o <b>'Normativo' (leyes y valores)</b>. Asimismo, definimos la Formulación de propuestas según su detalle técnico: <b>'Detallada con indicadores'</b> si incluye metas y cifras exactas; <b>'Con lineamientos generales'</b> si describe la ruta sin métricas; o <b>'Declarativa'</b> si expresa intenciones sin una hoja de ruta técnica.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Selector de tema -->
                 <div class="theme-selector">
                     <div class="theme-dropdown">
                         <select id="themeSelector" onchange="updateComparisonTheme()">
@@ -176,104 +202,186 @@
             </div>
         </div>
 
-         <div class="box-titulo-seccion">
+        <!-- ============================================
+             SECCIÓN: FACTCHECKING
+             ============================================ -->
+        <section class="factchecking-section" id="factcheckingSection">
+            <div class="factchecking-header">
+                <h2>¿Se pueden cumplir estas promesas?</h2>
+                <p>
+                    Analizamos tres propuestas clave en Salud y Educación para poner a prueba nuestra clasificación. Seleccionamos estos ejemplos específicos para mostrarte cómo diferenciamos una promesa que se puede cumplir de una que no tiene sustento.
+                </p>
+            </div>
+
+            <!-- Acordeón de conceptos -->
+            <div class="conceptos-accordion" id="conceptosAccordion3">
+                <button class="conceptos-accordion-header" onclick="toggleConceptosAccordion('conceptosAccordion3')">
+                    <div class="conceptos-accordion-icon">
+                        <img src="./img/icon-concepto-amarillo.jpg" alt="" width="100%">
+                    </div>
+                    <span class="conceptos-accordion-title">Guía de resultados</span>
+                    <svg class="conceptos-accordion-chevron" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="6 9 12 15 18 9"></polyline>
+                    </svg>
+                </button>
+                <div class="conceptos-accordion-content">
+                    <div class="conceptos-accordion-body">
+                        <div class="concepto-section">
+                            <p>
+                                El análisis aplica exclusivamente a esta muestra de propuestas seleccionadas y no califica la totalidad del plan de gobierno. Los resultados se determinan bajo los siguientes criterios técnicos:
+                            </p>        
+                            <p style="font: 0.92rem / 1.55 'Roboto', sans-serif;">
+                                <b>Factible:</b> La propuesta cuenta con los mecanismos técnicos para ejecutarse de manera viable durante una gestión.
+                            </p>      
+                            <p style="font: 0.92rem / 1.55 'Roboto', sans-serif;">
+                                <b>Engañosa:</b> Incluye metas o cifras concretas, pero sobredimensiona las capacidades reales del Ejecutivo, plantea plazos irrealistas o presenta resultados que no son exigibles dadas las restricciones técnicas, presupuestales o institucionales.
+                            </p>   
+                            <p style="font: 0.92rem / 1.55 'Roboto', sans-serif;">
+                                <b>No está en sus manos:</b> Su cumplimiento no depende exclusivamente del Ejecutivo, requiriendo la acción de otros poderes del Estado u organismos autónomos.
+                            </p>
+                            <p style="font: 0.92rem / 1.55 'Roboto', sans-serif;">
+                                <b>Sin sustento:</b> La propuesta carece de la información técnica suficiente para determinar su viabilidad.
+                            </p>     
+                            <p style="font: 0.92rem / 1.55 'Roboto', sans-serif;">
+                                <b>Inviable:</b> La propuesta no puede ejecutarse dentro de un periodo de gestión o contraviene directamente la normativa y el marco legal vigente.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <span class="filtrar">Filtrar por:</span>
+
+            <!-- Tabs de filtro -->
+            <div class="factchecking-tabs">
+                <button class="factchecking-tab active" data-filter="partido" onclick="switchFactcheckingTab('partido')">Partido</button>
+                <button class="factchecking-tab" data-filter="candidato" onclick="switchFactcheckingTab('candidato')">Candidato</button>
+                <button class="factchecking-tab" data-filter="veredicto" onclick="switchFactcheckingTab('veredicto')">Resultado</button>
+            </div>
+
+            <!-- Dropdowns de filtro -->
+            <div class="factchecking-dropdown-container" id="factcheckingPartidoContainer">
+                <select class="factchecking-dropdown" id="factcheckingPartidoDropdown" onchange="handlePartidoChange()">
+                    <option value="">Seleccionar partido...</option>
+                </select>
+            </div>
+
+            <div class="factchecking-dropdown-container" id="factcheckingCandidatoContainer" style="display: none;">
+                <select class="factchecking-dropdown" id="factcheckingCandidatoDropdown" onchange="handleCandidatoChange()">
+                    <option value="">Seleccionar candidato...</option>
+                </select>
+            </div>
+
+            <div class="factchecking-dropdown-container" id="factcheckingVeredictoContainer" style="display: none;">
+                <select class="factchecking-dropdown" id="factcheckingVeredictoDropdown" onchange="handleVeredictoChange()">
+                    <option value="">Seleccionar resultado...</option>                    
+                    <option value="factible">Factible</option>
+                    <option value="enganosa">Engañosa</option>
+                    <option value="inviable">Inviable</option>
+                    <option value="sin_sustento">Sin sustento</option>
+                    <option value="no_en_sus_manos">No está en sus manos</option>
+                </select>
+            </div>
+
+            <!-- Loading -->
+            <div class="factchecking-loading" id="factcheckingLoading">
+                <div class="factchecking-spinner"></div>
+                <p>Cargando datos...</p>
+            </div>
+
+            <!-- Grid de cards -->
+            <div class="factchecking-grid" id="factcheckingGrid" style="display: none;"></div>   
+
+            <!-- Botón Ver Más -->
+            <div class="factchecking-load-more" id="factcheckingLoadMore" style="display: none;">
+                <button class="load-more-btn" onclick="loadMoreFactchecking()">
+                    Ver más
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">                    
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </button>
+                <span class="load-more-count" id="loadMoreCount"></span>
+            </div>
+
+            <!-- No results -->
+            <div class="factchecking-no-results" id="factcheckingNoResults" style="display: none;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                <p>No se encontraron resultados</p>
+            </div>
+
+            <!-- Estado inicial -->
+            <div class="factchecking-initial" id="factcheckingInitial"></div>
+        </section>
+
+        <!-- ============================================
+             SECCIÓN: ¿SABÍAS QUE? (Tarjetas horizontales)
+             ============================================ -->
+        <div class="box-titulo-seccion">
             <span class="linea-titulo-seccion"></span>
-            <h3>¿Sabías que?</h3>
-            <p>Descubre en segundos los datos que mejor explican las propuestas</p>            
+            <h3>Prioridades y olvidos </h3>
+            <p>Descubre qué temas dominan la agenda y cuáles han sido ignorados por los partidos.</p>            
+            <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-horizontal-scroll.png" alt="" width="100%">
+            <span>Has scroll horizontal</span>
         </div>
-
-        <!-- slider resumen candidatos -->
-        <div class="slider-container">
-            <img src="../img/icon-desliza-gris.png" alt="" width="100%" class="icon-desliza-gris">
-            <div class="slider-resumen">
-                <!-- Slide 1 -->
-                <div class="slide-card card-pink">
-                    <div class="card-header">
-                        <h3>Cobertura por plan</h3>
+        
+        <div class="main-tarjetas">
+            <div class="scroll-container">
+                <div class="card theme-pink">
+                    <div class="icon-box">
+                        <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-card-1.jpg" alt="" width="100%">
                     </div>
-                    <div class="card-body">
-                        <h4>El más amplio trata 17 temas y el más acotado 8; la mayoría se mueve en 14.</h4>
-                        <p>
-                            Muchos temas indican amplitud, no necesariamente mejor sustento.
-                        </p>
-                    </div>
+                    <h3>Cobertura por plan</h3>
+                    <div class="color-line"></div>
+                    <p>La amplitud temática variable: <span>hay planes que cubren hasta 17 ejes, frente a otros que apenas llegan a 9.</span> El promedio se mantiene en 15 temas por partido.</p>
+                    <div class="separator-dotted"></div>
+                    <p>Muchos temas indican amplitud, no necesariamente mejor sustento.</p>
                 </div>
 
-                <!-- Slide 2 -->
-                <div class="slide-card card-blue">
-                    <div class="card-header">
-                        <h3>Agenda compartida</h3>
+                <div class="card theme-blue">
+                    <div class="icon-box">
+                        <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-card-2.jpg" alt="" width="100%">
                     </div>
-                    <div class="card-body">
-                        <h4>Temas que aparecen en casi todos los planes: Economía, Salud, Educación, Programas sociales, Justicia y DD. HH. y Gobernanza digital.</h4>
-                        <p>Alta presencia = tema transversal en la agenda.</p>
-                    </div>
+                    <h3>Agenda compartida</h3>
+                    <div class="color-line"></div>
+                    <p>Cuatro temas figuran en la agenda de casi todos los partidos: <span>Economía, Educación, Infraestructura y Salud. Son el eje base de sus propuestas.</span></p>
+                    <div class="separator-dotted"></div>
+                    <p>Alta presencia = tema transversal en la agenda.</p>
                 </div>
 
-                <!-- Slide 3 -->
-                <div class="slide-card card-yellow">
-                    <div class="card-header">
-                        <h3>Temas menos presentes</h3>
+                <div class="card theme-yellow">
+                    <div class="icon-box">
+                        <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-card-3.jpg" alt="" width="100%">
                     </div>
-                    <div class="card-body">
-                        <h4>Con menor aparición: Familia, Transporte, Energía y minería, Cultura y turismo y Vivienda.</h4>
-                        <p>Baja presencia ≠ irrelevancia</p>
-                    </div>
+                    <h3>Temas menos presentes</h3>
+                    <div class="color-line"></div>
+                    <p>Ejes como <span>Familia, Cultura y Transporte</span> aparecen de forma escueta o son ignorados por las agrupaciones.</p>
+                    <div class="separator-dotted"></div>
+                    <p>Baja presencia ≠ irrelevancia</p>
                 </div>
 
-                <!-- Slide 4 -->
-                <div class="slide-card card-pink">
-                    <div class="card-header">
-                        <h3>Más espacio en los planes (promedio)</h3>
+                <div class="card theme-orange">
+                    <div class="icon-box">
+                        <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-card-4.jpg" alt="" width="100%">
                     </div>
-                    <div class="card-body">
-                        <h4>Los planes dedican más espacio a Economía (18%) y Salud (14%).</h4>
-                        <p>Más porcentaje = más espacio, no mejor propuesta.</p>
-                    </div>
+                    <h3>Más espacio en los planes (promedio)</h3>
+                    <div class="color-line"></div>
+                    <p style="margin-top: auto; margin-bottom: auto;"><span>La Economía (14.2%) y los Programas Sociales (13.8%)</span> dominan la narrativa, consumiendo casi un tercio del texto total de los planes. Les siguen Salud y Justicia</p>
+                    <div class="separator-dotted"></div>
+                    <p>Más porcentaje = más espacio, no mejor propuesta.</p>
                 </div>
 
-                <!-- Slide 5 -->
-                <div class="slide-card card-blue">
-                    <div class="card-header">
-                        <h3>Menos espacio en los planes (promedio)</h3>
+                <div class="card theme-cyan">
+                    <div class="icon-box">
+                        <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-card-5.jpg" alt="" width="100%">
                     </div>
-                    <div class="card-body">
-                        <h4>Familia (1,5%) y Transporte (1,6%) reciben menos menciones.</h4>
-                        <p>Poco espacio no representa calidad.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 6 -->
-                <div class="slide-card card-yellow">
-                    <div class="card-header">
-                        <h3>Tema dominante por plan</h3>
-                    </div>
-                    <div class="card-body">
-                        <h4>En la mayoría de planes el tema n.º 1 es Economía; en varios, Salud o Programas sociales.</h4>
-                        <p>Muestra prioridad, mas no la profundidad.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 7 -->
-                <div class="slide-card card-pink">
-                    <div class="card-header">
-                        <h3>Tono predominante</h3>
-                    </div>
-                    <div class="card-body">
-                        <h4>Predominan los tonos social y pragmático; el técnico es minoritario y el ideológico aparece en diversa intensidad. </h4>
-                        <p>Esto describe cómo se propone, no si es cierto.</p>
-                    </div>
-                </div>
-
-                <!-- Slide 8 -->
-                <div class="slide-card card-blue">
-                    <div class="card-header">
-                        <h3>Coherencia interna</h3>
-                    </div>
-                    <div class="card-body">
-                        <h4>La evaluación global se concentra en coherencia alta o media; la baja es minoritaria.</h4>
-                        <p>Que esté bien estructurado no representa que sea correcto.</p>
-                    </div>
+                    <h3>Menos espacio en los planes (promedio)</h3>
+                    <div class="color-line"></div>
+                    <p style="margin-top: auto; margin-bottom: auto;">Pese a su importancia ciudadana, temas como <span>Familia (0.58%), Transporte (1.25%) y Cultura (1.43%)</span> ocupan un espacio insignificante en la redacción de los documentos.</p>
+                    <div class="separator-dotted"></div>
+                    <p>Poco espacio no representa calidad.</p>
                 </div>
 
                 <div class="card theme-teal">
@@ -373,54 +481,36 @@
         <div class="box-metodologia">
             <h6>Sobre nuestra metodología</h6>
             <p>
-                Este especial se basa en información pública de los planes de gobierno que cada partido suministra al JNE. Los documentos se procesaron con el programa de automatización n8n para su lectura, limpieza, estandarización y unificación. El contenido se clasificó por temas con asistencia de IA y se calcularon indicadores como diversidad temática, densidad discursiva y prevalencia. Para los resúmenes finales se emplearon modelos de OpenAI y Gemini, con edición y validación editorial antes de la publicación. El resultado es una síntesis comparable y clara, pensada para consulta rápida sin perder rigor.
+                Este especial procesa los planes de gobierno del JNE utilizando automatización y agentes de Inteligencia Artificial para identificar qué temas prioriza cada partido y cuáles ignora. El análisis, apoyado por el fondo AI Catalyst de WAN-IFRA y OpenAI, combina la potencia del procesamiento de datos con una validación editorial humana paso a paso, garantizando una síntesis precisa, objetiva y comparable.
             </p>
-            <p>
-                Para caracterizar el tono y la coherencia se aplicó un enfoque de análisis del discurso político (referencias: van Dijk, Fairclough, Habermas) y coherencia programática (Klingemann et al.). El tono se etiqueta por fragmento como: Técnico (gestión pública, evidencia, indicadores), Ideológico (valores, principios, identidad), Pragmático (acciones viables, implementación) o Social (inclusión, bienestar, equidad). La coherencia interna se valora en Alta / Media / Baja según el alineamiento entre diagnóstico y medidas, la ausencia de contradicciones y la claridad de metas.
+            <p class="mas-metodologia" style="cursor: pointer; text-decoration: underline;">
+                Conoce los estándares del análisis
             </p>
-        </div>
 
+            <div id="detalle-oculto" style="display: none;">
+                <h6>1. Cómo procesamos la data:</h6>
+                <p>
+                    Estandarización: Descargamos los planes del JNE y utilizamos flujos de automatización para limpiar, leer y uniformizar los diversos formatos de archivo.
+                </p>
+                <p>
+                    Segmentación: Dividimos cada plan en "unidades de análisis" para que la medición sea proporcional entre documentos de distinta extensión.
+                </p>
+                <p>
+                    <b>Clasificación con IA:</b> Modelos de lenguaje clasificaron cada fragmento por tema y tono, calculando indicadores de enfoque, precisión técnica, densidad y variedad temática.
+                </p>
+                <p>
+                    <b>Validación humana:</b> Ningún resultado se publicó automáticamente. El equipo editorial revisó y validó los resúmenes y clasificaciones finales para asegurar su rigor.
+                </p>
 
-    </div>
-
-    <div class="box-footer">
-        <img src="./img/logo-comercio.png" alt="El Comercio" width="100%" class="logo-comercio">
-        <ul>
-            <li>
+                <h6>2. Cómo medimos el discurso</h6>
                 <p>
-                    <span>Investigación y textos:</span>
+                    Las métricas de Enfoque y Formulación de propuestas no juzgan la calidad ni la viabilidad política de una idea. Son clasificaciones descriptivas derivadas del Análisis Crítico del Discurso (ACD) y marcos teóricos de coherencia programática (siguiendo estándares como los de T.A. van Dijk y H. Klingemann).
                 </p>
-            </li>
-            <li>
                 <p>
-                    Gisella Salmón
+                    <b>Formulación de propuestas:</b> Evalúa el grado de precisión del planteamiento técnico. Indica si la propuesta articula una solución específica y si el texto incluye metas cuantificables y plazos (Detallada con indicadores), lineamientos de acción (Con lineamientos generales) o solo una intención (Declarativa).
                 </p>
-            </li>
-            <li>
                 <p>
-                    Mayté Ciriaco
-                </p>
-            </li>
-            <li>
-                <p>
-                    Lorena Obregón
-                </p>
-            </li>
-
-            <li>
-                <p>
-                    <span>Diseño:</span>
-                </p>
-            </li>
-            <li>
-                <p>
-                    Marcelo Hidalgo
-                </p>
-            </li>
-
-            <li>
-                <p>
-                    <span>Ilustraciones y animación:</span>
+                    <b>Enfoque Discursivo:</b> Identifica la orientación narrativa del texto. Determinamos si el plan prioriza la gestión y los datos (Tecnocrático), la ejecución de obras y acciones físicas (Operativo) o los principios, leyes y derechos (Normativo).
                 </p>
             </div>
         </div>
