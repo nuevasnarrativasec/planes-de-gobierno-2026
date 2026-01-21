@@ -482,6 +482,30 @@
         },
         {
             "id": "21",
+            "nombre": "Partido Democrático Federal",
+            "logoUrl": "./img/logos/logo-partido-democratico-federal.png",
+            "densidad": {
+                "agricultura": 3,
+                "medio_ambiente": 4,
+                "cambio_climatico": 1,
+                "cultura_turismo": 1,
+                "descentralizacion": 7,
+                "economia": 21,
+                "educacion": 16,
+                "energia_minera": 3,
+                "familia": 0,
+                "gobernanza-digital": 3,
+                "infraestructura": 7,
+                "justicia_dh": 4,
+                "programas_sociales": 3,
+                "salud": 13,
+                "seguridad": 7,
+                "transporte": 0,
+                "vivienda": 4
+            }
+        },
+        {
+            "id": "22",
             "nombre": "Partido Morado",
             "logoUrl": "./img/logos/logo-partido-morado.png",
             "densidad": {
@@ -505,7 +529,7 @@
             }
         },
         {
-            "id": "22",
+            "id": "23",
             "nombre": "Partido Patriótico del Perú",
             "logoUrl": "./img/logos/logo-ppp.png",
             "densidad": {
@@ -529,7 +553,7 @@
             }
         },
         {
-            "id": "23",
+            "id": "24",
             "nombre": "Partido Perú Moderno",
             "logoUrl": "./img/logos/logo-peru-moderno.png",
             "densidad": {
@@ -553,7 +577,7 @@
             }
         },
         {
-            "id": "24",
+            "id": "25",
             "nombre": "Perú Acción",
             "logoUrl": "./img/logos/logo-peru-accion.png",
             "densidad": {
@@ -577,7 +601,7 @@
             }
         },
         {
-            "id": "25",
+            "id": "26",
             "nombre": "Perú Libre",
             "logoUrl": "./img/logos/logo-peru-libre.png",
             "densidad": {
@@ -601,7 +625,7 @@
             }
         },
         {
-            "id": "26",
+            "id": "27",
             "nombre": "Perú Primero",
             "logoUrl": "./img/logos/logo-peru-primero.png",
             "densidad": {
@@ -625,7 +649,7 @@
             }
         },
         {
-            "id": "27",
+            "id": "28",
             "nombre": "Podemos Perú",
             "logoUrl": "./img/logos/logo-podemos-peru.png",
             "densidad": {
@@ -649,7 +673,7 @@
             }
         },
         {
-            "id": "28",
+            "id": "29",
             "nombre": "Primero la Gente",
             "logoUrl": "./img/logos/logo-primero-la-gente.png",
             "densidad": {
@@ -673,7 +697,7 @@
             }
         },
         {
-            "id": "29",
+            "id": "30",
             "nombre": "PRIN",
             "logoUrl": "./img/logos/logo-prin.png",
             "densidad": {
@@ -697,7 +721,7 @@
             }
         },
         {
-            "id": "30",
+            "id": "31",
             "nombre": "Progresemos",
             "logoUrl": "./img/logos/logo-progresemos.png",
             "densidad": {
@@ -721,7 +745,7 @@
             }
         },
         {
-            "id": "31",
+            "id": "32",
             "nombre": "Renovación Popular",
             "logoUrl": "./img/logos/logo-renovacion-popular.png?v2",
             "densidad": {
@@ -745,7 +769,7 @@
             }
         },
         {
-            "id": "32",
+            "id": "33",
             "nombre": "Salvemos al Perú",
             "logoUrl": "./img/logos/logo-salvemos-al-peru.png",
             "densidad": {
@@ -769,7 +793,7 @@
             }
         },
         {
-            "id": "33",
+            "id": "34",
             "nombre": "Sí Creo",
             "logoUrl": "./img/logos/logo-si-creo.png",
             "densidad": {
@@ -793,7 +817,7 @@
             }
         },
         {
-            "id": "34",
+            "id": "35",
             "nombre": "Somos Perú",
             "logoUrl": "./img/logos/logo-somos-peru.png",
             "densidad": {
@@ -817,7 +841,7 @@
             }
         },
         {
-            "id": "35",
+            "id": "36",
             "nombre": "Un Camino Diferente",
             "logoUrl": "./img/logos/logo-un-camino-diferente.png",
             "densidad": {
