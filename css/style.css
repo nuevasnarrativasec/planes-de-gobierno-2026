@@ -19,6 +19,7 @@
 
 /* Layout & Responsive */
 @import url('./layout.css');
+@import url('./performance.css');
 
 /* ============================================
    AD BLOCKER / EXTERNAL ELEMENTS HIDE

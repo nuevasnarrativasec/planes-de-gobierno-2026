@@ -1,5 +1,6 @@
 /* ============================================
    FACTCHECKING
+   Versión optimizada para iOS/Safari
    ============================================ */
 
 // Variables globales
@@ -8,7 +9,7 @@ let filteredFactcheckingData = [];
 let currentFactcheckingFilter = 'partido';
 let hasSearched = false;
 
-// Paginacion responsive
+// Paginación responsive
 const ITEMS_DESKTOP = 8;
 const ITEMS_MOBILE = 3;
 const MOBILE_BREAKPOINT = 768;
@@ -19,17 +20,26 @@ function getItemsPerPage() {
 
 let visibleItems = getItemsPerPage();
 
-// Actualizar al cambiar tamano de ventana
-window.addEventListener('resize', function() {
-    const newItemsPerPage = getItemsPerPage();
-    if ((visibleItems <= ITEMS_MOBILE && newItemsPerPage > ITEMS_MOBILE) ||
-        (visibleItems > ITEMS_MOBILE && newItemsPerPage <= ITEMS_MOBILE)) {
-        visibleItems = newItemsPerPage;
-        if (hasSearched) {
-            renderFactcheckingCards();
-        }
-    }
-});
+// Actualizar al cambiar tamaño de ventana - CON DEBOUNCE
+const handleFactcheckingResize = (function() {
+    // Debounce interno si no está disponible globalmente
+    let timeout;
+    return function() {
+        clearTimeout(timeout);
+        timeout = setTimeout(function() {
+            const newItemsPerPage = getItemsPerPage();
+            if ((visibleItems <= ITEMS_MOBILE && newItemsPerPage > ITEMS_MOBILE) ||
+                (visibleItems > ITEMS_MOBILE && newItemsPerPage <= ITEMS_MOBILE)) {
+                visibleItems = newItemsPerPage;
+                if (hasSearched) {
+                    renderFactcheckingCards();
+                }
+            }
+        }, 200);
+    };
+})();
+
+window.addEventListener('resize', handleFactcheckingResize, { passive: true });
 
 /**
  * Cargar datos de factchecking
@@ -47,8 +57,7 @@ async function loadFactcheckingData() {
             url = addCacheBuster(url);
         }
         
-        const fetchFn = window.fetchWithRetry || fetch;
-        const response = await fetchFn(url);
+        const response = await fetch(url);
         
         if (!response.ok) {
             throw new Error('Error en la respuesta: ' + response.status);
@@ -58,7 +67,7 @@ async function loadFactcheckingData() {
         factcheckingData = parseFactcheckingCSV(csvText);
         filteredFactcheckingData = [...factcheckingData];
         
-        console.log('Datos de factchecking cargados:', factcheckingData.length, 'items');
+        console.log('✅ Datos de factchecking cargados:', factcheckingData.length, 'items');
         
         if (loading) loading.style.display = 'none';
         if (grid) grid.style.display = 'grid';
@@ -67,7 +76,7 @@ async function loadFactcheckingData() {
         renderFactcheckingCards();
         
     } catch (error) {
-        console.error('Error cargando datos de factchecking:', error);
+        console.error('❌ Error cargando datos de factchecking:', error);
         loadExampleFactcheckingData();
     }
 }
@@ -107,9 +116,9 @@ function loadExampleFactcheckingData() {
         {
             partido: 'Ejemplo Partido',
             candidato: 'Candidato Ejemplo',
-            frase: 'Propuesta de ejemplo para demostracion.',
+            frase: 'Propuesta de ejemplo para demostración.',
             veredicto: 'Indeterminado',
-            justificacion: 'Esta es una justificacion de ejemplo.',
+            justificacion: 'Esta es una justificación de ejemplo.',
             fuentes_consultadas: 'Fuente Ejemplo\nhttps://ejemplo.com'
         }
     ];
@@ -125,7 +134,7 @@ function loadExampleFactcheckingData() {
 }
 
 /**
- * Renderizar cards de factchecking
+ * Renderizar cards de factchecking - OPTIMIZADO
  */
 function renderFactcheckingCards() {
     const grid = document.getElementById('factcheckingGrid');
@@ -155,18 +164,22 @@ function renderFactcheckingCards() {
     if (noResults) noResults.style.display = 'none';
     
     const itemsToShow = filteredFactcheckingData.slice(0, visibleItems);
-    grid.innerHTML = itemsToShow.map(item => createFactcheckingCard(item)).join('');
     
-    const remainingItems = filteredFactcheckingData.length - visibleItems;
-    
-    if (remainingItems > 0 && loadMoreContainer) {
-        loadMoreContainer.style.display = 'flex';
-        if (loadMoreCount) {
-            loadMoreCount.textContent = `Mostrando ${visibleItems} de ${filteredFactcheckingData.length} resultados`;
+    // Usar requestAnimationFrame para mejor rendimiento
+    requestAnimationFrame(() => {
+        grid.innerHTML = itemsToShow.map(item => createFactcheckingCard(item)).join('');
+        
+        const remainingItems = filteredFactcheckingData.length - visibleItems;
+        
+        if (remainingItems > 0 && loadMoreContainer) {
+            loadMoreContainer.style.display = 'flex';
+            if (loadMoreCount) {
+                loadMoreCount.textContent = `Mostrando ${visibleItems} de ${filteredFactcheckingData.length} resultados`;
+            }
+        } else if (loadMoreContainer) {
+            loadMoreContainer.style.display = 'none';
         }
-    } else if (loadMoreContainer) {
-        loadMoreContainer.style.display = 'none';
-    }
+    });
 }
 
 /**
@@ -195,7 +208,7 @@ function createFactcheckingCard(item) {
                         <span class="veredicto-descripcion">(${veredictoDescripcion})</span>
                     </div>
                     <div class="factchecking-veredicto-text">
-                        ${item.justificacion || 'Justificacion no disponible'}
+                        ${item.justificacion || 'Justificación no disponible'}
                     </div>
                 </div>
                 
@@ -216,8 +229,8 @@ function normalizeVeredicto(veredicto) {
     if (v === 'factible') return 'FACTIBLE';
     if (v === 'inviable') return 'INVIABLE';
     if (v.includes('sin') && v.includes('sin')) return 'SIN SUSTENTO';
-    if (v.includes('enga')) return 'ENGANOSA';
-    if (v.includes('no') || v === 'No') return 'NO ESTA EN SUS MANOS';
+    if (v.includes('enga')) return 'ENGAÑOSA';
+    if (v.includes('no') || v === 'No') return 'no está en sus manos';
     return 'INDETERMINADO';
 }
 
@@ -236,16 +249,16 @@ function getVeredictoClass(veredicto) {
 }
 
 /**
- * Obtener descripcion del veredicto
+ * Obtener descripción del veredicto
  */
 function getVeredictoDescripcion(veredictoClass) {
     const descripciones = {
-        'factible': 'Propuesta que puede ejecutarse de manera factible durante una gestion.',
-        'inviable': 'Propuesta que no puede ejecutarse dentro de una gestion o que contraviene la normativa vigente.',
-        'no_en_sus_manos': 'Propuesta cuyo desarrollo o cumplimiento no depende exclusivamente del Ejecutivo, sino que requiere la accion de otros poderes del Estado.',
-        'inexacta': 'Compromiso que no presenta informacion concreta ni criterios medibles para su desarrollo o evaluacion.',
-        'enganosa': 'Propuesta que incluye metas o cifras concretas, pero que sobredimensiona las capacidades reales del Ejecutivo, usa plazos o alcances irrealistas o presenta resultados que no son exigibles ni creibles dadas las restricciones tecnicas, presupuestales o institucionales.',
-        'sin_sustento': 'No se cuenta con informacion suficiente para determinar la viabilidad de esta propuesta.'
+        'factible': 'Propuesta que puede ejecutarse de manera factible durante una gestión.',
+        'inviable': 'Propuesta que no puede ejecutarse dentro de una gestión o que contraviene la normativa vigente.',
+        'no_en_sus_manos': 'Propuesta cuyo desarrollo o cumplimiento no depende exclusivamente del Ejecutivo, sino que requiere la acción de otros poderes del Estado.',
+        'inexacta': 'Compromiso que no presenta información concreta ni criterios medibles para su desarrollo o evaluación.',
+        'enganosa': 'Propuesta que incluye metas o cifras concretas, pero que sobredimensiona las capacidades reales del Ejecutivo, usa plazos o alcances irrealistas o presenta resultados que no son exigibles ni creíbles dadas las restricciones técnicas, presupuestales o institucionales.',
+        'sin_sustento': 'No se cuenta con información suficiente para determinar la viabilidad de esta propuesta.'
     };
     return descripciones[veredictoClass] || '';
 }
@@ -407,26 +420,36 @@ function handleVeredictoChange() {
 }
 
 /**
- * Cargar mas items
+ * Cargar más items
  */
 function loadMoreFactchecking() {
     visibleItems += getItemsPerPage();
     renderFactcheckingCards();
     
-    const grid = document.getElementById('factcheckingGrid');
-    const cards = grid.querySelectorAll('.factchecking-card');
-    const itemsPerPage = getItemsPerPage();
-    if (cards.length > visibleItems - itemsPerPage) {
-        const targetCard = cards[visibleItems - itemsPerPage];
-        targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    // Scroll suave al nuevo contenido
+    requestAnimationFrame(() => {
+        const grid = document.getElementById('factcheckingGrid');
+        const cards = grid.querySelectorAll('.factchecking-card');
+        const itemsPerPage = getItemsPerPage();
+        if (cards.length > visibleItems - itemsPerPage) {
+            const targetCard = cards[visibleItems - itemsPerPage];
+            targetCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    });
 }
 
 /**
- * Resetear paginacion
+ * Resetear paginación
  */
 function resetPagination() {
     visibleItems = getItemsPerPage();
+}
+
+/**
+ * Ocultar autocomplete de factchecking (función placeholder)
+ */
+function hideFactcheckingAutocomplete() {
+    // Función placeholder para compatibilidad
 }
 
 // Exportar funciones
@@ -436,3 +459,4 @@ window.handlePartidoChange = handlePartidoChange;
 window.handleCandidatoChange = handleCandidatoChange;
 window.handleVeredictoChange = handleVeredictoChange;
 window.loadMoreFactchecking = loadMoreFactchecking;
+window.hideFactcheckingAutocomplete = hideFactcheckingAutocomplete;

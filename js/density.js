@@ -1,5 +1,6 @@
 /* ============================================
    DENSIDAD DISCURSIVA
+   Versión optimizada para iOS/Safari
    ============================================ */
 
 // Variables globales
@@ -8,13 +9,21 @@ let densityFilteredParty = '';
 let densityData = {};
 let isSliderDragging = false;
 
+// Cache de elementos DOM para evitar queries repetidas
+let sliderElements = {
+    slider: null,
+    handle: null,
+    segments: null,
+    labels: null,
+    container: null
+};
+
 /**
  * Cargar datos de densidad desde JSON
  */
 async function loadDensityData() {
     try {
-        const fetchFn = window.fetchWithRetry || fetch;
-        const response = await fetchFn(CONFIG.DENSITY_DATA_URL);
+        const response = await fetch(CONFIG.DENSITY_DATA_URL);
         if (!response.ok) {
             throw new Error('Error al cargar datos de densidad');
         }
@@ -29,10 +38,10 @@ async function loadDensityData() {
             };
         });
         
-        console.log('Datos de densidad cargados:', Object.keys(densityData).length, 'partidos');
+        console.log('✅ Datos de densidad cargados:', Object.keys(densityData).length, 'partidos');
         return densityData;
     } catch (error) {
-        console.error('Error cargando datos de densidad:', error);
+        console.error('❌ Error cargando datos de densidad:', error);
         // Datos de ejemplo si falla
         densityData = {
             "1": {
@@ -46,27 +55,40 @@ async function loadDensityData() {
 }
 
 /**
- * Inicializar theme slider
+ * Cachear elementos del DOM del slider
+ */
+function cacheSliderElements() {
+    sliderElements = {
+        slider: document.getElementById('themeSlider'),
+        handle: document.getElementById('sliderHandle'),
+        segments: document.getElementById('themeSegments'),
+        labels: document.getElementById('themeLabels'),
+        container: document.getElementById('partyDensityList')
+    };
+}
+
+/**
+ * Inicializar theme slider - OPTIMIZADO PARA iOS
  */
 function initThemeSlider() {
-    const segmentsContainer = document.getElementById('themeSegments');
-    const labelsContainer = document.getElementById('themeLabels');
-    const slider = document.getElementById('themeSlider');
-    const handle = document.getElementById('sliderHandle');
+    cacheSliderElements();
+    
+    const { slider, handle, segments: segmentsContainer, labels: labelsContainer } = sliderElements;
     
     if (!segmentsContainer || !labelsContainer || !slider || !handle) {
-        console.error('Elementos del slider no encontrados');
+        console.error('❌ Elementos del slider no encontrados');
         return;
     }
     
-    // Aplicar estilos criticos
+    // Aplicar estilos críticos
     slider.style.position = 'relative';
-    slider.style.touchAction = 'none';
+    slider.style.touchAction = 'pan-y'; // Permitir scroll vertical, capturar horizontal
     
     handle.style.position = 'absolute';
     handle.style.cursor = 'grab';
     handle.style.touchAction = 'none';
     handle.style.userSelect = 'none';
+    handle.style.webkitUserSelect = 'none';
     handle.style.zIndex = '100';
     
     // Crear segmentos
@@ -100,68 +122,115 @@ function initThemeSlider() {
             if (!isSliderDragging) {
                 selectTheme(index);
             }
-        });
+        }, { passive: true });
     });
     
-    // Eventos de drag - Mouse
-    handle.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        startSliderDrag();
-        updateSliderFromPosition(e.clientX);
-    });
+    // ============================================
+    // EVENTOS DE MOUSE (Desktop)
+    // ============================================
+    handle.addEventListener('mousedown', handleMouseDown);
+    document.addEventListener('mousemove', handleMouseMove);
+    document.addEventListener('mouseup', handleMouseUp);
     
-    document.addEventListener('mousemove', (e) => {
-        if (!isSliderDragging) return;
-        e.preventDefault();
-        updateSliderFromPosition(e.clientX);
-    });
+    // ============================================
+    // EVENTOS DE TOUCH (iOS/Mobile) - OPTIMIZADOS
+    // ============================================
     
-    document.addEventListener('mouseup', () => {
-        if (isSliderDragging) stopSliderDrag();
-    });
+    // TouchStart en el handle - necesita preventDefault para capturar el gesto
+    handle.addEventListener('touchstart', handleTouchStart, { passive: false });
     
-    // Eventos de drag - Touch
-    handle.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        startSliderDrag();
-        const touch = e.touches[0];
-        updateSliderFromPosition(touch.clientX);
-    }, { passive: false });
+    // TouchMove en document - solo prevenir default si estamos arrastrando
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
     
-    document.addEventListener('touchmove', (e) => {
-        if (!isSliderDragging) return;
-        e.preventDefault();
-        const touch = e.touches[0];
-        updateSliderFromPosition(touch.clientX);
-    }, { passive: false });
-    
-    document.addEventListener('touchend', () => {
-        if (isSliderDragging) stopSliderDrag();
-    });
-    
-    document.addEventListener('touchcancel', () => {
-        if (isSliderDragging) stopSliderDrag();
-    });
+    // TouchEnd/Cancel - pueden ser passive
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    document.addEventListener('touchcancel', handleTouchEnd, { passive: true });
     
     // Click en la barra del slider
-    slider.addEventListener('click', (e) => {
-        if (e.target === handle || e.target.closest('#sliderHandle') || isSliderDragging) {
-            return;
-        }
-        updateSliderFromPosition(e.clientX);
-    });
+    slider.addEventListener('click', handleSliderClick, { passive: true });
     
-    console.log('Theme slider inicializado');
+    console.log('✅ Theme slider inicializado (optimizado para iOS)');
 }
+
+/* ============================================
+   HANDLERS DE EVENTOS - MOUSE
+   ============================================ */
+
+function handleMouseDown(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    startSliderDrag();
+    updateSliderFromPosition(e.clientX);
+}
+
+function handleMouseMove(e) {
+    if (!isSliderDragging) return;
+    e.preventDefault();
+    updateSliderFromPosition(e.clientX);
+}
+
+function handleMouseUp() {
+    if (isSliderDragging) stopSliderDrag();
+}
+
+/* ============================================
+   HANDLERS DE EVENTOS - TOUCH (iOS Optimizado)
+   ============================================ */
+
+function handleTouchStart(e) {
+    // Prevenir el comportamiento por defecto solo en el handle
+    e.preventDefault();
+    e.stopPropagation();
+    
+    startSliderDrag();
+    
+    const touch = e.touches[0];
+    updateSliderFromPosition(touch.clientX);
+}
+
+function handleTouchMove(e) {
+    // Solo prevenir si estamos arrastrando el slider
+    if (!isSliderDragging) return;
+    
+    // Prevenir scroll mientras arrastramos
+    e.preventDefault();
+    
+    const touch = e.touches[0];
+    
+    // Usar requestAnimationFrame para mejor rendimiento
+    if (window.rafUpdate) {
+        window.rafUpdate(() => {
+            updateSliderFromPosition(touch.clientX);
+        });
+    } else {
+        updateSliderFromPosition(touch.clientX);
+    }
+}
+
+function handleTouchEnd() {
+    if (isSliderDragging) {
+        stopSliderDrag();
+    }
+}
+
+function handleSliderClick(e) {
+    const handle = sliderElements.handle;
+    if (e.target === handle || e.target.closest('#sliderHandle') || isSliderDragging) {
+        return;
+    }
+    updateSliderFromPosition(e.clientX);
+}
+
+/* ============================================
+   FUNCIONES DE DRAG
+   ============================================ */
 
 /**
  * Iniciar drag del slider
  */
 function startSliderDrag() {
     isSliderDragging = true;
-    const handle = document.getElementById('sliderHandle');
+    const handle = sliderElements.handle;
     if (handle) {
         handle.classList.add('dragging');
         handle.style.transition = 'none';
@@ -169,6 +238,11 @@ function startSliderDrag() {
     }
     document.body.style.cursor = 'grabbing';
     document.body.style.userSelect = 'none';
+    document.body.style.webkitUserSelect = 'none';
+    
+    // Prevenir scroll en iOS mientras se arrastra
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
 }
 
 /**
@@ -176,7 +250,7 @@ function startSliderDrag() {
  */
 function stopSliderDrag() {
     isSliderDragging = false;
-    const handle = document.getElementById('sliderHandle');
+    const handle = sliderElements.handle;
     if (handle) {
         handle.classList.remove('dragging');
         handle.style.transition = 'left 0.2s ease-out';
@@ -185,21 +259,24 @@ function stopSliderDrag() {
     }
     document.body.style.cursor = '';
     document.body.style.userSelect = '';
+    document.body.style.webkitUserSelect = '';
+    
+    // Restaurar scroll
+    document.body.style.overflow = '';
+    document.body.style.touchAction = '';
     
     updateSliderHandle();
 }
 
 /**
- * Actualizar slider desde posicion
+ * Actualizar slider desde posición - OPTIMIZADO
  */
 function updateSliderFromPosition(clientX) {
-    const slider = document.getElementById('themeSlider');
-    const handle = document.getElementById('sliderHandle');
+    const { slider, handle } = sliderElements;
     if (!slider || !handle) return;
     
     const sliderRect = slider.getBoundingClientRect();
-    const handleRect = handle.getBoundingClientRect();
-    const handleWidth = handleRect.width || 40;
+    const handleWidth = 40; // Valor fijo para evitar getBoundingClientRect adicional
     
     const x = clientX - sliderRect.left;
     const clampedX = Math.max(0, Math.min(x, sliderRect.width));
@@ -217,16 +294,28 @@ function updateSliderFromPosition(clientX) {
     if (newIndex !== selectedThemeIndex && newIndex >= 0 && newIndex < THEMES.length) {
         selectedThemeIndex = newIndex;
         
-        document.querySelectorAll('.theme-segment').forEach((seg, i) => {
-            seg.classList.toggle('active', i === newIndex);
-            seg.classList.toggle('dimmed', i !== newIndex);
+        // Batch DOM updates
+        requestAnimationFrame(() => {
+            document.querySelectorAll('.theme-segment').forEach((seg, i) => {
+                seg.classList.toggle('active', i === newIndex);
+                seg.classList.toggle('dimmed', i !== newIndex);
+            });
+            
+            document.querySelectorAll('.theme-label-item').forEach((label, i) => {
+                label.classList.toggle('active', i === newIndex);
+            });
         });
         
-        document.querySelectorAll('.theme-label-item').forEach((label, i) => {
-            label.classList.toggle('active', i === newIndex);
-        });
+        // Debounce renderDensityBars para mejor rendimiento
+        if (window.debounce && !window._debouncedRenderBars) {
+            window._debouncedRenderBars = window.debounce(renderDensityBars, 50);
+        }
         
-        renderDensityBars();
+        if (window._debouncedRenderBars) {
+            window._debouncedRenderBars();
+        } else {
+            renderDensityBars();
+        }
     }
 }
 
@@ -238,16 +327,18 @@ function selectTheme(index) {
     
     selectedThemeIndex = index;
     
-    document.querySelectorAll('.theme-segment').forEach((seg, i) => {
-        seg.classList.toggle('active', i === index);
-        seg.classList.toggle('dimmed', i !== index);
+    requestAnimationFrame(() => {
+        document.querySelectorAll('.theme-segment').forEach((seg, i) => {
+            seg.classList.toggle('active', i === index);
+            seg.classList.toggle('dimmed', i !== index);
+        });
+        
+        document.querySelectorAll('.theme-label-item').forEach((label, i) => {
+            label.classList.toggle('active', i === index);
+        });
     });
     
-    document.querySelectorAll('.theme-label-item').forEach((label, i) => {
-        label.classList.toggle('active', i === index);
-    });
-    
-    const handle = document.getElementById('sliderHandle');
+    const handle = sliderElements.handle;
     if (handle) {
         handle.style.transition = 'left 0.2s ease-out';
     }
@@ -257,11 +348,10 @@ function selectTheme(index) {
 }
 
 /**
- * Actualizar posicion del handle
+ * Actualizar posición del handle
  */
 function updateSliderHandle() {
-    const slider = document.getElementById('themeSlider');
-    const handle = document.getElementById('sliderHandle');
+    const { slider, handle } = sliderElements;
     const segments = document.querySelectorAll('.theme-segment');
     
     if (!slider || !handle || segments.length === 0) return;
@@ -271,8 +361,7 @@ function updateSliderHandle() {
     
     const segmentRect = activeSegment.getBoundingClientRect();
     const sliderRect = slider.getBoundingClientRect();
-    const handleRect = handle.getBoundingClientRect();
-    const handleWidth = handleRect.width || 40;
+    const handleWidth = 40; // Valor fijo
     
     const segmentCenter = segmentRect.left - sliderRect.left + (segmentRect.width / 2);
     const leftPos = segmentCenter - (handleWidth / 2);
@@ -286,10 +375,10 @@ function updateSliderHandle() {
 }
 
 /**
- * Renderizar barras de densidad
+ * Renderizar barras de densidad - OPTIMIZADO
  */
 function renderDensityBars() {
-    const container = document.getElementById('partyDensityList');
+    const container = sliderElements.container || document.getElementById('partyDensityList');
     if (!container) return;
     
     const selectedTheme = THEMES[selectedThemeIndex].id;
@@ -300,15 +389,19 @@ function renderDensityBars() {
         partidosToShow = partidosToShow.filter(id => id == densityFilteredParty);
     }
     
+    // Usar documentFragment para mejor rendimiento
+    const fragment = document.createDocumentFragment();
+    const tempDiv = document.createElement('div');
+    
     if (isMobile) {
         container.className = 'party-list mobile-view';
-        container.innerHTML = partidosToShow.map(partidoId => {
+        tempDiv.innerHTML = partidosToShow.map(partidoId => {
             const partido = densityData[partidoId];
             const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
             const selectedPercentage = partido.temas[selectedTheme] || 0;
             
             const logoHTML = partido.logoUrl 
-                ? `<img src="${partido.logoUrl}" alt="${partido.partido}" onerror="this.style.display='none';">` 
+                ? `<img src="${partido.logoUrl}" alt="${partido.partido}" loading="lazy" onerror="this.style.display='none';">` 
                 : '🎈';
             
             const totalPercentage = THEMES.reduce((sum, theme) => {
@@ -354,7 +447,7 @@ function renderDensityBars() {
         const namesHTML = partidosToShow.map(partidoId => {
             const partido = densityData[partidoId];
             const logoHTML = partido.logoUrl 
-                ? `<img src="${partido.logoUrl}" alt="${partido.partido}" onerror="this.style.display='none';">` 
+                ? `<img src="${partido.logoUrl}" alt="${partido.partido}" loading="lazy" onerror="this.style.display='none';">` 
                 : '🎈';
             const highlightClass = densityFilteredParty == partidoId ? 'highlighted' : '';
             
@@ -404,11 +497,14 @@ function renderDensityBars() {
             `;
         }).join('');
         
-        container.innerHTML = `
+        tempDiv.innerHTML = `
             <div class="party-names-column">${namesHTML}</div>
             <div class="party-bars-column">${barsHTML}</div>
         `;
     }
+    
+    // Actualizar DOM de una sola vez
+    container.innerHTML = tempDiv.innerHTML;
 }
 
 /**
@@ -417,7 +513,7 @@ function renderDensityBars() {
 function selectThemeFromBar(themeIndex) {
     selectTheme(themeIndex);
     
-    const slider = document.getElementById('themeSlider');
+    const slider = sliderElements.slider || document.getElementById('themeSlider');
     if (slider) {
         slider.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
