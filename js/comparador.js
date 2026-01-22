@@ -8,27 +8,26 @@ let selectedComparisons = [null, null, null];
 let currentComparisonTheme = '';
 
 /**
- * Cargar datos de comparacion desde Google Sheets
+ * Cargar datos de comparaciÃ³n desde Google Sheets
  */
 async function loadComparisonData() {
     try {
-        const fetchFn = window.fetchWithRetry || fetch;
-        const response = await fetchFn(addCacheBuster(CONFIG.COMPARISON_SPREADSHEET_URL));
+        const response = await fetch(addCacheBuster(CONFIG.COMPARISON_SPREADSHEET_URL));
         if (!response.ok) {
-            throw new Error('Error al cargar datos de comparacion');
+            throw new Error('Error al cargar datos de comparaciÃ³n');
         }
         const csvText = await response.text();
         comparisonDataList = parseCSV(csvText);
-        console.log('Datos de comparacion cargados:', comparisonDataList.length, 'registros');
+        console.log('âœ… Datos de comparaciÃ³n cargados:', comparisonDataList.length, 'registros');
         return comparisonDataList;
     } catch (error) {
-        console.error('Error cargando datos de comparacion:', error);
+        console.error('âŒ Error cargando datos de comparaciÃ³n:', error);
         return [];
     }
 }
 
 /**
- * Actualizar tema de comparacion
+ * Actualizar tema de comparaciÃ³n
  */
 function updateComparisonTheme() {
     currentComparisonTheme = document.getElementById('themeSelector').value;
@@ -36,13 +35,13 @@ function updateComparisonTheme() {
 }
 
 /**
- * Renderizar tarjetas de comparacion
+ * Renderizar tarjetas de comparaciÃ³n
  */
 function renderComparisonCards() {
     const grid = document.getElementById('comparisonGrid');
     if (!grid) return;
     
-    const partyOptions = window.allData ? window.allData.filter(d => d.tipo === 'partido') : [];
+    const partyOptions = window.allData ? window.allData.filter(d => d.tipo === 'partido').sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')) : [];
     
     grid.innerHTML = selectedComparisons.map((item, index) => {
         if (!item) {
@@ -65,7 +64,7 @@ function renderComparisonCards() {
 }
 
 /**
- * Renderizar una tarjeta de comparacion con datos
+ * Renderizar una tarjeta de comparaciÃ³n con datos
  */
 function renderComparisonCard(item, index) {
     const compData = comparisonDataList.find(c => {
@@ -75,7 +74,7 @@ function renderComparisonCard(item, index) {
     if (!compData && currentComparisonTheme) {
         return `
             <div class="comparison-card">
-                <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
+                <button class="remove-card" onclick="removeFromComparison(${index})">Ã—</button>
                 <div class="card-profile">
                     <div class="card-avatar">
                         ${item.fotourl ? `<img src="${item.fotourl}" alt="${item.candidato}">` : '<div class="card-avatar-icon"></div><div class="card-avatar-body"></div>'}
@@ -95,11 +94,11 @@ function renderComparisonCard(item, index) {
         : '<div class="card-avatar-icon"></div><div class="card-avatar-body"></div>';
     
     if (!currentComparisonTheme) {
-        const partyOptions = window.allData ? window.allData.filter(d => d.tipo === 'partido' && d.id != item.id) : [];
+        const partyOptions = window.allData ? window.allData.filter(d => d.tipo === 'partido' && d.id != item.id).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')) : [];
         
         return `
             <div class="comparison-card">
-                <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
+                <button class="remove-card" onclick="removeFromComparison(${index})">Ã—</button>
                 <div class="card-selector">
                     <select onchange="changeComparison(${index}, this.value)">
                         <option value="${item.id}" selected>${item.nombre}</option>
@@ -122,11 +121,11 @@ function renderComparisonCard(item, index) {
         `<ul>${compData.propuestas.split('\n').filter(p => p.trim()).map(p => `<li>${p.replace(/^- /, '')}</li>`).join('')}</ul>` 
         : '<p>No hay propuestas disponibles</p>';
     
-    const partyOptions = window.allData ? window.allData.filter(d => d.id != item.id && d.tipo === 'partido') : [];
+    const partyOptions = window.allData ? window.allData.filter(d => d.id != item.id && d.tipo === 'partido').sort((a, b) => a.nombre.localeCompare(b.nombre, 'es')) : [];
     
     return `
         <div class="comparison-card">
-            <button class="remove-card" onclick="removeFromComparison(${index})">×</button>
+            <button class="remove-card" onclick="removeFromComparison(${index})">Ã—</button>
             <div class="card-selector">
                 <select onchange="changeComparison(${index}, this.value)">
                     <option value="${item.id}" selected>${item.nombre}</option>
@@ -149,11 +148,11 @@ function renderComparisonCard(item, index) {
                 ${compData.tonodiscursivo || compData.coherencia ? `
                     <div class="discourse-tone no-bg">
                         <p><strong>ENFOQUE DISCURSIVO:</strong> ${compData.tonodiscursivo || 'N/A'}</p>
-                        <p><strong>FORMULACION DE PROPUESTA:</strong> ${compData.coherencia || 'N/A'}</p>
-                        <span style="font-size: .8rem;">Estos indicadores clasifican la estructura logica y el enfoque semantico del texto.</span>
+                        <p><strong>FORMULACIÃ“N DE PROPUESTA:</strong> ${compData.coherencia || 'N/A'}</p>
+                        <span style="font-size: .8rem;">Estos indicadores clasifican la estructura lÃ³gica y el enfoque semÃ¡ntico del texto.</span>
                     </div>
                     <div class="discourse-tone ancla">
-                        <p>Ver criterios de analisis</p>
+                        <p>Ver criterios de anÃ¡lisis</p>
                     </div>
                 ` : ''}
             </div>
@@ -162,7 +161,7 @@ function renderComparisonCard(item, index) {
 }
 
 /**
- * Agregar partido a la comparacion
+ * Agregar partido a la comparaciÃ³n
  */
 function addToComparison(index, itemId) {
     if (!itemId) return;
@@ -175,7 +174,7 @@ function addToComparison(index, itemId) {
 }
 
 /**
- * Cambiar partido en la comparacion
+ * Cambiar partido en la comparaciÃ³n
  */
 function changeComparison(index, itemId) {
     if (!itemId) return;
@@ -188,7 +187,7 @@ function changeComparison(index, itemId) {
 }
 
 /**
- * Remover de la comparacion
+ * Remover de la comparaciÃ³n
  */
 function removeFromComparison(index) {
     selectedComparisons[index] = null;
@@ -196,7 +195,7 @@ function removeFromComparison(index) {
 }
 
 /**
- * Scroll suave a la seccion de comparar
+ * Scroll suave a la secciÃ³n de comparar
  */
 function scrollToCompare() {
     const comparisonSection = document.getElementById('comparisonSection');
@@ -206,7 +205,7 @@ function scrollToCompare() {
 }
 
 /**
- * Agregar al comparador desde el boton "Comparar" del detalle
+ * Agregar al comparador desde el botÃ³n "Comparar" del detalle
  */
 function addToCompare(item) {
     if (typeof item === 'string' || typeof item === 'number') {
@@ -225,7 +224,7 @@ function addToCompare(item) {
         if (partido) {
             item = partido;
         } else {
-            alert('No es posible anadir candidatos al comparador. Solo se permiten partidos.');
+            alert('No es posible aÃ±adir candidatos al comparador. SÃ³lo se permiten partidos.');
             return;
         }
     }
