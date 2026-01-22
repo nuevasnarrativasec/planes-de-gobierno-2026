@@ -24,9 +24,7 @@ async function loadDataFromGoogleSheets() {
     }
 
     try {
-        // Usar fetchWithRetry si esta disponible, sino fetch normal
-        const fetchFn = window.fetchWithRetry || fetch;
-        const response = await fetchFn(addCacheBuster(CONFIG.SPREADSHEET_URL));
+        const response = await fetch(addCacheBuster(CONFIG.SPREADSHEET_URL));
         
         if (!response.ok) {
             throw new Error('Error al cargar los datos');
@@ -35,10 +33,10 @@ async function loadDataFromGoogleSheets() {
         const csvText = await response.text();
         allData = parseCSV(csvText);
         
-        // Actualizar referencia global para que otros modulos puedan acceder
+        // Actualizar referencia global para que otros módulo puedan acceder
         window.allData = allData;
         
-        filteredData = allData.filter(item => item.tipo === currentTab);
+        filteredData = allData.filter(item => item.tipo === currentTab).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
         
         console.log('Datos cargados:', allData.length, 'registros');
         
@@ -60,7 +58,7 @@ async function loadDataFromGoogleSheets() {
                 <div style="padding: 20px; text-align: center; color: #e74c3c;">
                     <p style="font-weight: bold; margin-bottom: 10px;">Error al cargar los datos</p>
                     <p style="font-size: 13px; line-height: 1.6;">
-                        Verifica que la URL del Google Sheet sea correcta y que este publicado como CSV.
+                        Verifica que la URL del Google Sheet sea correcta y que estÃ© publicado como CSV.
                     </p>
                 </div>
             `;
@@ -87,7 +85,7 @@ function switchTab(tab) {
 }
 
 /**
- * Filtrar items por busqueda
+ * Filtrar items por búsqueda
  */
 function filterItems() {
     const searchInput = document.getElementById('searchInput');
@@ -98,7 +96,7 @@ function filterItems() {
         const matchesSearch = item.nombre.toLowerCase().includes(searchTerm) || 
                             (item.candidato && item.candidato.toLowerCase().includes(searchTerm));
         return matchesTab && matchesSearch;
-    });
+    }).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es'));
     
     renderItems();
 }
@@ -122,14 +120,14 @@ function renderItems() {
             imageDisplay = item.fotourl 
                 ? `<img src="${item.fotourl}" alt="${item.candidato || item.nombre}" 
                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 6px;"
-                    onerror="this.style.display='none'; this.parentElement.innerHTML='👤';">` 
-                : '👤';
+                    onerror="this.style.display='none'; this.parentElement.innerHTML='ðŸ‘¤';">` 
+                : 'ðŸ‘¤';
         } else {
             imageDisplay = item.logourl 
                 ? `<img src="${item.logourl}" alt="${item.nombre}" 
                     style="width: 100%; height: 100%; object-fit: contain; border-radius: 6px;"
-                    onerror="this.style.display='none'; this.parentElement.innerHTML='🎈';">` 
-                : '🎈';
+                    onerror="this.style.display='none'; this.parentElement.innerHTML='ðŸŽˆ';">` 
+                : 'ðŸŽˆ';
         }
         
         return `
@@ -199,8 +197,8 @@ function renderDetails(item) {
         <div class="candidate-profile">
             <div class="box-main-avatar">
                 <div class="avatar">${avatarHTML}</div>
-                <div class="candidate-name">${item.candidato || 'Sin informacion'}</div>
-                <div class="party-label">${item.nombrepartido || 'Sin informacion'}</div>                        
+                <div class="candidate-name">${item.candidato || 'Sin información'}</div>
+                <div class="party-label">${item.nombrepartido || 'Sin información'}</div>                        
             </div>   
             
             <div class="box-main-buttons">
@@ -211,7 +209,7 @@ function renderDetails(item) {
             </div> 
             <div class="candidate-vices">
                 <h6>Vicepresidentes:</h6>
-                ${item.vicepresidentes || 'Sin informacion'}
+                ${item.vicepresidentes || 'Sin información'}
             </div>
             <div class="candidate-info">
                 <div class="box-edad">  
@@ -224,10 +222,10 @@ function renderDetails(item) {
                 </div> 
             </div> 
             <div class="vision-section">
-                <p class="vision-text">${item.vision || 'Sin informacion de vision disponible.'}</p>    
+                <p class="vision-text">${item.vision || 'Sin información de visión disponible.'}</p>    
             </div>
             <div class="candidate-temas-mencionados">                        
-                <h6>Temas mas mencionados:</h6>
+                <h6>Temas más mencionados:</h6>
                 <img src="./img/icon-click-2.png" alt="" width="100%" class="icon-click-temas">
                 <div class="topics">
                     ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
@@ -242,7 +240,7 @@ function renderDetails(item) {
    ============================================ */
 
 /**
- * Manejar input de busqueda
+ * Manejar input de bÃºsqueda
  */
 function handleSearchInput(event) {
     const key = event.key;
@@ -317,12 +315,12 @@ function renderSuggestions(searchTerm) {
         if (item.tipo === 'candidato') {
             const photoUrl = item.fotourl || item.logourl;
             imageContent = photoUrl && photoUrl.trim() !== '' 
-                ? `<img src="${photoUrl}" alt="${item.candidato || item.nombre}" onerror="this.parentElement.innerHTML='👤';">`
-                : '👤';
+                ? `<img src="${photoUrl}" alt="${item.candidato || item.nombre}" onerror="this.parentElement.innerHTML='ðŸ‘¤';">`
+                : 'ðŸ‘¤';
         } else {
             imageContent = item.logourl && item.logourl.trim() !== ''
-                ? `<img src="${item.logourl}" alt="${item.nombre}" onerror="this.parentElement.innerHTML='🎈';">`
-                : '🎈';
+                ? `<img src="${item.logourl}" alt="${item.nombre}" onerror="this.parentElement.innerHTML='ðŸŽˆ';">`
+                : 'ðŸŽˆ';
         }
         
         const highlightText = (text, term) => {
@@ -376,7 +374,7 @@ function navigateSuggestions(direction) {
 }
 
 /**
- * Seleccionar sugerencia por indice
+ * Seleccionar sugerencia por Ã­ndice
  */
 function selectSuggestionByIndex(index) {
     selectSuggestion(currentSuggestions[index]);
