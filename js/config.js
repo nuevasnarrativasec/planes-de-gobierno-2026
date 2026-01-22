@@ -14,7 +14,7 @@ const CONFIG = {
     FACTCHECKING_SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1IV5othVVZ0udcHWXN5Tfv5UDsDRPjHcJDz4X6BWGiV8/export?format=csv',
     
     // URL del archivo JSON con datos de densidad
-    DENSITY_DATA_URL: './data/densidad-data.json'
+    DENSITY_DATA_URL: 'https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/data/densidad-data.json'
 };
 
 // Temas para densidad discursiva
