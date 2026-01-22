@@ -226,7 +226,7 @@ function renderDetails(item) {
             </div>
             <div class="candidate-temas-mencionados">                        
                 <h6>Temas más mencionados:</h6>
-                <img src="./img/icon-click-2.png" alt="" width="100%" class="icon-click-temas">
+                <img src="https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/img/icon-click-2.png" alt="" width="100%" class="icon-click-temas">
                 <div class="topics">
                     ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
                 </div>
