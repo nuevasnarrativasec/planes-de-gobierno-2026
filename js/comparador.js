@@ -74,7 +74,7 @@ function renderComparisonCard(item, index) {
     if (!compData && currentComparisonTheme) {
         return `
             <div class="comparison-card">
-                <button class="remove-card" onclick="removeFromComparison(${index})">X—</button>
+                <button class="remove-card" onclick="removeFromComparison(${index})">X</button>
                 <div class="card-profile">
                     <div class="card-avatar">
                         ${item.fotourl ? `<img src="${item.fotourl}" alt="${item.candidato}">` : '<div class="card-avatar-icon"></div><div class="card-avatar-body"></div>'}
@@ -125,7 +125,7 @@ function renderComparisonCard(item, index) {
     
     return `
         <div class="comparison-card">
-            <button class="remove-card" onclick="removeFromComparison(${index})">X—</button>
+            <button class="remove-card" onclick="removeFromComparison(${index})">X</button>
             <div class="card-selector">
                 <select onchange="changeComparison(${index}, this.value)">
                     <option value="${item.id}" selected>${item.nombre}</option>
