@@ -1,12 +1,12 @@
 /* ============================================
-   MAIN.JS - INICIALIZACIÓN DE LA APLICACIÓN
+   MAIN.JS - INICIALIZACION DE LA APLICACION
    ============================================ */
 
 /**
- * Inicialización principal de la aplicación
+ * Inicializacion principal de la aplicacion
  */
 async function init() {
-    console.log('🚀 Iniciando aplicación...');
+    console.log('Iniciando aplicacion...');
     
     try {
         // Cargar datos principales
@@ -35,15 +35,15 @@ async function init() {
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey && e.key === 'R') {
                 e.preventDefault();
-                console.log('⌨️ Atajo de teclado: Refrescando datos...');
+                console.log('Atajo de teclado: Refrescando datos...');
                 refreshAllData();
             }
         });
         
-        console.log('✅ Aplicación inicializada correctamente');
+        console.log('Aplicacion inicializada correctamente');
         
     } catch (error) {
-        console.error('❌ Error al inicializar la aplicación:', error);
+        console.error('Error al inicializar la aplicacion:', error);
     }
 }
 
@@ -52,7 +52,7 @@ async function init() {
  */
 async function refreshAllData() {
     try {
-        console.log('🔄 Refrescando todos los datos...');
+        console.log('Refrescando todos los datos...');
         
         await loadDataFromGoogleSheets();
         await loadComparisonData();
@@ -62,10 +62,10 @@ async function refreshAllData() {
         populateDensityPartySelector();
         renderDensityBars();
         
-        console.log('✅ Todos los datos actualizados correctamente');
+        console.log('Todos los datos actualizados correctamente');
         
     } catch (error) {
-        console.error('❌ Error al refrescar datos:', error);
+        console.error('Error al refrescar datos:', error);
     }
 }
 
@@ -108,7 +108,7 @@ function shareUrl(event) {
 }
 
 /**
- * Inicializar scroll container horizontal (tarjetas ¿Sabías que?)
+ * Inicializar scroll container horizontal (tarjetas Sabias que?)
  */
 function initScrollContainer() {
     const slider = document.querySelector('.scroll-container');
@@ -145,7 +145,7 @@ function initScrollContainer() {
 }
 
 /**
- * Inicializar navegación por anclas
+ * Inicializar navegacion por anclas
  */
 function initAnchorNavigation() {
     const anchorItems = document.querySelectorAll('ul.anclas li');
@@ -176,7 +176,7 @@ function initAnchorNavigation() {
 }
 
 /**
- * Inicializar botón flotante (Ver Hojas de Vida)
+ * Inicializar boton flotante (Ver Hojas de Vida)
  */
 function initFloatingButton() {
     const boton = document.querySelector('.btn-ver-hojas');
@@ -207,7 +207,7 @@ function initFloatingButton() {
 }
 
 /**
- * Inicializar sección de metodología (expandible)
+ * Inicializar seccion de metodologia (expandible)
  */
 function initMetodologia() {
     const botonLeerMas = document.querySelector('.mas-metodologia');
@@ -218,10 +218,10 @@ function initMetodologia() {
     botonLeerMas.addEventListener('click', function() {
         if (contenidoOculto.style.display === "none") {
             contenidoOculto.style.display = "block";
-            botonLeerMas.innerText = "Ocultar detalle del método";
+            botonLeerMas.innerText = "Ocultar detalle del metodo";
         } else {
             contenidoOculto.style.display = "none";
-            botonLeerMas.innerText = "Conoce el detalle del método de análisis aquí";
+            botonLeerMas.innerText = "Conoce el detalle del metodo de analisis aqui";
         }
     });
 
@@ -232,7 +232,7 @@ function initMetodologia() {
             
             if (contenidoOculto.style.display === "none") {
                 contenidoOculto.style.display = "block";
-                botonLeerMas.innerText = "Ocultar detalle del método";
+                botonLeerMas.innerText = "Ocultar detalle del metodo";
             }
             
             const boxMetodologia = document.querySelector('.box-metodologia');
@@ -247,7 +247,7 @@ function initMetodologia() {
 }
 
 /**
- * Toggle para acordeón de conceptos
+ * Toggle para acordeon de conceptos
  */
 function toggleConceptosAccordion(accordionId) {
     const accordion = document.getElementById(accordionId);
@@ -262,7 +262,7 @@ function toggleConceptosAccordion(accordionId) {
     }
 }
 
-// Exportar función global
+// Exportar funcion global
 window.toggleConceptosAccordion = toggleConceptosAccordion;
 
 /**
@@ -285,10 +285,70 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 /**
- * Window onload - Inicializar datos
+ * Verificar que todas las dependencias esten cargadas
  */
-window.onload = init;
+function checkDependencies() {
+    return typeof loadDataFromGoogleSheets === 'function' &&
+           typeof loadComparisonData === 'function' &&
+           typeof loadFactcheckingData === 'function' &&
+           typeof loadDensityData === 'function' &&
+           typeof CONFIG !== 'undefined';
+}
+
+/**
+ * Inicializacion robusta con retry
+ */
+function robustInit(retries = 5, delay = 500) {
+    if (checkDependencies()) {
+        console.log('Dependencias verificadas, iniciando...');
+        init();
+    } else if (retries > 0) {
+        console.log('Esperando dependencias... (intentos restantes: ' + retries + ')');
+        setTimeout(() => robustInit(retries - 1, delay), delay);
+    } else {
+        console.error('No se pudieron cargar las dependencias despues de varios intentos');
+        // Intentar inicializar de todas formas como ultimo recurso
+        init();
+    }
+}
+
+/**
+ * Multiples puntos de entrada para maxima compatibilidad
+ */
+// Metodo 1: DOMContentLoaded (mas temprano)
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(robustInit, 100);
+    });
+} else {
+    // DOM ya esta listo
+    setTimeout(robustInit, 100);
+}
+
+// Metodo 2: window.onload como respaldo
+window.addEventListener('load', function() {
+    // Solo inicializar si no se ha hecho ya
+    if (!window._appInitialized) {
+        console.log('Inicializacion por window.load...');
+        robustInit();
+    }
+});
+
+// Marcar cuando la app se inicialice
+const originalInit = init;
+init = async function() {
+    if (window._appInitialized) {
+        console.log('App ya inicializada, ignorando llamada duplicada');
+        return;
+    }
+    window._appInitialized = true;
+    await originalInit();
+};
 
 // Exportar funciones globales
 window.refreshAllData = refreshAllData;
 window.shareUrl = shareUrl;
+window.forceReload = function() {
+    window._appInitialized = false;
+    robustInit();
+};

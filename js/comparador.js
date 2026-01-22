@@ -8,26 +8,27 @@ let selectedComparisons = [null, null, null];
 let currentComparisonTheme = '';
 
 /**
- * Cargar datos de comparación desde Google Sheets
+ * Cargar datos de comparacion desde Google Sheets
  */
 async function loadComparisonData() {
     try {
-        const response = await fetch(addCacheBuster(CONFIG.COMPARISON_SPREADSHEET_URL));
+        const fetchFn = window.fetchWithRetry || fetch;
+        const response = await fetchFn(addCacheBuster(CONFIG.COMPARISON_SPREADSHEET_URL));
         if (!response.ok) {
-            throw new Error('Error al cargar datos de comparación');
+            throw new Error('Error al cargar datos de comparacion');
         }
         const csvText = await response.text();
         comparisonDataList = parseCSV(csvText);
-        console.log('✅ Datos de comparación cargados:', comparisonDataList.length, 'registros');
+        console.log('Datos de comparacion cargados:', comparisonDataList.length, 'registros');
         return comparisonDataList;
     } catch (error) {
-        console.error('❌ Error cargando datos de comparación:', error);
+        console.error('Error cargando datos de comparacion:', error);
         return [];
     }
 }
 
 /**
- * Actualizar tema de comparación
+ * Actualizar tema de comparacion
  */
 function updateComparisonTheme() {
     currentComparisonTheme = document.getElementById('themeSelector').value;
@@ -35,7 +36,7 @@ function updateComparisonTheme() {
 }
 
 /**
- * Renderizar tarjetas de comparación
+ * Renderizar tarjetas de comparacion
  */
 function renderComparisonCards() {
     const grid = document.getElementById('comparisonGrid');
@@ -64,7 +65,7 @@ function renderComparisonCards() {
 }
 
 /**
- * Renderizar una tarjeta de comparación con datos
+ * Renderizar una tarjeta de comparacion con datos
  */
 function renderComparisonCard(item, index) {
     const compData = comparisonDataList.find(c => {
@@ -148,11 +149,11 @@ function renderComparisonCard(item, index) {
                 ${compData.tonodiscursivo || compData.coherencia ? `
                     <div class="discourse-tone no-bg">
                         <p><strong>ENFOQUE DISCURSIVO:</strong> ${compData.tonodiscursivo || 'N/A'}</p>
-                        <p><strong>FORMULACIÓN DE PROPUESTA:</strong> ${compData.coherencia || 'N/A'}</p>
-                        <span style="font-size: .8rem;">Estos indicadores clasifican la estructura lógica y el enfoque semántico del texto.</span>
+                        <p><strong>FORMULACION DE PROPUESTA:</strong> ${compData.coherencia || 'N/A'}</p>
+                        <span style="font-size: .8rem;">Estos indicadores clasifican la estructura logica y el enfoque semantico del texto.</span>
                     </div>
                     <div class="discourse-tone ancla">
-                        <p>Ver criterios de análisis</p>
+                        <p>Ver criterios de analisis</p>
                     </div>
                 ` : ''}
             </div>
@@ -161,7 +162,7 @@ function renderComparisonCard(item, index) {
 }
 
 /**
- * Agregar partido a la comparación
+ * Agregar partido a la comparacion
  */
 function addToComparison(index, itemId) {
     if (!itemId) return;
@@ -174,7 +175,7 @@ function addToComparison(index, itemId) {
 }
 
 /**
- * Cambiar partido en la comparación
+ * Cambiar partido en la comparacion
  */
 function changeComparison(index, itemId) {
     if (!itemId) return;
@@ -187,7 +188,7 @@ function changeComparison(index, itemId) {
 }
 
 /**
- * Remover de la comparación
+ * Remover de la comparacion
  */
 function removeFromComparison(index) {
     selectedComparisons[index] = null;
@@ -195,7 +196,7 @@ function removeFromComparison(index) {
 }
 
 /**
- * Scroll suave a la sección de comparar
+ * Scroll suave a la seccion de comparar
  */
 function scrollToCompare() {
     const comparisonSection = document.getElementById('comparisonSection');
@@ -205,7 +206,7 @@ function scrollToCompare() {
 }
 
 /**
- * Agregar al comparador desde el botón "Comparar" del detalle
+ * Agregar al comparador desde el boton "Comparar" del detalle
  */
 function addToCompare(item) {
     if (typeof item === 'string' || typeof item === 'number') {
@@ -224,7 +225,7 @@ function addToCompare(item) {
         if (partido) {
             item = partido;
         } else {
-            alert('No es posible añadir candidatos al comparador. Sólo se permiten partidos.');
+            alert('No es posible anadir candidatos al comparador. Solo se permiten partidos.');
             return;
         }
     }

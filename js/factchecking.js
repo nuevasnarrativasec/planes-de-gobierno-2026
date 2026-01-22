@@ -8,7 +8,7 @@ let filteredFactcheckingData = [];
 let currentFactcheckingFilter = 'partido';
 let hasSearched = false;
 
-// Paginación responsive
+// Paginacion responsive
 const ITEMS_DESKTOP = 8;
 const ITEMS_MOBILE = 3;
 const MOBILE_BREAKPOINT = 768;
@@ -19,7 +19,7 @@ function getItemsPerPage() {
 
 let visibleItems = getItemsPerPage();
 
-// Actualizar al cambiar tamaño de ventana
+// Actualizar al cambiar tamano de ventana
 window.addEventListener('resize', function() {
     const newItemsPerPage = getItemsPerPage();
     if ((visibleItems <= ITEMS_MOBILE && newItemsPerPage > ITEMS_MOBILE) ||
@@ -47,7 +47,8 @@ async function loadFactcheckingData() {
             url = addCacheBuster(url);
         }
         
-        const response = await fetch(url);
+        const fetchFn = window.fetchWithRetry || fetch;
+        const response = await fetchFn(url);
         
         if (!response.ok) {
             throw new Error('Error en la respuesta: ' + response.status);
@@ -57,7 +58,7 @@ async function loadFactcheckingData() {
         factcheckingData = parseFactcheckingCSV(csvText);
         filteredFactcheckingData = [...factcheckingData];
         
-        console.log('✅ Datos de factchecking cargados:', factcheckingData.length, 'items');
+        console.log('Datos de factchecking cargados:', factcheckingData.length, 'items');
         
         if (loading) loading.style.display = 'none';
         if (grid) grid.style.display = 'grid';
@@ -66,7 +67,7 @@ async function loadFactcheckingData() {
         renderFactcheckingCards();
         
     } catch (error) {
-        console.error('❌ Error cargando datos de factchecking:', error);
+        console.error('Error cargando datos de factchecking:', error);
         loadExampleFactcheckingData();
     }
 }
@@ -106,9 +107,9 @@ function loadExampleFactcheckingData() {
         {
             partido: 'Ejemplo Partido',
             candidato: 'Candidato Ejemplo',
-            frase: 'Propuesta de ejemplo para demostración.',
+            frase: 'Propuesta de ejemplo para demostracion.',
             veredicto: 'Indeterminado',
-            justificacion: 'Esta es una justificación de ejemplo.',
+            justificacion: 'Esta es una justificacion de ejemplo.',
             fuentes_consultadas: 'Fuente Ejemplo\nhttps://ejemplo.com'
         }
     ];
@@ -194,7 +195,7 @@ function createFactcheckingCard(item) {
                         <span class="veredicto-descripcion">(${veredictoDescripcion})</span>
                     </div>
                     <div class="factchecking-veredicto-text">
-                        ${item.justificacion || 'Justificación no disponible'}
+                        ${item.justificacion || 'Justificacion no disponible'}
                     </div>
                 </div>
                 
@@ -210,52 +211,42 @@ function createFactcheckingCard(item) {
  * Normalizar veredicto
  */
 function normalizeVeredicto(veredicto) {
-            if (!veredicto) return 'INDETERMINADO';
-            const v = veredicto.toLowerCase().trim();
-            // Viable (pero no inviable)
-            if (v === 'factible') return 'FACTIBLE';
-            // Inviable
-            if (v === 'inviable') return 'INVIABLE';
-            // Requiere acción de otros poderes del Estado
-            if (v.includes('sin') && v.includes('sin')) return 'SIN SUSTENTO';
-            // Engañosa (con o sin eñe)
-            if (v.includes('enga')) return 'ENGAÑOSA';
-            // No está en sus manos
-            if (v.includes('no') || v === 'No') return 'no está en sus manos';
-            return 'INDETERMINADO';
-        }
+    if (!veredicto) return 'INDETERMINADO';
+    const v = veredicto.toLowerCase().trim();
+    if (v === 'factible') return 'FACTIBLE';
+    if (v === 'inviable') return 'INVIABLE';
+    if (v.includes('sin') && v.includes('sin')) return 'SIN SUSTENTO';
+    if (v.includes('enga')) return 'ENGANOSA';
+    if (v.includes('no') || v === 'No') return 'NO ESTA EN SUS MANOS';
+    return 'INDETERMINADO';
+}
 
 /**
  * Obtener clase CSS del veredicto
  */
 function getVeredictoClass(veredicto) {
-            if (!veredicto) return 'indeterminado';
-            const v = veredicto.toLowerCase().trim();
-            // Viable (pero no inviable)
-            if (v === 'factible') return 'factible';
-            // Inviable
-            if (v === 'inviable') return 'inviable';
-            // Requiere acción de otros poderes del Estado
-            if (v.includes('sin') && v.includes('sin')) return 'sin_sustento';
-            // Engañosa (con o sin eñe)
-            if (v.includes('enga')) return 'enganosa';
-            // No está en sus manos
-            if (v.includes('no') || v === 'No') return 'no_en_sus_manos';
-            return 'indeterminado';
-        }
+    if (!veredicto) return 'indeterminado';
+    const v = veredicto.toLowerCase().trim();
+    if (v === 'factible') return 'factible';
+    if (v === 'inviable') return 'inviable';
+    if (v.includes('sin') && v.includes('sin')) return 'sin_sustento';
+    if (v.includes('enga')) return 'enganosa';
+    if (v.includes('no') || v === 'No') return 'no_en_sus_manos';
+    return 'indeterminado';
+}
 
 /**
- * Obtener descripción del veredicto
+ * Obtener descripcion del veredicto
  */
 function getVeredictoDescripcion(veredictoClass) {
     const descripciones = {
-                'factible': 'Propuesta que puede ejecutarse de manera factible durante una gestión.',
-                'inviable': 'Propuesta que no puede ejecutarse dentro de una gestión o que contraviene la normativa vigente.',
-                'no_en_sus_manos': 'Propuesta cuyo desarrollo o cumplimiento no depende exclusivamente del Ejecutivo, sino que requiere la acción de otros poderes del Estado.',
-                'inexacta': 'Compromiso que no presenta información concreta ni criterios medibles para su desarrollo o evaluación.',
-                'enganosa': 'Propuesta que incluye metas o cifras concretas, pero que sobredimensiona las capacidades reales del Ejecutivo, usa plazos o alcances irrealistas o presenta resultados que no son exigibles ni creíbles dadas las restricciones técnicas, presupuestales o institucionales.',
-                'sin_sustento': 'No se cuenta con información suficiente para determinar la viabilidad de esta propuesta.'
-            };
+        'factible': 'Propuesta que puede ejecutarse de manera factible durante una gestion.',
+        'inviable': 'Propuesta que no puede ejecutarse dentro de una gestion o que contraviene la normativa vigente.',
+        'no_en_sus_manos': 'Propuesta cuyo desarrollo o cumplimiento no depende exclusivamente del Ejecutivo, sino que requiere la accion de otros poderes del Estado.',
+        'inexacta': 'Compromiso que no presenta informacion concreta ni criterios medibles para su desarrollo o evaluacion.',
+        'enganosa': 'Propuesta que incluye metas o cifras concretas, pero que sobredimensiona las capacidades reales del Ejecutivo, usa plazos o alcances irrealistas o presenta resultados que no son exigibles ni creibles dadas las restricciones tecnicas, presupuestales o institucionales.',
+        'sin_sustento': 'No se cuenta con informacion suficiente para determinar la viabilidad de esta propuesta.'
+    };
     return descripciones[veredictoClass] || '';
 }
 
@@ -416,7 +407,7 @@ function handleVeredictoChange() {
 }
 
 /**
- * Cargar más items
+ * Cargar mas items
  */
 function loadMoreFactchecking() {
     visibleItems += getItemsPerPage();
@@ -432,7 +423,7 @@ function loadMoreFactchecking() {
 }
 
 /**
- * Resetear paginación
+ * Resetear paginacion
  */
 function resetPagination() {
     visibleItems = getItemsPerPage();

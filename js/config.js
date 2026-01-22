@@ -1,5 +1,5 @@
 /* ============================================
-   CONFIGURACIÓN GLOBAL
+   CONFIGURACION GLOBAL
    ============================================ */
 
 // URLs de Google Spreadsheets
@@ -7,26 +7,26 @@ const CONFIG = {
     // Hoja 1: Datos generales de partidos y candidatos
     SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR_yZQbmqUse6lOcFRxBhP53YkC3CdIc36YcOE3bk-w_91-TVudDvH9uVuJoSMZwf_4bPPuq--qbHKb/pub?output=csv',
     
-    // Hoja 2: Datos de comparación por temas
+    // Hoja 2: Datos de comparacion por temas
     COMPARISON_SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRcgvr6YP_YLsgXS9-mJD34bBug-Qzlv8W_d3ZacfQhYcM-7u85u-U6TCl8S9rsBDVPD8Ck5mMsYNxW/pub?output=csv',
     
     // Hoja 3: Factchecking
     FACTCHECKING_SPREADSHEET_URL: 'https://docs.google.com/spreadsheets/d/1IV5othVVZ0udcHWXN5Tfv5UDsDRPjHcJDz4X6BWGiV8/export?format=csv',
     
     // URL del archivo JSON con datos de densidad
-    DENSITY_DATA_URL: 'https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/data/densidad-data.json?v2'
+    DENSITY_DATA_URL: 'https://nuevasnarrativasec.github.io/planes-de-gobierno-2026/data/densidad-data.json?v3'
 };
 
 // Temas para densidad discursiva
 const THEMES = [
     { id: 'agricultura', name: 'AGRICULTURA', color: '#3B82F6' },
     { id: 'medio_ambiente', name: 'AMBIENTE', color: '#EF4444' },
-    { id: 'cambio_climatico', name: 'CAMBIO CLIMÁTICO', color: '#10B981' },
+    { id: 'cambio_climatico', name: 'CAMBIO CLIMATICO', color: '#10B981' },
     { id: 'cultura_turismo', name: 'CULTURA Y TURISMO', color: '#F59E0B' },
-    { id: 'descentralizacion', name: 'DESCENTRALIZACIÓN', color: '#8B5CF6' },
-    { id: 'economia', name: 'ECONOMÍA', color: '#06B6D4' },
-    { id: 'educacion', name: 'EDUCACIÓN', color: '#06B6D4' },
-    { id: 'energia_minera', name: 'ENERGÍA MINERA', color: '#06B6D4' },
+    { id: 'descentralizacion', name: 'DESCENTRALIZACION', color: '#8B5CF6' },
+    { id: 'economia', name: 'ECONOMIA', color: '#06B6D4' },
+    { id: 'educacion', name: 'EDUCACION', color: '#06B6D4' },
+    { id: 'energia_minera', name: 'ENERGIA MINERA', color: '#06B6D4' },
     { id: 'familia', name: 'FAMILIA', color: '#06B6D4' },
     { id: 'gobernanza_digital', name: 'GOBERNANZA DIGITAL', color: '#06B6D4' },
     { id: 'infraestructura', name: 'INFRAESTRUCTURA', color: '#06B6D4' },
@@ -43,9 +43,7 @@ const THEMES = [
    ============================================ */
 
 /**
- * Agrega timestamp para evitar caché
- * @param {string} url - URL a modificar
- * @returns {string} URL con parámetro de cache-busting
+ * Agrega timestamp para evitar cache
  */
 function addCacheBuster(url) {
     const separator = url.includes('?') ? '&' : '?';
@@ -53,9 +51,7 @@ function addCacheBuster(url) {
 }
 
 /**
- * Parsea CSV completo (maneja saltos de línea dentro de celdas con comillas)
- * @param {string} csvText - Texto CSV a parsear
- * @returns {Array} Array de objetos con los datos
+ * Parsea CSV completo (maneja saltos de linea dentro de celdas con comillas)
  */
 function parseCSV(csvText) {
     const rows = parseCSVComplete(csvText);
@@ -91,9 +87,7 @@ function parseCSV(csvText) {
 }
 
 /**
- * Parser CSV completo que maneja saltos de línea dentro de celdas con comillas
- * @param {string} csvText - Texto CSV
- * @returns {Array} Array de arrays con las filas
+ * Parser CSV completo que maneja saltos de linea dentro de celdas con comillas
  */
 function parseCSVComplete(csvText) {
     const rows = [];
@@ -146,9 +140,7 @@ function parseCSVComplete(csvText) {
 }
 
 /**
- * Parsea una línea CSV individual
- * @param {string} line - Línea CSV
- * @returns {Array} Array con los valores
+ * Parsea una linea CSV individual
  */
 function parseCSVLine(line) {
     const result = [];
@@ -180,8 +172,6 @@ function parseCSVLine(line) {
 
 /**
  * Extrae dominio de una URL
- * @param {string} url - URL completa
- * @returns {string} Dominio extraído
  */
 function extractDomain(url) {
     try {
@@ -189,6 +179,28 @@ function extractDomain(url) {
         return domain.replace('www.', '');
     } catch {
         return url;
+    }
+}
+
+/**
+ * Fetch con retry automatico
+ */
+async function fetchWithRetry(url, retries = 3, delay = 1000) {
+    for (let i = 0; i < retries; i++) {
+        try {
+            const response = await fetch(url);
+            if (response.ok) {
+                return response;
+            }
+            throw new Error(`HTTP ${response.status}`);
+        } catch (error) {
+            console.warn(`Intento ${i + 1}/${retries} fallo:`, error.message);
+            if (i < retries - 1) {
+                await new Promise(resolve => setTimeout(resolve, delay));
+            } else {
+                throw error;
+            }
+        }
     }
 }
 
@@ -200,3 +212,4 @@ window.parseCSV = parseCSV;
 window.parseCSVComplete = parseCSVComplete;
 window.parseCSVLine = parseCSVLine;
 window.extractDomain = extractDomain;
+window.fetchWithRetry = fetchWithRetry;

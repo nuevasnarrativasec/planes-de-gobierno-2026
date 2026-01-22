@@ -24,7 +24,9 @@ async function loadDataFromGoogleSheets() {
     }
 
     try {
-        const response = await fetch(addCacheBuster(CONFIG.SPREADSHEET_URL));
+        // Usar fetchWithRetry si esta disponible, sino fetch normal
+        const fetchFn = window.fetchWithRetry || fetch;
+        const response = await fetchFn(addCacheBuster(CONFIG.SPREADSHEET_URL));
         
         if (!response.ok) {
             throw new Error('Error al cargar los datos');
@@ -33,12 +35,12 @@ async function loadDataFromGoogleSheets() {
         const csvText = await response.text();
         allData = parseCSV(csvText);
         
-        // Actualizar referencia global para que otros módulos puedan acceder
+        // Actualizar referencia global para que otros modulos puedan acceder
         window.allData = allData;
         
         filteredData = allData.filter(item => item.tipo === currentTab);
         
-        console.log('✅ Datos cargados:', allData.length, 'registros');
+        console.log('Datos cargados:', allData.length, 'registros');
         
         if (allData.length === 0) {
             if (itemList) {
@@ -52,13 +54,13 @@ async function loadDataFromGoogleSheets() {
         }
         
     } catch (error) {
-        console.error('❌ Error cargando datos:', error);
+        console.error('Error cargando datos:', error);
         if (itemList) {
             itemList.innerHTML = `
                 <div style="padding: 20px; text-align: center; color: #e74c3c;">
                     <p style="font-weight: bold; margin-bottom: 10px;">Error al cargar los datos</p>
                     <p style="font-size: 13px; line-height: 1.6;">
-                        Verifica que la URL del Google Sheet sea correcta y que esté publicado como CSV.
+                        Verifica que la URL del Google Sheet sea correcta y que este publicado como CSV.
                     </p>
                 </div>
             `;
@@ -85,7 +87,7 @@ function switchTab(tab) {
 }
 
 /**
- * Filtrar items por búsqueda
+ * Filtrar items por busqueda
  */
 function filterItems() {
     const searchInput = document.getElementById('searchInput');
@@ -197,8 +199,8 @@ function renderDetails(item) {
         <div class="candidate-profile">
             <div class="box-main-avatar">
                 <div class="avatar">${avatarHTML}</div>
-                <div class="candidate-name">${item.candidato || 'Sin información'}</div>
-                <div class="party-label">${item.nombrepartido || 'Sin información'}</div>                        
+                <div class="candidate-name">${item.candidato || 'Sin informacion'}</div>
+                <div class="party-label">${item.nombrepartido || 'Sin informacion'}</div>                        
             </div>   
             
             <div class="box-main-buttons">
@@ -209,7 +211,7 @@ function renderDetails(item) {
             </div> 
             <div class="candidate-vices">
                 <h6>Vicepresidentes:</h6>
-                ${item.vicepresidentes || 'Sin información'}
+                ${item.vicepresidentes || 'Sin informacion'}
             </div>
             <div class="candidate-info">
                 <div class="box-edad">  
@@ -222,10 +224,10 @@ function renderDetails(item) {
                 </div> 
             </div> 
             <div class="vision-section">
-                <p class="vision-text">${item.vision || 'Sin información de visión disponible.'}</p>    
+                <p class="vision-text">${item.vision || 'Sin informacion de vision disponible.'}</p>    
             </div>
             <div class="candidate-temas-mencionados">                        
-                <h6>Temas más mencionados:</h6>
+                <h6>Temas mas mencionados:</h6>
                 <img src="./img/icon-click-2.png" alt="" width="100%" class="icon-click-temas">
                 <div class="topics">
                     ${topicsHTML || '<p style="color: #999;">No hay temas disponibles</p>'}
@@ -240,7 +242,7 @@ function renderDetails(item) {
    ============================================ */
 
 /**
- * Manejar input de búsqueda
+ * Manejar input de busqueda
  */
 function handleSearchInput(event) {
     const key = event.key;
@@ -374,7 +376,7 @@ function navigateSuggestions(direction) {
 }
 
 /**
- * Seleccionar sugerencia por índice
+ * Seleccionar sugerencia por indice
  */
 function selectSuggestionByIndex(index) {
     selectSuggestion(currentSuggestions[index]);

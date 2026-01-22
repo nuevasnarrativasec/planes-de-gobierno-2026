@@ -13,7 +13,8 @@ let isSliderDragging = false;
  */
 async function loadDensityData() {
     try {
-        const response = await fetch(CONFIG.DENSITY_DATA_URL);
+        const fetchFn = window.fetchWithRetry || fetch;
+        const response = await fetchFn(CONFIG.DENSITY_DATA_URL);
         if (!response.ok) {
             throw new Error('Error al cargar datos de densidad');
         }
@@ -28,10 +29,10 @@ async function loadDensityData() {
             };
         });
         
-        console.log('✅ Datos de densidad cargados:', Object.keys(densityData).length, 'partidos');
+        console.log('Datos de densidad cargados:', Object.keys(densityData).length, 'partidos');
         return densityData;
     } catch (error) {
-        console.error('❌ Error cargando datos de densidad:', error);
+        console.error('Error cargando datos de densidad:', error);
         // Datos de ejemplo si falla
         densityData = {
             "1": {
@@ -54,11 +55,11 @@ function initThemeSlider() {
     const handle = document.getElementById('sliderHandle');
     
     if (!segmentsContainer || !labelsContainer || !slider || !handle) {
-        console.error('❌ Elementos del slider no encontrados');
+        console.error('Elementos del slider no encontrados');
         return;
     }
     
-    // Aplicar estilos críticos
+    // Aplicar estilos criticos
     slider.style.position = 'relative';
     slider.style.touchAction = 'none';
     
@@ -152,7 +153,7 @@ function initThemeSlider() {
         updateSliderFromPosition(e.clientX);
     });
     
-    console.log('✅ Theme slider inicializado');
+    console.log('Theme slider inicializado');
 }
 
 /**
@@ -189,7 +190,7 @@ function stopSliderDrag() {
 }
 
 /**
- * Actualizar slider desde posición
+ * Actualizar slider desde posicion
  */
 function updateSliderFromPosition(clientX) {
     const slider = document.getElementById('themeSlider');
@@ -256,7 +257,7 @@ function selectTheme(index) {
 }
 
 /**
- * Actualizar posición del handle
+ * Actualizar posicion del handle
  */
 function updateSliderHandle() {
     const slider = document.getElementById('themeSlider');
