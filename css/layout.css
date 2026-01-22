@@ -629,6 +629,11 @@ span.separador-logo {
     .comparison-section .btn-ver-conceptos {
         margin-left: 20%;
     }
+
+    .slider-handle {
+        min-width: 30px;
+        min-height: 30px;
+    }
 }
 
 /* ============================================
