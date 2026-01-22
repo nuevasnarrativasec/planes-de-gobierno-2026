@@ -8,20 +8,20 @@ let selectedComparisons = [null, null, null];
 let currentComparisonTheme = '';
 
 /**
- * Cargar datos de comparaciÃ³n desde Google Sheets
+ * Cargar datos de comparación desde Google Sheets
  */
 async function loadComparisonData() {
     try {
         const response = await fetch(addCacheBuster(CONFIG.COMPARISON_SPREADSHEET_URL));
         if (!response.ok) {
-            throw new Error('Error al cargar datos de comparaciÃ³n');
+            throw new Error('Error al cargar datos de comparación');
         }
         const csvText = await response.text();
         comparisonDataList = parseCSV(csvText);
-        console.log('âœ… Datos de comparaciÃ³n cargados:', comparisonDataList.length, 'registros');
+        console.log('Datos de comparación cargados:', comparisonDataList.length, 'registros');
         return comparisonDataList;
     } catch (error) {
-        console.error('âŒ Error cargando datos de comparaciÃ³n:', error);
+        console.error('Error cargando datos de comparación:', error);
         return [];
     }
 }
@@ -74,7 +74,7 @@ function renderComparisonCard(item, index) {
     if (!compData && currentComparisonTheme) {
         return `
             <div class="comparison-card">
-                <button class="remove-card" onclick="removeFromComparison(${index})">Ã—</button>
+                <button class="remove-card" onclick="removeFromComparison(${index})">X—</button>
                 <div class="card-profile">
                     <div class="card-avatar">
                         ${item.fotourl ? `<img src="${item.fotourl}" alt="${item.candidato}">` : '<div class="card-avatar-icon"></div><div class="card-avatar-body"></div>'}
@@ -125,7 +125,7 @@ function renderComparisonCard(item, index) {
     
     return `
         <div class="comparison-card">
-            <button class="remove-card" onclick="removeFromComparison(${index})">Ã—</button>
+            <button class="remove-card" onclick="removeFromComparison(${index})">X—</button>
             <div class="card-selector">
                 <select onchange="changeComparison(${index}, this.value)">
                     <option value="${item.id}" selected>${item.nombre}</option>
@@ -148,11 +148,11 @@ function renderComparisonCard(item, index) {
                 ${compData.tonodiscursivo || compData.coherencia ? `
                     <div class="discourse-tone no-bg">
                         <p><strong>ENFOQUE DISCURSIVO:</strong> ${compData.tonodiscursivo || 'N/A'}</p>
-                        <p><strong>FORMULACIÃ“N DE PROPUESTA:</strong> ${compData.coherencia || 'N/A'}</p>
-                        <span style="font-size: .8rem;">Estos indicadores clasifican la estructura lÃ³gica y el enfoque semÃ¡ntico del texto.</span>
+                        <p><strong>FORMULACIÓN DE PROPUESTA:</strong> ${compData.coherencia || 'N/A'}</p>
+                        <span style="font-size: .8rem;">Estos indicadores clasifican la estructura lógica y el enfoque semántico del texto.</span>
                     </div>
                     <div class="discourse-tone ancla">
-                        <p>Ver criterios de anÃ¡lisis</p>
+                        <p>Ver criterios de análisis</p>
                     </div>
                 ` : ''}
             </div>
@@ -224,7 +224,7 @@ function addToCompare(item) {
         if (partido) {
             item = partido;
         } else {
-            alert('No es posible aÃ±adir candidatos al comparador. SÃ³lo se permiten partidos.');
+            alert('No es posible añadir candidatos al comparador. Sólo se permiten partidos.');
             return;
         }
     }
