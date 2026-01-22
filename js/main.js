@@ -3,32 +3,59 @@
    ============================================ */
 
 /**
+ * Verificar que todas las dependencias esten cargadas
+ */
+function checkDependencies() {
+    const deps = {
+        'CONFIG': typeof CONFIG !== 'undefined',
+        'loadDataFromGoogleSheets': typeof window.loadDataFromGoogleSheets === 'function',
+        'loadComparisonData': typeof window.loadComparisonData === 'function',
+        'loadFactcheckingData': typeof window.loadFactcheckingData === 'function',
+        'loadDensityData': typeof window.loadDensityData === 'function',
+        'parseCSV': typeof window.parseCSV === 'function'
+    };
+    
+    const missing = Object.entries(deps).filter(([name, loaded]) => !loaded).map(([name]) => name);
+    
+    if (missing.length > 0) {
+        console.log('Dependencias faltantes:', missing.join(', '));
+        return false;
+    }
+    
+    return true;
+}
+
+/**
  * Inicializacion principal de la aplicacion
  */
-async function init() {
+async function initApp() {
     console.log('Iniciando aplicacion...');
     
     try {
         // Cargar datos principales
-        await loadDataFromGoogleSheets();
+        await window.loadDataFromGoogleSheets();
         
         // Cargar datos del comparador
-        await loadComparisonData();
-        renderComparisonCards();
+        await window.loadComparisonData();
+        window.renderComparisonCards();
         
         // Cargar datos de factchecking
-        await loadFactcheckingData();
+        await window.loadFactcheckingData();
         
         // Cargar y renderizar densidad discursiva
-        await loadDensityData();
-        initThemeSlider();
-        populateDensityPartySelector();
-        renderDensityBars();
+        await window.loadDensityData();
+        window.initThemeSlider();
+        window.populateDensityPartySelector();
+        window.renderDensityBars();
         
         // Event listener para resize (actualizar slider y densidad)
         window.addEventListener('resize', () => {
-            updateSliderHandle();
-            renderDensityBars();
+            if (typeof window.updateSliderHandle === 'function') {
+                window.updateSliderHandle();
+            }
+            if (typeof window.renderDensityBars === 'function') {
+                window.renderDensityBars();
+            }
         });
         
         // Atajo de teclado para refrescar datos (Ctrl+Shift+R)
@@ -54,13 +81,13 @@ async function refreshAllData() {
     try {
         console.log('Refrescando todos los datos...');
         
-        await loadDataFromGoogleSheets();
-        await loadComparisonData();
-        renderComparisonCards();
+        await window.loadDataFromGoogleSheets();
+        await window.loadComparisonData();
+        window.renderComparisonCards();
         
-        await loadDensityData();
-        populateDensityPartySelector();
-        renderDensityBars();
+        await window.loadDensityData();
+        window.populateDensityPartySelector();
+        window.renderDensityBars();
         
         console.log('Todos los datos actualizados correctamente');
         
@@ -279,76 +306,65 @@ document.addEventListener('DOMContentLoaded', function() {
     // Cerrar autocomplete al hacer click fuera
     document.addEventListener('click', function(e) {
         if (!e.target.closest('.factchecking-search-box')) {
-            hideFactcheckingAutocomplete();
+            if (typeof window.hideFactcheckingAutocomplete === 'function') {
+                window.hideFactcheckingAutocomplete();
+            }
         }
     });
 });
 
 /**
- * Verificar que todas las dependencias esten cargadas
- */
-function checkDependencies() {
-    return typeof loadDataFromGoogleSheets === 'function' &&
-           typeof loadComparisonData === 'function' &&
-           typeof loadFactcheckingData === 'function' &&
-           typeof loadDensityData === 'function' &&
-           typeof CONFIG !== 'undefined';
-}
-
-/**
  * Inicializacion robusta con retry
  */
-function robustInit(retries = 5, delay = 500) {
+function robustInit(retries = 10, delay = 300) {
+    if (window._appInitialized) {
+        console.log('App ya inicializada, ignorando...');
+        return;
+    }
+    
     if (checkDependencies()) {
         console.log('Dependencias verificadas, iniciando...');
-        init();
+        window._appInitialized = true;
+        initApp();
     } else if (retries > 0) {
         console.log('Esperando dependencias... (intentos restantes: ' + retries + ')');
         setTimeout(() => robustInit(retries - 1, delay), delay);
     } else {
         console.error('No se pudieron cargar las dependencias despues de varios intentos');
-        // Intentar inicializar de todas formas como ultimo recurso
-        init();
+        // Mostrar que scripts estan cargados para debug
+        console.log('Scripts disponibles:', {
+            CONFIG: typeof CONFIG,
+            loadDataFromGoogleSheets: typeof window.loadDataFromGoogleSheets,
+            loadComparisonData: typeof window.loadComparisonData,
+            loadFactcheckingData: typeof window.loadFactcheckingData,
+            loadDensityData: typeof window.loadDensityData
+        });
     }
 }
 
 /**
- * Multiples puntos de entrada para maxima compatibilidad
+ * Iniciar cuando el DOM este listo
  */
-// Metodo 1: DOMContentLoaded (mas temprano)
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
-        setTimeout(robustInit, 100);
+        setTimeout(robustInit, 200);
     });
 } else {
-    // DOM ya esta listo
-    setTimeout(robustInit, 100);
+    setTimeout(robustInit, 200);
 }
 
-// Metodo 2: window.onload como respaldo
+// Respaldo con window.onload
 window.addEventListener('load', function() {
-    // Solo inicializar si no se ha hecho ya
     if (!window._appInitialized) {
         console.log('Inicializacion por window.load...');
-        robustInit();
+        setTimeout(robustInit, 100);
     }
 });
-
-// Marcar cuando la app se inicialice
-const originalInit = init;
-init = async function() {
-    if (window._appInitialized) {
-        console.log('App ya inicializada, ignorando llamada duplicada');
-        return;
-    }
-    window._appInitialized = true;
-    await originalInit();
-};
 
 // Exportar funciones globales
 window.refreshAllData = refreshAllData;
 window.shareUrl = shareUrl;
 window.forceReload = function() {
     window._appInitialized = false;
-    robustInit();
+    robustInit(5, 100);
 };
